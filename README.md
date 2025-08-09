@@ -1,4 +1,4 @@
-# **EducaOnline - Plataforma de gestão de cursos (melhorar o titulo)
+# **EducaOnline - Plataforma de gestão de cursos (melhorar o titulo)**
 
 ## **1. Apresentação**
 
