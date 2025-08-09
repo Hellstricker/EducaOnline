@@ -7,7 +7,7 @@ using System.Text;
 
 namespace EducaOnline.WebAPI.Core.Identidade
 {
-    public static class IdentityConfiguration
+    public static class JwtConfiguration
     {
         public static WebApplicationBuilder AddJwtConfiguration(this WebApplicationBuilder builder)
         {           
