@@ -9,7 +9,7 @@ Bem-vindo ao repositório do projeto **EducaOnline**. Este projeto é uma entreg
 - **Jairo**
 - **Victor**
 - **Motta**
-- **Ozias Manoel costa Neto**
+- **Ozias Manoel Costa Neto**
  
 ## **2. Proposta do Projeto**
 
