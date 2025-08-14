@@ -1,5 +1,4 @@
-﻿
-using EducaOnline.Core.Messages;
+﻿using EducaOnline.Core.Messages;
 using EducaOnline.Core.Messages.CommonMessages.DomainEvents;
 using EducaOnline.Core.Messages.CommonMessages.Notifications;
 using MediatR;
@@ -19,6 +18,11 @@ namespace EducaOnline.Core.Communication
         {
             return await _mediator.Send(comando);
         }
+
+        //public async Task<ValidationResult> EnviarComando<T>(T comando) where T : Command
+        //{
+        //    return await _mediator.Send(comando);
+        //}
 
         public async Task PublicarEvento<T>(T evento) where T : Event
         {

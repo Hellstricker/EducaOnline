@@ -39,6 +39,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{1C
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EducaOnline.WebAPI.Core", "src\building_blocks\EducaOnline.WebAPI.Core\EducaOnline.WebAPI.Core.csproj", "{EC6FB693-1A14-46EE-91BA-9D56536D28BE}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MessageBus", "MessageBus", "{82922228-C37C-4C70-8D6D-196645EEEA9A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EducaOnline.MessageBus", "src\building_blocks\EducaOnline.MessageBus\EducaOnline.MessageBus.csproj", "{9A343B14-33F6-46F4-B958-C63DE5876792}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -69,6 +73,10 @@ Global
 		{EC6FB693-1A14-46EE-91BA-9D56536D28BE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EC6FB693-1A14-46EE-91BA-9D56536D28BE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EC6FB693-1A14-46EE-91BA-9D56536D28BE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9A343B14-33F6-46F4-B958-C63DE5876792}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9A343B14-33F6-46F4-B958-C63DE5876792}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9A343B14-33F6-46F4-B958-C63DE5876792}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9A343B14-33F6-46F4-B958-C63DE5876792}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -91,6 +99,8 @@ Global
 		{29DB7109-2F0A-48A6-9587-D078085543B6} = {635B1F07-EF7F-44A7-ABD6-3B386008CBED}
 		{1C4F3D9B-1263-4DDC-8B50-D0A44F64A55B} = {CC560A87-8DB2-43B9-9127-F7E676B9E1D9}
 		{EC6FB693-1A14-46EE-91BA-9D56536D28BE} = {1C4F3D9B-1263-4DDC-8B50-D0A44F64A55B}
+		{82922228-C37C-4C70-8D6D-196645EEEA9A} = {CC560A87-8DB2-43B9-9127-F7E676B9E1D9}
+		{9A343B14-33F6-46F4-B958-C63DE5876792} = {82922228-C37C-4C70-8D6D-196645EEEA9A}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {DCD17264-9810-41B3-8DEC-849368893E01}
