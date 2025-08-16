@@ -10,7 +10,7 @@ namespace EducaOnline.Catalogo.API.Configurations
             IConfiguration configuration)
         {
             services.AddMessageBus(configuration.GetMessageQueueConnection("MessageBus"))
-                .AddHostedService<RegistroClienteIntegrationHandler>();
+                .AddHostedService<RegistroAlunoIntegrationHandler>();
         }
     }
 
