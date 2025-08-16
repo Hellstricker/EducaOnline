@@ -16,10 +16,7 @@ namespace EducaOnline.WebAPI.Controllers
     {
         private readonly IAlunoService _alunoService;
 
-        //public AlunoController(INotificationHandler<DomainNotification> notifications,
-        //                       IMediatorHandler mediatorHandler,
-        //                       IAlunoService alunoService)
-        //    : base(notifications, mediatorHandler)
+        //public AlunoController(IAlunoService alunoService)
         //{
         //    _alunoService = alunoService;
         //}

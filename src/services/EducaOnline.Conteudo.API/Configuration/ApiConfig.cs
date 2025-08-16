@@ -53,7 +53,7 @@ namespace EducaOnline.Conteudo.API.Configuration
 
             app.UseCors("Total");
 
-            //app.UseIdentityConfig();
+            app.UseAuthConfiguration();
 
             app.UseEndpoints(endpoints =>
             {
