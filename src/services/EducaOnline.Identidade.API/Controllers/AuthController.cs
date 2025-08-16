@@ -11,11 +11,12 @@ using EducaOnline.WebAPI.Core.Identidade;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using EducaOnline.Core.DomainObjects;
 
 namespace EducaOnline.Identidade.API.Controllers
 {    
     [Route("api/identidade")]
-    public class AuthController : MainController2
+    public class AuthController : MainController
     {
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly UserManager<IdentityUser> _userManager;
@@ -45,10 +46,10 @@ namespace EducaOnline.Identidade.API.Controllers
 
             var result = await _userManager.CreateAsync(user, usuarioRegistro.Senha!);
             if (result.Succeeded)
-            {                
+            {
                 // Realizar o processo abaixo comunicando com a API aluno
-                //var clienteResult  = await RegistrarCliente(usuarioRegistro);
-                //if(!clienteResult.ValidationResult.IsValid)
+                //var clienteResult = await RegistrarCliente(usuarioRegistro);
+                //if (!clienteResult.ValidationResult.IsValid)
                 //{
                 //    await _userManager.DeleteAsync(user);
                 //    return CustomResponse(clienteResult.ValidationResult);
@@ -66,6 +67,7 @@ namespace EducaOnline.Identidade.API.Controllers
         [HttpPost("autenticar")]
         public async Task<ActionResult> Login(UsuarioLogin usuarioLogin)
         {
+            throw new DomainException("Erro de teste no controller de autenticação");
             if (!ModelState.IsValid) return CustomResponse(ModelState);
 
             var result = await _signInManager.PasswordSignInAsync(usuarioLogin.Email!, usuarioLogin.Senha!, isPersistent: false, lockoutOnFailure: true);

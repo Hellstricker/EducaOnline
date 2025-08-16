@@ -13,6 +13,7 @@ namespace EducaOnline.Identidade.API.Configurations
                 {
                     Title = "EducaOnline Identity API",
                     Description = "Esta API faz parte do curso MBA DevExpert Módulo 4",
+                    //Colocar uma página de contatos ou remover definitivamente
                     //Contact = new OpenApiContact() { Name = "Ozias Costa", Email = "oziasmcn@gmail.com" },
                     License = new OpenApiLicense() { Name = "MIT", Url = new Uri("https://opensource.org/license/mit") }
                 });
