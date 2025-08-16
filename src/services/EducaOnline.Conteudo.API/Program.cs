@@ -11,12 +11,13 @@ builder.Configuration
 
 
 builder.Services.AddApiConfig(builder.Configuration);
+builder.Services.AddJwtConfiguration(builder.Configuration);
 builder.Services.AddDependencyConfig();
-//builder.Services.AddSeedConfig(builder.Configuration);
 //builder.Services.AddAutoMapper(typeof(ConteudoMapperConfig));
 
 var app = builder.Build();
 
+DbMigrationHelpers.EnsureSeedData(app).Wait();
 app.UseApiConfig(app.Environment);
 
 app.Run();

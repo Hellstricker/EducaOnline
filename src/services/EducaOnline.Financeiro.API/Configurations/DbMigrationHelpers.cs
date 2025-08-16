@@ -1,12 +1,9 @@
-﻿using EducaOnline.Aluno.API.Data;
-using EducaOnline.Aluno.API.Models;
-using EducaOnline.Core.Enums;
+﻿using EducaOnline.Financeiro.API.Data;
 using EducaOnline.WebAPI.Core.Configuration;
-using Microsoft.AspNetCore.Identity;
 
-namespace EducaOnline.Aluno.API.Configuration
+namespace EducaOnline.Financeiro.API.Configurations
 {
-    public class DbMigrationHelper
+    public class DbMigrationHelpers
     {
         public static async Task EnsureSeedData(WebApplication app)
         {
@@ -19,12 +16,12 @@ namespace EducaOnline.Aluno.API.Configuration
             using var scope = serviceProvider.GetRequiredService<IServiceScopeFactory>().CreateScope();
             var env = scope.ServiceProvider.GetRequiredService<IWebHostEnvironment>();
 
-            var alunoContext = scope.ServiceProvider.GetRequiredService<AlunoDbContext>();
+            var financeiroContext = scope.ServiceProvider.GetRequiredService<FinanceiroContext>();
 
-            await DbHealthChecker.TestConnection(alunoContext);
+            await DbHealthChecker.TestConnection(financeiroContext);
 
             if (env.IsDevelopment() || env.IsEnvironment("Docker"))
-                await alunoContext.Database.EnsureCreatedAsync();
+                await financeiroContext.Database.EnsureCreatedAsync();
         }
     }
 }
