@@ -1,5 +1,6 @@
 
 using EducaOnline.Aluno.API.Configuration;
+using EducaOnline.Catalogo.API.Configurations;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,6 +13,7 @@ builder.Configuration
 
 builder.Services.AddApiConfig(builder.Configuration);
 builder.Services.AddDependencyConfig();
+builder.Services.AddMessageBusConfiguration(builder.Configuration);
 //builder.Services.AddSeedConfig(builder.Configuration);
 //builder.Services.AddAutoMapper(typeof(ConteudoMapperConfig));
 
