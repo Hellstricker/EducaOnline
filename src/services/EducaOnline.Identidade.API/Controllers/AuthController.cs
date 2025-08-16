@@ -47,13 +47,12 @@ namespace EducaOnline.Identidade.API.Controllers
             var result = await _userManager.CreateAsync(user, usuarioRegistro.Senha!);
             if (result.Succeeded)
             {
-                // Realizar o processo abaixo comunicando com a API aluno
-                //var clienteResult = await RegistrarCliente(usuarioRegistro);
-                //if (!clienteResult.ValidationResult.IsValid)
-                //{
-                //    await _userManager.DeleteAsync(user);
-                //    return CustomResponse(clienteResult.ValidationResult);
-                //}
+                var clienteResult = await RegistrarAluno(usuarioRegistro);
+                if (!clienteResult.ValidationResult.IsValid)
+                {
+                    await _userManager.DeleteAsync(user);
+                    return CustomResponse(clienteResult.ValidationResult);
+                }
                 return CustomResponse(await GetJwt(usuarioRegistro.Email!));
             }
 
@@ -149,8 +148,8 @@ namespace EducaOnline.Identidade.API.Controllers
             return (long)Math.Round((date.ToUniversalTime() - new DateTimeOffset(1970, 1, 1, 0, 0, 0, TimeSpan.Zero)).TotalSeconds);
         }
 
-        //Adaptar para Aluno
-        private async Task<ResponseMessage> RegistrarCliente(UsuarioRegistro usuarioRegistro)
+        
+        private async Task<ResponseMessage> RegistrarAluno(UsuarioRegistro usuarioRegistro)
         {
             var usuario = await _userManager.FindByEmailAsync(usuarioRegistro.Email!);
             var usuarioRegistrado = new UsuarioRegistradoIntegrationEvent(Guid.Parse(usuario!.Id), usuarioRegistro.Nome!, usuarioRegistro.Email!);

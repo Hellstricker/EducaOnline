@@ -22,6 +22,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\building_blocks\EducaOnline.Core\EducaOnline.Core.csproj" />
+    <ProjectReference Include="..\..\building_blocks\EducaOnline.MessageBus\EducaOnline.MessageBus.csproj" />
     <ProjectReference Include="..\..\building_blocks\EducaOnline.WebAPI.Core\EducaOnline.WebAPI.Core.csproj" />
   </ItemGroup>
 
