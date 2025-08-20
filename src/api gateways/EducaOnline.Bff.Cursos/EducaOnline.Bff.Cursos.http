@@ -1,0 +1,6 @@
+@EducaOnline.Bff.Cursos_HostAddress = http://localhost:5043
+
+GET {{EducaOnline.Bff.Cursos_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
