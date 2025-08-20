@@ -29,39 +29,71 @@ namespace EducaOnline.Identidade.API.Configurations
             await DbHealthChecker.TestConnection(ssoContext);
 
             if (env.IsDevelopment() || env.IsEnvironment("Docker"))
+            {
                 await ssoContext.Database.EnsureCreatedAsync();
 
+                var usuarioDb = userManager.FindByEmailAsync("admin@educaonline.com.br").Result;
+                if (usuarioDb == null)
+                {
+                    var identityUser = new IdentityUser("admin@educaonline.com.br");
+                    identityUser.Email = "admin@educaonline.com.br";
 
-            #region adm
-            //var usuarioDb = userManager.FindByEmailAsync("admin@educaonline.com.br").Result;
-            //if (usuarioDb == null)
-            //{
-            //    var identityUser = new IdentityUser("admin@educaonline.com.br");
-            //    identityUser.Email = "admin@educaonline.com.br";
+                    var result = userManager.CreateAsync(identityUser).Result;
 
-            //    var result = userManager.CreateAsync(identityUser).Result;
+                    if (result.Succeeded)
+                    {
 
-            //    if (result.Succeeded)
-            //    {
-            //        var admininstrador = new Administrador(Guid.Parse(identityUser.Id), "Educa online ADM", "admin@educaonline.com.br");
-            //        appContext.Set<Administrador>().Add(admininstrador);
-            //        appContext.SaveChanges();
+                        CreateRoles(roleManager).Wait();
 
-            //        if (admininstrador != null)
-            //        {
-            //            CreateRoles(roleManager).Wait();
-
-            //            userManager.AddToRoleAsync(identityUser, PerfilUsuarioEnum.ADM.ToString()).Wait();
-            //        }
+                        await userManager.AddToRoleAsync(identityUser, PerfilUsuarioEnum.ADM.ToString());
 
 
-            //        var hash = passwordHash.HashPassword(identityUser, "Teste@123");
-            //        identityUser.SecurityStamp = Guid.NewGuid().ToString();
-            //        identityUser.PasswordHash = hash;
-            //        userManager.UpdateAsync(identityUser).Wait();
-            //    }
-            //}
-            #endregion
+                        var hash = passwordHash.HashPassword(identityUser, "Teste@123");
+                        identityUser.SecurityStamp = Guid.NewGuid().ToString();
+                        identityUser.PasswordHash = hash;
+                        userManager.UpdateAsync(identityUser).Wait();
+                    }
+                }
+
+                var usuarioDbAluno = userManager.FindByEmailAsync("aluno@educaonline.com.br").Result;
+                if (usuarioDbAluno == null)
+                {
+                    var identityUser = new IdentityUser("aluno@educaonline.com.br");
+                    identityUser.Email = "aluno@educaonline.com.br";
+                    identityUser.Id = "40640fec-5daf-4956-b1c0-2fde87717b66";
+
+                    var result = userManager.CreateAsync(identityUser).Result;
+
+                    if (result.Succeeded)
+                    {
+                        CreateRoles(roleManager).Wait();
+
+                        await userManager.AddToRoleAsync(identityUser, PerfilUsuarioEnum.ALUNO.ToString());
+
+                        var hash = passwordHash.HashPassword(identityUser, "Teste@123");
+                        identityUser.SecurityStamp = Guid.NewGuid().ToString();
+                        identityUser.PasswordHash = hash;
+                        userManager.UpdateAsync(identityUser).Wait();
+                    }
+                }
+            }
+        }
+
+        private static async Task CreateRoles(RoleManager<IdentityRole> roleManager)
+        {
+            string[] rolesNames = {
+                PerfilUsuarioEnum.ADM.ToString(),
+                PerfilUsuarioEnum.ALUNO.ToString(),
+            };
+
+            foreach (var namesRole in rolesNames)
+            {
+                var roleExist = await roleManager.RoleExistsAsync(namesRole);
+                if (!roleExist)
+                {
+                    await roleManager.CreateAsync(new IdentityRole(namesRole));
+                }
+            }
         }
     }
 }
