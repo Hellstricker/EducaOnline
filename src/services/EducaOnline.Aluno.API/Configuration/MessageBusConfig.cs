@@ -1,6 +1,6 @@
 ﻿using EducaOnline.MessageBus;
 using EducaOnline.Core.Utils;
-using EducaOnline.Clientes.API.Services;
+using EducaOnline.Aluno.API.Services;
 
 namespace EducaOnline.Catalogo.API.Configurations
 {

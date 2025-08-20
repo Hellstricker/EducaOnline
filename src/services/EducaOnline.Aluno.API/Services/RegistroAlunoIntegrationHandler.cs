@@ -1,18 +1,20 @@
-﻿using FluentValidation.Results;
-using EducaOnline.Core.Messages.Integration;
-using EducaOnline.MessageBus;
-using EducaOnline.Core.Communication;
+﻿using System;
+using System.Threading;
+using System.Threading.Tasks;
+using FluentValidation.Results;                 
+using EducaOnline.Core.Messages.Integration;          
+using EducaOnline.Core.Communication;                 
+using EducaOnline.Aluno.API.Application.Commands;     
+using EducaOnline.MessageBus;                         
 
-namespace EducaOnline.Clientes.API.Services
+namespace EducaOnline.Aluno.API.Services
 {
     public class RegistroAlunoIntegrationHandler : BackgroundService
     {
         private readonly IMessageBus _bus;
         private readonly IServiceProvider _serviceProvider;
 
-        public RegistroAlunoIntegrationHandler(
-                            IServiceProvider serviceProvider,
-                            IMessageBus bus)
+        public RegistroAlunoIntegrationHandler(IServiceProvider serviceProvider, IMessageBus bus)
         {
             _serviceProvider = serviceProvider;
             _bus = bus;
@@ -39,10 +41,16 @@ namespace EducaOnline.Clientes.API.Services
 
         private async Task<ResponseMessage> RegistrarAluno(UsuarioRegistradoIntegrationEvent message)
         {
-            //Alterar esse código para utilizar o serviço de cadastro de Aluno e este deve retornar o ValidationResult
-                      
+            var command = new AdicionarAlunoCommand(message.Id, message.Nome, message.Email);
+            ValidationResult resultado;
 
-            return new ResponseMessage(new ValidationResult());
+            using (var scope = _serviceProvider.CreateScope())
+            {
+                var mediator = scope.ServiceProvider.GetRequiredService<IMediatorHandler>();
+                resultado = await mediator.EnviarComando(command);
+            }
+
+            return new ResponseMessage(resultado);
         }
     }
 }

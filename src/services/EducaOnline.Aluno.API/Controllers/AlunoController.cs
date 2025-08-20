@@ -1,142 +1,118 @@
-﻿using EducaOnline.Aluno.API.DTO;
+﻿using EducaOnline.Aluno.API.Application.Commands; 
+using EducaOnline.Aluno.API.Dto;
+using EducaOnline.Aluno.API.DTO;
 using EducaOnline.Aluno.API.Models;
-using EducaOnline.Aluno.API.Services;
 using EducaOnline.Core.Communication;
-using EducaOnline.Core.DomainObjects;
-using EducaOnline.Core.Messages.CommonMessages.Notifications;
+using EducaOnline.MessageBus;
 using EducaOnline.WebAPI.Core.Controllers;
-using MediatR;
+using EducaOnline.WebAPI.Core.Usuario;
 using Microsoft.AspNetCore.Mvc;
 
-namespace EducaOnline.WebAPI.Controllers
+
+namespace EducaOnline.Aluno.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
     public class AlunoController : MainController
     {
-        private readonly IAlunoService _alunoService;
+        private readonly IAlunoRepository _alunoRepository;
+        private readonly IMediatorHandler _mediator;
+        private readonly IMessageBus _messageBus;
+        private readonly IAspNetUser _user;
 
-        //public AlunoController(IAlunoService alunoService)
-        //{
-        //    _alunoService = alunoService;
-        //}
+        public AlunoController(
+            IAlunoRepository alunoRepository,
+            IMediatorHandler mediator,
+            IMessageBus messageBus,
+            IAspNetUser user)
+        {
+            _alunoRepository = alunoRepository;
+            _mediator = mediator;
+            _messageBus = messageBus;
+            _user = user;
+        }
 
-        //[HttpPost]
-        //public async Task<IActionResult> CriarAluno([FromBody] AlunoDto alunoDto)
-        //{
-        //    if (!ModelState.IsValid)
-        //    {
-        //        NotificarErro("InvalidData", "Dados do aluno inválidos.");
-        //        return BadRequest(ObterMensagensErro());
-        //    }
+        [HttpPost]
+        public async Task<IActionResult> CriarAluno([FromBody] AlunoDto alunoDto)
+        {
+            if (!ModelState.IsValid)
+            {
+                AdicionarErro("Dados do aluno inválidos.");
+                return CustomResponse();
+            }
 
-        //    try
-        //    {
-        //        var aluno = await _alunoService.CriarAluno(alunoDto.Nome, alunoDto.Email);
-        //        return Ok(aluno);
-        //    }
-        //    catch (DomainException ex)
-        //    {
-        //        NotificarErro("AlunoErro", ex.Message);
-        //        return BadRequest(ObterMensagensErro());
-        //    }
-        //}
+            var novoId = Guid.NewGuid();
+            var cmd = new AdicionarAlunoCommand(novoId, alunoDto.Nome, alunoDto.Email);
 
-        //[HttpGet("{id}")]
-        //public async Task<IActionResult> ObterAlunoPorId(Guid id)
-        //{
-        //    try
-        //    {
-        //        var aluno = await _alunoService.ObterAlunoPorId(id);
-        //        if (aluno == null)
-        //        {
-        //            NotificarErro("AlunoNaoEncontrado", "Aluno não encontrado");
-        //            return NotFound(ObterMensagensErro());
-        //        }
+            var result = await _mediator.EnviarComando(cmd);
+            if(!result.IsValid)
+                return CustomResponse(result);
 
-        //        return Ok(aluno);
-        //    }
-        //    catch (DomainException ex)
-        //    {
-        //        NotificarErro("AlunoErro", ex.Message);
-        //        return BadRequest(ObterMensagensErro());
-        //    }
-        //}
+            // Publicar evento caso necessário
+            return Ok("Aluno criado com sucesso!");
+        }
 
-        //[HttpPut("{id}")]
-        //public async Task<IActionResult> AtualizarAluno(Guid id, [FromBody] AlunoDto alunoDto)
-        //{
-        //    if (!ModelState.IsValid)
-        //    {
-        //        NotificarErro("InvalidData", "Dados do aluno inválidos.");
-        //        return BadRequest(ObterMensagensErro());
-        //    }
+        [HttpGet("{id:guid}")]
+        public async Task<IActionResult> ObterAlunoPorId(Guid id)
+        {
+            var aluno = await _alunoRepository.BuscarAlunoPorId(_user.ObterUserId());
+            if (aluno == null)
+            {
+                AdicionarErro("Aluno não encontrado");
+                return CustomResponse();
+            }
+            return Ok(aluno);
+        }
 
-        //    try
-        //    {
-        //        var aluno = await _alunoService.ObterAlunoPorId(id);
-        //        if (aluno == null)
-        //        {
-        //            NotificarErro("AlunoNaoEncontrado", "Aluno não encontrado");
-        //            return NotFound(ObterMensagensErro());
-        //        }
+        [HttpPut("{id:guid}")]
+        public async Task<IActionResult> AtualizarAluno(Guid id, [FromBody] AlunoDto alunoDto)
+        {
+            if (!ModelState.IsValid)
+            {
+                AdicionarErro("Dados do aluno inválidos.");
+                return CustomResponse();
+            }
+            var cmd = new AtualizarAlunoCommand(id, alunoDto.Nome, alunoDto.Email);
 
-        //        aluno = new Aluno.API.Models.Aluno(id, alunoDto.Nome, alunoDto.Email);
-        //        await _alunoService.AtualizarAluno(aluno);
-        //        return Ok(aluno);
-        //    }
-        //    catch (DomainException ex)
-        //    {
-        //        NotificarErro("AlunoErro", ex.Message);
-        //        return BadRequest(ObterMensagensErro());
-        //    }
-        //}
+            var result = await _mediator.EnviarComando(cmd);
+            if (!result.IsValid)
+                return CustomResponse(result);
 
-        //[HttpPost("matricular")]
-        //public async Task<IActionResult> RealizarMatricula([FromBody] MatriculaDto matriculaDto)
-        //{
-        //    try
-        //    {
-        //        await _alunoService.RealizarMatricula(matriculaDto.AlunoId, matriculaDto.CursoId, matriculaDto.TotalAulas);
-        //        return Ok("Matrícula realizada com sucesso!");
-        //    }
-        //    catch (DomainException ex)
-        //    {
-        //        NotificarErro("MatriculaErro", ex.Message);
-        //        return BadRequest(ObterMensagensErro());
-        //    }
-        //}
+            var aluno = await _alunoRepository.BuscarAlunoPorId(_user.ObterUserId());
+            return CustomResponse(aluno);
+        }
 
-        //[HttpPost("concluir-aula")]
-        //public async Task<IActionResult> ConcluirAula([FromBody] AulaDto aulaDto)
-        //{
-        //    try
-        //    {
-        //        await _alunoService.ConcluirAula(aulaDto.AlunoId, aulaDto.AulaId, aulaDto.Horas);
-        //        return Ok("Aula concluída com sucesso!");
-        //    }
-        //    catch (DomainException ex)
-        //    {
-        //        NotificarErro("AulaErro", ex.Message);
-        //        return BadRequest(ObterMensagensErro());
-        //    }
-        //}
+        [HttpPost("matricular")]
+        public async Task<IActionResult> RealizarMatricula([FromBody] MatriculaDto dto)
+        {
+            if (!ModelState.IsValid) return CustomResponse(ModelState);
 
-        //[HttpPost("emitir-certificado")]
-        //public async Task<IActionResult> EmitirCertificado([FromBody] CertificadoDto certificadoDto)
-        //{
-        //    try
-        //    {
-        //        var certificado = new Certificado(certificadoDto.Curso);
-        //        await _alunoService.EmitirCertificado(certificadoDto.AlunoId, certificado);
-        //        return Ok("Certificado emitido com sucesso!");
-        //    }
-        //    catch (DomainException ex)
-        //    {
-        //        NotificarErro("CertificadoErro", ex.Message);
-        //        return BadRequest(ObterMensagensErro());
-        //    }
-        //}
+            var cmd = new RealizarMatriculaCommand(
+                alunoId: dto.AlunoId,
+                cursoId: dto.CursoId,
+                cursoNome: dto.CursoNome,
+                totalAulas: dto.TotalAulas,
+                cargaHorariaTotal: dto.CargaHorariaTotal
+            );
+
+            var result = await _mediator.EnviarComando(cmd);
+            return CustomResponse(result);
+        }
+
+        [HttpPost("emitir-certificado")]
+        public async Task<IActionResult> EmitirCertificado([FromBody] CertificadoDto certificadoDto)
+        {
+            // Command recebe CursoId e AlunoId; o handler decide emitir e atualiza status
+            var cmd = new EmitirCertificadoCommand(
+                cursoId: certificadoDto.CursoId,
+                alunoId: certificadoDto.AlunoId
+            );
+
+            var result = await _mediator.EnviarComando(cmd);
+            if (!result.IsValid)
+                return CustomResponse(result);
+
+            return CustomResponse("Certificado emitido com sucesso!");
+        }
     }
 }
-

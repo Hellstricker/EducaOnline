@@ -1,27 +1,42 @@
-﻿namespace EducaOnline.Aluno.API.Models.ValueObjects
+﻿using EducaOnline.Core.DomainObjects;
+
+namespace EducaOnline.Aluno.API.Models.ValueObjects
 {
     public class HistoricoAprendizado
     {
-        public int TotalHorasEstudadas { get; private set; }
         public int TotalAulasConcluidas { get; private set; }
-        public double Progresso { get; private set; }
         public int TotalAulas { get; private set; }
+        public double Progresso { get; private set; } // 0..100
 
         private HistoricoAprendizado() { }
 
-        public HistoricoAprendizado(int totalHoras, int totalAulasConcluidas, int totalAulas, double progresso = 0)
+        public HistoricoAprendizado(int totalAulasConcluidas, int totalAulas)
         {
-            TotalHorasEstudadas = totalHoras;
+            if (totalAulas < 0) throw new DomainException("Total de aulas inválido.");
+            if (totalAulasConcluidas < 0) throw new DomainException("Total de aulas concluídas inválido.");
+            if (totalAulasConcluidas > totalAulas) totalAulasConcluidas = totalAulas;
+
             TotalAulasConcluidas = totalAulasConcluidas;
             TotalAulas = totalAulas;
-            Progresso = progresso;
+            Progresso = CalcularProgresso(TotalAulasConcluidas, TotalAulas);
         }
 
-        public void Atualizar(int novasHoras)
+        public void IncrementarAulaConcluida()
         {
-            TotalHorasEstudadas += novasHoras;
-            TotalAulasConcluidas += 1;
-            Progresso = (TotalAulasConcluidas * 100) / TotalAulas;
+            if (TotalAulas == 0)
+                throw new DomainException("Total de aulas não informado.");
+
+            if (TotalAulasConcluidas < TotalAulas)
+            {
+                TotalAulasConcluidas += 1;
+                Progresso = CalcularProgresso(TotalAulasConcluidas, TotalAulas);
+            }
+        }
+
+        private static double CalcularProgresso(int concluidas, int total)
+        {
+            if (total <= 0) return 0;
+            return Math.Round((double)((decimal)concluidas / total * 100m), 0, MidpointRounding.AwayFromZero);
         }
     }
 }

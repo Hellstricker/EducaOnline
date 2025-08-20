@@ -1,6 +1,7 @@
 ﻿using EducaOnline.Aluno.API.Models;
 using EducaOnline.Core.Data;
 using EducaOnline.Core.Messages;
+using FluentValidation.Results;
 using Microsoft.EntityFrameworkCore;
 
 namespace EducaOnline.Aluno.API.Data
@@ -18,6 +19,7 @@ namespace EducaOnline.Aluno.API.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Ignore<Event>();
+            modelBuilder.Ignore<ValidationResult>();
 
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(AlunoDbContext).Assembly);
         }

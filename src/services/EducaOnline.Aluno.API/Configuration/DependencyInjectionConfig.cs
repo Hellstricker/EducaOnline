@@ -14,7 +14,6 @@ namespace EducaOnline.Aluno.API.Configuration
             services.AddScoped<IMediatorHandler, MediatorHandler>();
 
             // Conteudo
-            services.AddScoped<IAlunoService, AlunoService>();
             services.AddScoped<IAlunoRepository, AlunoRepository>();
 
         }

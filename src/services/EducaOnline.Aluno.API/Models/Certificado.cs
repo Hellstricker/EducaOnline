@@ -8,7 +8,6 @@ namespace EducaOnline.Aluno.API.Models
         {
 
         }
-
         public Certificado(string curso)
         {
             Id = Guid.Empty;
