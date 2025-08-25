@@ -6,8 +6,8 @@ Bem-vindo ao repositório do projeto **EducaOnline**. Este projeto é uma entreg
 
 
 ### **Autor(es)**
-- **Jairo**
-- **Victor**
+- **Jairo Bionez**
+- **Victor Lino**
 - **Motta**
 - **Ozias Manoel Costa Neto**
  
