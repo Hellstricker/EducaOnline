@@ -21,7 +21,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
     MatFormFieldModule,
     ValidationMessagePipe,
     NgxMaskDirective,
-    MatSnackBarModule
+    MatSnackBarModule,
   ],
   exports: [],
   declarations: [LoginComponent, FormLoginComponent, FormaNovaContaComponent],

@@ -18,7 +18,7 @@ export class FormLoginComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private router: Router,
-    private authService: AuthService
+    // private authService: AuthService
   ) {
     this.form = fb.group({
       email: ['', [Validators.required, Validators.email]],
@@ -33,16 +33,16 @@ export class FormLoginComponent implements OnInit {
     const { value, valid } = this.form;
 
     if(valid) {
-      this.authService.login(value)
-      .pipe(take(1))
-      .subscribe(token => {
-        if(token) {
-          console.log(token);
-          this.authService.setToken(token.data.accessToken);
-          this.authService.setUrl('inicio');
-          this.router.navigate(['inicio']);
-        }
-      });
+      // this.authService.login(value)
+      // .pipe(take(1))
+      // .subscribe(token => {
+      //   if(token) {
+      //     console.log(token);
+      //     this.authService.setToken(token.data.accessToken);
+      //     this.authService.setUrl('inicio');
+      //     this.router.navigate(['inicio']);
+      //   }
+      // });
     }
   }
 
