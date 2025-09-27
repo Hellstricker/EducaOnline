@@ -1,0 +1,45 @@
+<div class="menu">
+  <div class="menu-icons">
+    <!-- <div class="mo">
+      <div class="conteudo">
+
+        <p>Gestão contas</p>
+      </div>
+    </div>
+    ' -->
+    <div class="logo">
+      <img class="img" src="assets/imgs/logo_reduzida.png" alt="">
+      <p>Educa online</p>
+    </div>
+
+
+    <div class="menu-item" [routerLink]="['inicio']">
+      <div class="d-flex" [ngClass]="{'ativo': ativo('inicio')}">
+        <span class="material-symbols-outlined">
+          home
+        </span>
+
+        <p class="opcao font-16 ms-1">Inicio</p>
+      </div>
+    </div>
+
+    <div class="menu-item" [routerLink]="['usuario']">
+      <div class="d-flex" [ngClass]="{'ativo': ativo('usuario')}">
+        <span class="material-symbols-outlined">
+          person
+        </span>
+
+        <p class="opcao font-16 ms-1">Usuários</p>
+      </div>
+    </div>
+
+    <div class="menu-item" [routerLink]="['curso']">
+      <div class="d-flex" [ngClass]="{'ativo': ativo('curso')}">
+        <span class="material-symbols-outlined">
+          school
+        </span>
+
+        <p class="opcao font-16 ms-1">Cursos</p>
+      </div>
+    </div>
+</div>

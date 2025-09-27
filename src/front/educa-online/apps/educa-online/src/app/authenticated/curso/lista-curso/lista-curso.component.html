@@ -1,0 +1,51 @@
+<div class="filter-content">
+      <div class="d-flex align-items-center">
+        <mat-form-field class="example-full-width" appearance="outline">
+          <mat-label>Buscar curso</mat-label>
+          <input matInput>
+        </mat-form-field>
+      </div>
+</div>
+
+<div class="table-content">
+  <mat-table mat-table [dataSource]="cursos">
+    <ng-container matColumnDef="nome">
+      <mat-header-cell *matHeaderCellDef> Nome </mat-header-cell>
+      <mat-cell *matCellDef="let element" data-label="Nome"> {{element.nome}} </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="dataCadastro">
+      <mat-header-cell *matHeaderCellDef> Data Cadastro </mat-header-cell>
+      <mat-cell *matCellDef="let element" data-label="Data Cadastro"> {{element.dataCadastro}} </mat-cell>
+    </ng-container>
+
+
+    <ng-container matColumnDef="ativo">
+      <mat-header-cell *matHeaderCellDef> Ativo </mat-header-cell>
+      <mat-cell *matCellDef="let element" data-label="Ativo">
+        @if (element.ativo) {
+        <p>Sim</p>
+        }@else {
+        <p>Não</p>
+        }
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="acoes">
+      <mat-header-cell *matHeaderCellDef> Ações </mat-header-cell>
+      <mat-cell *matCellDef="let element" data-label="Ações">
+        <span class="material-symbols-outlined cursor-pointer">
+          edit
+        </span>
+
+        <span class="material-symbols-outlined cor-vermelho ms-2 cursor-pointer" >
+          delete
+        </span>
+      </mat-cell>
+    </ng-container>
+
+
+    <mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row >
+  </mat-table>
+</div>
