@@ -3,40 +3,40 @@ using EducaOnline.Aluno.API.Models;
 using EducaOnline.Core.Enums;
 using EducaOnline.WebAPI.Core.Configuration;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using System.Threading;
 
 namespace EducaOnline.Aluno.API.Configuration
 {
     public class DbMigrationHelper
     {
-        public static async Task EnsureSeedData(WebApplication app)
+        public static async Task EnsureSeedData(WebApplication app, CancellationToken cancellationToken)
         {
             var services = app.Services.CreateScope().ServiceProvider;
-            await EnsureSeedData(services);
+            await EnsureSeedData(services, cancellationToken);
         }
 
-        public static async Task EnsureSeedData(IServiceProvider serviceProvider)
+        public static async Task EnsureSeedData(IServiceProvider serviceProvider, CancellationToken cancellationToken)
         {
             using var scope = serviceProvider.GetRequiredService<IServiceScopeFactory>().CreateScope();
             var env = scope.ServiceProvider.GetRequiredService<IWebHostEnvironment>();
-            var alunoRepository = scope.ServiceProvider.GetRequiredService<IAlunoRepository>();
-
             var alunoContext = scope.ServiceProvider.GetRequiredService<AlunoDbContext>();
 
             await DbHealthChecker.TestConnection(alunoContext);
 
             if (env.IsDevelopment() || env.IsEnvironment("Docker"))
             {
-                await alunoContext.Database.EnsureCreatedAsync();
+                await alunoContext.Database.MigrateAsync(cancellationToken);
 
-
-                var alunoDb = await alunoRepository.BuscarAlunoPorId(Guid.Parse("40640fec-5daf-4956-b1c0-2fde87717b66"));
+                var alunoId = Guid.Parse("40640fec-5daf-4956-b1c0-2fde87717b66");
+                var alunoDb = await alunoContext.Alunos.FirstOrDefaultAsync(x => x.Id == alunoId, cancellationToken);
 
                 if (alunoDb == null)
                 {
-                    var aluno = new Models.Aluno(Guid.Parse("40640fec-5daf-4956-b1c0-2fde87717b66"), "Jairo Bionez", "aluno@educaonline.com.br");
+                    var aluno = new Models.Aluno(alunoId, "Jairo Bionez", "aluno@educaonline.com.br");
 
-                    alunoContext.Set<Models.Aluno>().Add(aluno);
-                    alunoContext.SaveChanges();
+                    await alunoContext.Alunos.AddAsync(aluno, cancellationToken);
+                    await alunoContext.SaveChangesAsync(cancellationToken);
                 }
             }
         }
