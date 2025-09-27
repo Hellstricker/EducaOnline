@@ -8,7 +8,7 @@ namespace EducaOnline.Aluno.API.Data.Mappings
     {
         public void Configure(EntityTypeBuilder<Models.Aluno> builder)
         {
-            builder.ToTable("Aluno");
+            builder.ToTable("Alunos");
 
             builder.HasKey(x => x.Id);
 
@@ -35,7 +35,7 @@ namespace EducaOnline.Aluno.API.Data.Mappings
     {
         public void Configure(EntityTypeBuilder<Matricula> builder)
         {
-            builder.ToTable("Matricula");
+            builder.ToTable("Matriculas");
 
             builder.HasKey(x => x.Id);
 
@@ -47,7 +47,7 @@ namespace EducaOnline.Aluno.API.Data.Mappings
     {
         public void Configure(EntityTypeBuilder<Certificado> builder)
         {
-            builder.ToTable("Certificado");
+            builder.ToTable("Certificados");
 
             builder.HasKey(x => x.Id);
         }
@@ -57,7 +57,7 @@ namespace EducaOnline.Aluno.API.Data.Mappings
     {
         public void Configure(EntityTypeBuilder<AulaConcluida> builder)
         {
-            builder.ToTable("AulaConcluida");
+            builder.ToTable("AulaConcluidas");
 
             builder.HasKey(x => x.Id);
         }

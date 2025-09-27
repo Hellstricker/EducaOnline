@@ -7,20 +7,21 @@ using EducaOnline.MessageBus;
 using EducaOnline.WebAPI.Core.Controllers;
 using EducaOnline.WebAPI.Core.Usuario;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading;
 
 
 namespace EducaOnline.Aluno.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class AlunoController : MainController
+    public class AlunosController : MainController
     {
         private readonly IAlunoRepository _alunoRepository;
         private readonly IMediatorHandler _mediator;
         private readonly IMessageBus _messageBus;
         private readonly IAspNetUser _user;
 
-        public AlunoController(
+        public AlunosController(
             IAlunoRepository alunoRepository,
             IMediatorHandler mediator,
             IMessageBus messageBus,
@@ -53,9 +54,9 @@ namespace EducaOnline.Aluno.API.Controllers
         }
 
         [HttpGet("{id:guid}")]
-        public async Task<IActionResult> ObterAlunoPorId(Guid id)
+        public async Task<IActionResult> ObterAlunoPorId(Guid id, CancellationToken cancellationToken)
         {
-            var aluno = await _alunoRepository.BuscarAlunoPorId(_user.ObterUserId());
+            var aluno = await _alunoRepository.BuscarAlunoPorId(id, cancellationToken);
             if (aluno == null)
             {
                 AdicionarErro("Aluno não encontrado");
@@ -65,7 +66,7 @@ namespace EducaOnline.Aluno.API.Controllers
         }
 
         [HttpPut("{id:guid}")]
-        public async Task<IActionResult> AtualizarAluno(Guid id, [FromBody] AlunoDto alunoDto)
+        public async Task<IActionResult> AtualizarAluno(Guid id, [FromBody] AlunoDto alunoDto, CancellationToken cancellationToken)
         {
             if (!ModelState.IsValid)
             {
@@ -78,7 +79,7 @@ namespace EducaOnline.Aluno.API.Controllers
             if (!result.IsValid)
                 return CustomResponse(result);
 
-            var aluno = await _alunoRepository.BuscarAlunoPorId(_user.ObterUserId());
+            var aluno = await _alunoRepository.BuscarAlunoPorId(id, cancellationToken);
             return CustomResponse(aluno);
         }
 
