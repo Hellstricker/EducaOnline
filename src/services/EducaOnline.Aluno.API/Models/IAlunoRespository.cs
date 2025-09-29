@@ -4,11 +4,12 @@ namespace EducaOnline.Aluno.API.Models
 {
     public interface IAlunoRepository : IRepository<Aluno>
     {
-        Task AdicionarAluno(Aluno aluno);
-        Task AtualizarAluno(Aluno aluno);
-        IQueryable<Aluno?> BuscarAlunos();
-        Task<Aluno?> BuscarAlunoPorRa(int ra);
-        Task<Aluno?> BuscarAlunoPorId(Guid id);
-        Task<int> BuscarUltimoRa();
+        Task AdicionarAluno(Aluno aluno, CancellationToken cancellationToken);
+        Task AtualizarAluno(Aluno aluno, CancellationToken cancellationToken);
+        Task<IEnumerable<Aluno>> BuscarAlunos(CancellationToken cancellationToken);
+        Task<Aluno?> BuscarAlunoPorRa(int ra, CancellationToken cancellationToken);
+        Task<Aluno?> BuscarAlunoPorId(Guid id, CancellationToken cancellationToken);
+        Task<int> BuscarUltimoRa(CancellationToken cancellationToken);
+        Task<int> BuscarProximoRa(CancellationToken cancellationToken);
     }
 }

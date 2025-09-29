@@ -1,5 +1,7 @@
 ﻿using EducaOnline.Core.Messages;
 using FluentValidation;
+using MediatR;
+using FluentValidation.Results;
 
 namespace EducaOnline.Aluno.API.Application.Commands
 {
