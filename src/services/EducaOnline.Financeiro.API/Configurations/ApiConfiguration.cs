@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using EducaOnline.Financeiro.API.Data;
 using EducaOnline.WebAPI.Core.Identidade;
+using EducaOnline.Financeiro.API.Facade;
 
 namespace EducaOnline.Financeiro.API.Configurations
 {
@@ -13,6 +14,8 @@ namespace EducaOnline.Financeiro.API.Configurations
             );
 
             services.AddControllers();
+
+            services.Configure<PagamentoConfig>(configuration.GetSection("PagamentoConfig"));
 
             services.AddCors(options =>
             {

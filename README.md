@@ -32,8 +32,12 @@ O projeto consiste em:
 A estrutura do projeto é organizada da seguinte forma:
 
 - src/
+  - api gateways/
+  	- EducaOnline.Bff.Cursos - BFF
   - building_blocks/
 	- EducaOnline.Core/ - Contém todas as definições comuns aos domínios compartilhados
+  	- EducaOnline.MessageBus - 
+   	- EducaOnline.WebAPI.Core - Contém todas as definições comuns às APIS
   - services/
 	- EducaOnline.Aluno.API/ - API para exposição de endpoints do contexto Aluno
 	- EducaOnline.Conteudo.API/ - API para exposição de endpoints do contexto Conteudo

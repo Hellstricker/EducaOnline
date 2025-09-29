@@ -12,7 +12,7 @@ namespace EducaOnline.Financeiro.API.Controllers
         [HttpGet]
         public IActionResult Index()
         {
-            return CustomResponse("Financeiro API is running successfully!");
+            return CustomResponse("Financeiro API ok!");
         }
     }
 }
