@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net9.0</TargetFramework>
@@ -17,6 +17,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\building_blocks\EducaOnline.MessageBus\EducaOnline.MessageBus.csproj" />
     <ProjectReference Include="..\..\building_blocks\EducaOnline.WebAPI.Core\EducaOnline.WebAPI.Core.csproj" />
+    <ProjectReference Include="..\EducaOnline.Financeiro.Pagamentos\EducaOnline.Financeiro.Pagamentos.csproj" />
   </ItemGroup>
 
 </Project>
