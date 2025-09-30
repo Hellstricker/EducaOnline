@@ -1,0 +1,23 @@
+[
+  {
+    "Name": "Novo Perfil",
+    "Projects": [
+      {
+        "Path": "src\\services\\EducaOnline.Financeiro.API\\EducaOnline.Financeiro.API.csproj",
+        "Action": "Start"
+      },
+      {
+        "Path": "src\\services\\EducaOnline.Aluno.API\\EducaOnline.Aluno.API.csproj",
+        "Action": "Start"
+      },
+      {
+        "Path": "src\\services\\EducaOnline.Conteudo.API\\EducaOnline.Conteudo.API.csproj",
+        "Action": "Start"
+      },
+      {
+        "Path": "src\\services\\EducaOnline.Identidade.API\\EducaOnline.Identidade.API.csproj",
+        "Action": "Start"
+      }
+    ]
+  }
+]

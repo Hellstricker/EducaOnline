@@ -27,11 +27,14 @@ namespace EducaOnline.Conteudo.API.Models
         public ICollection<Aula>? Aulas { get; private set; }
 
 
-        public void Atualizar(string nome)
+        public void Atualizar(Curso curso)
         {
             Validacoes.ValidarSeVazio(Nome, "O campo Nome do curso não pode estar vazio");
 
-            Nome = nome;
+            Nome = curso.Nome;
+            Ativo = curso.Ativo;
+
+            AtualizarConteudoProgramatico(curso.ConteudoProgramatico);
         }
 
         public void AdicionarAula(Aula aula)
