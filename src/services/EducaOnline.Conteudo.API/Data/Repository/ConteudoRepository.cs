@@ -25,9 +25,5 @@ namespace EducaOnline.Conteudo.API.Data.Repository
 
         public void RemoverCurso(Curso curso) => _context.Cursos.Remove(curso);
 
-        public void Dispose()
-        {
-            _context.Dispose();
-        }
     }
 }

@@ -1,18 +1,16 @@
 using EducaOnline.Conteudo.API.Models;
 using EducaOnline.Conteudo.API.Models.ValueObjects;
 using EducaOnline.Conteudo.API.Services;
-using EducaOnline.Core.Communication;
+using EducaOnline.Conteudo.API.ViewModels;
 using EducaOnline.Core.Enums;
-using EducaOnline.Core.Messages.CommonMessages.Notifications;
 using EducaOnline.WebAPI.Core.Controllers;
-using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EducaOnline.Conteudo.API.Controllers
 {
     [Authorize]
-    [Route("api/curso")]
+    [Route("api/conteudos")]
     public class ConteudoController : MainController
     {
         private readonly IConteudoService _conteudoService;
@@ -25,7 +23,6 @@ namespace EducaOnline.Conteudo.API.Controllers
         /// <summary>
         /// Lista os cursos
         /// </summary>
-        /// <response code="401">Token n„o autorizado. Favor contate o suporte</response>
         [ProducesResponseType(typeof(List<Curso>), 200)]
         //[ProducesResponseType(typeof(InternalServerErrorModel), 500)]
         [HttpGet]
@@ -35,9 +32,9 @@ namespace EducaOnline.Conteudo.API.Controllers
         }
 
         /// <summary>
-        /// Busca um curso especifico por id
+        /// Busca um curso espec√≠fico por id
         /// </summary>
-        /// <response code="401">Token n„o autorizado. Favor contate o suporte</response>
+        /// <response code="401">Token n√£o autorizado. Favor contatar o suporte</response>
         [ProducesResponseType(typeof(Curso), 200)]
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(Guid id)
@@ -48,7 +45,7 @@ namespace EducaOnline.Conteudo.API.Controllers
         /// <summary>
         /// Adicionar um novo curso
         /// </summary>
-        /// <response code="401">Token n„o autorizado. Favor contate o suporte</response>
+        /// <response code="401">Token n√£o autorizado. Favor contatar o suporte</response>
         [Authorize(Roles = nameof(PerfilUsuarioEnum.ADM))]
         [HttpPost]
         public async Task<IActionResult> AdicionarCurso(Curso model)
@@ -58,13 +55,16 @@ namespace EducaOnline.Conteudo.API.Controllers
         }
 
         /// <summary>
-        /// Altera o nome do curso
+        /// Atualiza os dados de um curso espec√≠fico
         /// </summary>
-        /// <response code="401">Token n„o autorizado. Favor contate o suporte</response>
+        /// <response code="401">Token n√£o autorizado. Favor contatar o suporte</response>
         [Authorize(Roles = nameof(PerfilUsuarioEnum.ADM))]
         [HttpPut("{id}")]
-        public async Task<IActionResult> AlterarNomeCurso(Guid id, Curso model)
+        public async Task<IActionResult> AtualizarCurso(Guid id, CursoModel model)
         {
+            if (!ModelState.IsValid)
+                return CustomResponse(ModelState);
+            
             await _conteudoService.AlterarNomeCurso(id, model?.Nome);
             return Ok();
         }
@@ -72,10 +72,10 @@ namespace EducaOnline.Conteudo.API.Controllers
         /// <summary>
         /// Alterar o conteudo programtico do curso
         /// </summary>
-        /// <response code="401">Token n„o autorizado. Favor contate o suporte</response>
+        /// <response code="401">Token n√£o autorizado. Favor contatar o suporte</response>
         [Authorize(Roles = nameof(PerfilUsuarioEnum.ADM))]
         [HttpPut("{id}/conteudo-programatico")]
-        public async Task<IActionResult> AlterarNomeCurso(Guid id, ConteudoProgramatico model)
+        public async Task<IActionResult> AlterarConteudoProgramtico(Guid id, ConteudoProgramatico model)
         {
             await _conteudoService.AlterarConteudoProgramaticoCurso(id, model);
             return Ok();
@@ -84,7 +84,7 @@ namespace EducaOnline.Conteudo.API.Controllers
         /// <summary>
         /// Desatia um curso
         /// </summary>
-        /// <response code="401">Token n„o autorizado. Favor contate o suporte</response>
+        /// <response code="401">Token n√£o autorizado. Favor contatar o suporte</response>
         [Authorize(Roles = nameof(PerfilUsuarioEnum.ADM))]
         [HttpPut("{id}/desativar")]
         public async Task<IActionResult> DesativarCurso(Guid id)
@@ -96,7 +96,7 @@ namespace EducaOnline.Conteudo.API.Controllers
         /// <summary>
         /// Adiciona uma aula ao curso informado
         /// </summary>
-        /// <response code="401">Token n„o autorizado. Favor contate o suporte</response>
+        /// <response code="401">Token n√£o autorizado. Favor contatar o suporte</response>
         [Authorize(Roles = nameof(PerfilUsuarioEnum.ADM))]
         [HttpPost("{id}/aula")]
         [ProducesResponseType(typeof(List<Curso>), 200)]
@@ -108,7 +108,7 @@ namespace EducaOnline.Conteudo.API.Controllers
         /// <summary>
         /// Altera uma aula do curso informado
         /// </summary>
-        /// <response code="401">Token n„o autorizado. Favor contate o suporte</response>
+        /// <response code="401">Token n√£o autorizado. Favor contatar o suporte</response>
         [Authorize(Roles = nameof(PerfilUsuarioEnum.ADM))]
         [HttpPut("{id}/aula/{aulaId}")]
         [ProducesResponseType(typeof(List<Curso>), 200)]
@@ -120,7 +120,7 @@ namespace EducaOnline.Conteudo.API.Controllers
         /// <summary>
         /// Remove uma aula do curso informado
         /// </summary>
-        /// <response code="401">Token n„o autorizado. Favor contate o suporte</response>
+        /// <response code="401">Token n√£o autorizado. Favor contatar o suporte</response>
         [Authorize(Roles = nameof(PerfilUsuarioEnum.ADM))]
         [HttpDelete("{id}/aula/{aulaId}")]
         [ProducesResponseType(typeof(List<Curso>), 200)]
