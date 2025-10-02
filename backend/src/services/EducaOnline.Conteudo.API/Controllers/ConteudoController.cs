@@ -60,24 +60,12 @@ namespace EducaOnline.Conteudo.API.Controllers
         /// <response code="401">Token não autorizado. Favor contatar o suporte</response>
         [Authorize(Roles = nameof(PerfilUsuarioEnum.ADM))]
         [HttpPut("{id}")]
-        public async Task<IActionResult> AtualizarCurso(Guid id, CursoModel model)
+        public async Task<IActionResult> AtualizarCurso(Guid id, Curso model)
         {
             if (!ModelState.IsValid)
                 return CustomResponse(ModelState);
             
-            await _conteudoService.AlterarNomeCurso(id, model?.Nome);
-            return Ok();
-        }
-
-        /// <summary>
-        /// Alterar o conteudo programtico do curso
-        /// </summary>
-        /// <response code="401">Token não autorizado. Favor contatar o suporte</response>
-        [Authorize(Roles = nameof(PerfilUsuarioEnum.ADM))]
-        [HttpPut("{id}/conteudo-programatico")]
-        public async Task<IActionResult> AlterarConteudoProgramtico(Guid id, ConteudoProgramatico model)
-        {
-            await _conteudoService.AlterarConteudoProgramaticoCurso(id, model);
+            await _conteudoService.AlterarCurso(id, model);
             return Ok();
         }
 

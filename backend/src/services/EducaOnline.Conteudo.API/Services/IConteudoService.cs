@@ -8,7 +8,7 @@ namespace EducaOnline.Conteudo.API.Services
         Task<List<Curso>> BuscarCursos();
         Task<Curso> BuscarCurso(Guid id);
         Task AdicionarCurso(Curso curso);
-        Task<Curso> AlterarNomeCurso(Guid id, string nome);
+        Task<Curso> AlterarCurso(Guid id, Curso model);
         Task<Curso> AlterarConteudoProgramaticoCurso(Guid id, ConteudoProgramatico conteudoProgramatico);
         Task DesativarCurso(Guid id);
         Task<Curso> AdicionarAula(Guid cursoId, Aula aula);

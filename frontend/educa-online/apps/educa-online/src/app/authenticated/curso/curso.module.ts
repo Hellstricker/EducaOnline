@@ -10,6 +10,8 @@ import { MatDialogModule } from "@angular/material/dialog";
 import { MatSnackBarModule } from "@angular/material/snack-bar";
 import { CursoComponent } from "./curso.component";
 import { ListaCursoComponent } from "./lista-curso/lista-curso.component";
+import { CreateEditCursoComponent } from "./create-edit-curso/create-edit-curso.component";
+import { MatSelectModule } from "@angular/material/select";
 
 @NgModule({
   imports: [CursoRouting, MatTableModule,
@@ -19,10 +21,11 @@ import { ListaCursoComponent } from "./lista-curso/lista-curso.component";
     ReactiveFormsModule,
     ValidationMessagePipe,
     MatDialogModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    MatSelectModule,
   ],
   exports: [],
-  declarations: [CursoComponent, ListaCursoComponent],
+  declarations: [CursoComponent, ListaCursoComponent, CreateEditCursoComponent],
   providers: [],
 })
 export class CursoModule { }

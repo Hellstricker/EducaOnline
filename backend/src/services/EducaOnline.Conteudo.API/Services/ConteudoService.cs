@@ -31,13 +31,13 @@ namespace EducaOnline.Conteudo.API.Services
             await _conteudoRepository.UnitOfWork.Commit();
         }
 
-        public async Task<Curso> AlterarNomeCurso(Guid id, string nome)
+        public async Task<Curso> AlterarCurso(Guid id, Curso model)
         {
             var curso = await _conteudoRepository.BuscarCurso(id);
             if (curso == null)
                 throw new DomainException("Curso não encontrado");
 
-            curso.Atualizar(nome);
+            curso.Atualizar(model);
 
             _conteudoRepository.AlterarCurso(curso);
 

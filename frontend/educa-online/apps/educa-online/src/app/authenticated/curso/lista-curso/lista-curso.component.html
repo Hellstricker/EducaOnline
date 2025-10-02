@@ -1,10 +1,14 @@
 <div class="filter-content">
-      <div class="d-flex align-items-center">
-        <mat-form-field class="example-full-width" appearance="outline">
-          <mat-label>Buscar curso</mat-label>
-          <input matInput>
-        </mat-form-field>
-      </div>
+  <div class="d-flex align-items-center">
+    <mat-form-field class="example-full-width" appearance="outline">
+      <mat-label>Buscar curso</mat-label>
+      <input matInput>
+    </mat-form-field>
+  </div>
+
+  <div class="d-flex justify-content-end">
+    <button class="width-10" mat-flat-button (click)="novoCurso()">Novo curso</button>
+  </div>
 </div>
 
 <div class="table-content">
@@ -14,11 +18,15 @@
       <mat-cell *matCellDef="let element" data-label="Nome"> {{element.nome}} </mat-cell>
     </ng-container>
 
-    <ng-container matColumnDef="dataCadastro">
-      <mat-header-cell *matHeaderCellDef> Data Cadastro </mat-header-cell>
-      <mat-cell *matCellDef="let element" data-label="Data Cadastro"> {{element.dataCadastro}} </mat-cell>
+    <ng-container matColumnDef="titulo">
+      <mat-header-cell *matHeaderCellDef> Titulo </mat-header-cell>
+      <mat-cell *matCellDef="let element" data-label="Titulo"> {{element.titulo}} </mat-cell>
     </ng-container>
 
+    <ng-container matColumnDef="cargaHoraria">
+      <mat-header-cell *matHeaderCellDef> Carga horária </mat-header-cell>
+      <mat-cell *matCellDef="let element" data-label="Carga horária"> {{element.cargaHoraria}} </mat-cell>
+    </ng-container>
 
     <ng-container matColumnDef="ativo">
       <mat-header-cell *matHeaderCellDef> Ativo </mat-header-cell>
@@ -43,7 +51,6 @@
         </span>
       </mat-cell>
     </ng-container>
-
 
     <mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></mat-header-row>
     <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row >
