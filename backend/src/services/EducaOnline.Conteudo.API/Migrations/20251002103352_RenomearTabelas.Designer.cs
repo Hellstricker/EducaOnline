@@ -3,6 +3,7 @@ using System;
 using EducaOnline.Conteudo.API.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EducaOnline.Conteudo.API.Migrations
 {
     [DbContext(typeof(ConteudoContext))]
-    partial class ConteudoContextModelSnapshot : ModelSnapshot
+    [Migration("20251002103352_RenomearTabelas")]
+    partial class RenomearTabelas
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "9.0.8");
@@ -96,7 +99,7 @@ namespace EducaOnline.Conteudo.API.Migrations
 
                             b1.HasKey("CursoId");
 
-                            b1.ToTable("Cursos", (string)null);
+                            b1.ToTable("Cursos");
 
                             b1.WithOwner()
                                 .HasForeignKey("CursoId");

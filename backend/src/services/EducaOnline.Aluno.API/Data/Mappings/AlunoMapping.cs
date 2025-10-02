@@ -19,7 +19,7 @@ namespace EducaOnline.Aluno.API.Data.Mappings
                .Property(p => p.Progresso);
 
             builder.OwnsOne(p => p.HistoricoAprendizado)
-              .Property(p => p.TotalAulas);
+              .Property(p => p.TotalAulas);              
 
             builder.HasOne(p => p.Matricula);
 

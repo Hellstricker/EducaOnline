@@ -4,9 +4,9 @@ namespace EducaOnline.Aluno.API.Models.ValueObjects
 {
     public class HistoricoAprendizado
     {
-        public int TotalAulasConcluidas { get; private set; }
-        public int TotalAulas { get; private set; }
-        public double Progresso { get; private set; } // 0..100
+        public int? TotalAulasConcluidas { get; private set; }
+        public int? TotalAulas { get; private set; }
+        public double? Progresso { get; private set; } // 0..100
 
         private HistoricoAprendizado() { }
 
@@ -18,7 +18,7 @@ namespace EducaOnline.Aluno.API.Models.ValueObjects
 
             TotalAulasConcluidas = totalAulasConcluidas;
             TotalAulas = totalAulas;
-            Progresso = CalcularProgresso(TotalAulasConcluidas, TotalAulas);
+            Progresso = CalcularProgresso(TotalAulasConcluidas.Value, TotalAulas.Value);
         }
 
         public void IncrementarAulaConcluida()
@@ -29,7 +29,7 @@ namespace EducaOnline.Aluno.API.Models.ValueObjects
             if (TotalAulasConcluidas < TotalAulas)
             {
                 TotalAulasConcluidas += 1;
-                Progresso = CalcularProgresso(TotalAulasConcluidas, TotalAulas);
+                Progresso = CalcularProgresso(TotalAulasConcluidas.Value, TotalAulas.Value);
             }
         }
 

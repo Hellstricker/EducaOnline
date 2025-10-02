@@ -29,7 +29,7 @@ namespace EducaOnline.Aluno.API.Application.Handlers
 
             aluno.AtualizarDados(command.Nome, command.Email);
 
-            await _alunoRepository.AtualizarAluno(aluno, cancellationToken);
+            _alunoRepository.AtualizarAluno(aluno);
             return await PersistirDados(_alunoRepository.UnitOfWork);
         }
     }
