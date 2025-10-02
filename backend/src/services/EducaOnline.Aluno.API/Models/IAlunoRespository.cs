@@ -11,5 +11,7 @@ namespace EducaOnline.Aluno.API.Models
         Task<Aluno?> BuscarAlunoPorId(Guid id, CancellationToken cancellationToken);
         Task<int> BuscarUltimoRa(CancellationToken cancellationToken);
         Task<int> BuscarProximoRa(CancellationToken cancellationToken);
+        Task AdicionarMatricula(Matricula matricula, CancellationToken cancellationToken);
+
     }
 }

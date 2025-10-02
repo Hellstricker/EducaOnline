@@ -8,11 +8,12 @@ namespace EducaOnline.Core.DomainObjects
 
         protected Entity()
         {
-            Id = Guid.NewGuid();            
+            Id = Guid.NewGuid();
+            
         }
 
         private List<Event> _notificacoes;
-        public IReadOnlyCollection<Event> Notificacoes => _notificacoes.AsReadOnly();
+        public IReadOnlyCollection<Event> Notificacoes => _notificacoes?.AsReadOnly();
 
         public void AdicionarEvento(Event evento)
         {
