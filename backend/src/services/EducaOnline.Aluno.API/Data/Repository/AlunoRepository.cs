@@ -20,7 +20,7 @@ namespace EducaOnline.Aluno.API.Data.Repository
             await _context.Alunos.AddAsync(aluno, cancellationToken);
         }
 
-        public async Task AtualizarAluno(Models.Aluno aluno, CancellationToken cancellationToken = default)
+        public void AtualizarAluno(Models.Aluno aluno)
         {
             _context.Alunos.Update(aluno);
         }

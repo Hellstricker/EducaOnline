@@ -8,7 +8,7 @@ namespace EducaOnline.Conteudo.API.Data.Mappings
     {
         public void Configure(EntityTypeBuilder<Curso> builder)
         {
-            builder.ToTable("Curso");
+            builder.ToTable("Cursos");
 
             builder.HasKey(x => x.Id);
 
@@ -34,7 +34,7 @@ namespace EducaOnline.Conteudo.API.Data.Mappings
     {
         public void Configure(EntityTypeBuilder<Aula> builder)
         {
-            builder.ToTable("Aula");
+            builder.ToTable("Aulas");
 
             builder.HasKey(x => x.Id);
         }

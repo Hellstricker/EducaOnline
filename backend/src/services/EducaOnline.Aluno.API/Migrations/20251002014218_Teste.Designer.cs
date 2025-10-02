@@ -3,6 +3,7 @@ using System;
 using EducaOnline.Aluno.API.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EducaOnline.Aluno.API.Migrations
 {
     [DbContext(typeof(AlunoDbContext))]
-    partial class AlunoDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251002014218_Teste")]
+    partial class Teste
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "9.0.8");
@@ -135,13 +138,13 @@ namespace EducaOnline.Aluno.API.Migrations
                             b1.Property<Guid>("AlunoId")
                                 .HasColumnType("TEXT");
 
-                            b1.Property<double?>("Progresso")
+                            b1.Property<double>("Progresso")
                                 .HasColumnType("REAL");
 
-                            b1.Property<int?>("TotalAulas")
+                            b1.Property<int>("TotalAulas")
                                 .HasColumnType("INTEGER");
 
-                            b1.Property<int?>("TotalAulasConcluidas")
+                            b1.Property<int>("TotalAulasConcluidas")
                                 .HasColumnType("INTEGER");
 
                             b1.HasKey("AlunoId");
