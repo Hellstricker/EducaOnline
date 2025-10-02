@@ -42,9 +42,9 @@ namespace EducaOnline.Aluno.API.Application.Handlers
                 cargaHorariaTotal: command.CargaHorariaTotal
             );
 
-            aluno.RealizarMatricula(matricula);
+            //aluno.RealizarMatricula(matricula);
 
-            _alunoRepository.AtualizarAluno(aluno);
+            await _alunoRepository.AdicionarMatricula(matricula, cancellationToken);
             return await PersistirDados(_alunoRepository.UnitOfWork);
         }
     }

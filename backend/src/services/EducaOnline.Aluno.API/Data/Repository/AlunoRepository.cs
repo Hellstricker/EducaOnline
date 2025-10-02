@@ -20,6 +20,11 @@ namespace EducaOnline.Aluno.API.Data.Repository
             await _context.Alunos.AddAsync(aluno, cancellationToken);
         }
 
+        public async Task AdicionarMatricula(Matricula matricula, CancellationToken cancellationToken)
+        {
+            await _context.Matriculas.AddAsync(matricula, cancellationToken);
+        }
+
         public void AtualizarAluno(Models.Aluno aluno)
         {
             _context.Alunos.Update(aluno);
