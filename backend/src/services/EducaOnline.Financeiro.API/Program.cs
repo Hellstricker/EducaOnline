@@ -19,7 +19,7 @@ builder.Services
     .AddDependenceInjectionConfiguration()
     .AddSwaggerConfiguration()
     .AddMediatR(config => config.RegisterServicesFromAssembly(typeof(Program).Assembly))
-    .AddMessageBusConfiguration(builder.Configuration); ;
+    .AddMessageBusConfiguration(builder.Configuration);
 
 var app = builder.Build();
 

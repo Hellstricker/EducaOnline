@@ -55,10 +55,7 @@ namespace EducaOnline.Aluno.API.Configuration
 
             //app.UseIdentityConfig();
 
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-            });
+            app.MapControllers();
         }
     }
 }

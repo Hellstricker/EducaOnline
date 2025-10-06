@@ -55,10 +55,7 @@ namespace EducaOnline.Conteudo.API.Configuration
 
             app.UseAuthConfiguration();
 
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-            });
+            app.MapControllers();
         }
     }
 }

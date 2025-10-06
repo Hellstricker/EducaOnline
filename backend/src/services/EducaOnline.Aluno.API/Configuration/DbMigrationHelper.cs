@@ -31,7 +31,7 @@ namespace EducaOnline.Aluno.API.Configuration
                 var alunoId = Guid.Parse("40640fec-5daf-4956-b1c0-2fde87717b66");
                 var alunoDb = await alunoContext.Alunos.FirstOrDefaultAsync(x => x.Id == alunoId, cancellationToken);
 
-                if (alunoDb == null)
+                if (alunoDb is null)
                 {
                     var aluno = new Models.Aluno(alunoId, "Jairo Bionez", "aluno@educaonline.com.br");
 

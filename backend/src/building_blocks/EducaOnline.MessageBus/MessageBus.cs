@@ -7,14 +7,14 @@ namespace EducaOnline.MessageBus
 {
     public class MessageBus : IMessageBus
     {
-        private IBus _bus;
-        private IAdvancedBus _advancedBus;
+        private IBus? _bus;
+        private IAdvancedBus? _advancedBus;
 
         private readonly string _connectionString;
 
         public bool IsConnected => _bus?.Advanced.IsConnected ?? false;
 
-        public IAdvancedBus AdvancedBus => _bus.Advanced;
+        public IAdvancedBus AdvancedBus => _bus!.Advanced;
 
         public MessageBus(string connectionString)
         {
@@ -25,25 +25,25 @@ namespace EducaOnline.MessageBus
         public void Publish<T>(T message) where T : IntegrationEvent
         {
             TryConnect();
-            _bus.PubSub.Publish(message);
+            _bus!.PubSub.Publish(message);
         }
 
         public async Task PublishAsync<T>(T message) where T : IntegrationEvent
         {
             TryConnect();
-            await _bus.PubSub.PublishAsync(message);
+            await _bus!.PubSub.PublishAsync(message);
         }
 
         public void Subscribe<T>(string subscriptionId, Action<T> onMessage) where T : class
         {
             TryConnect();
-            _bus.PubSub.Subscribe(subscriptionId, onMessage);
+            _bus!.PubSub.Subscribe(subscriptionId, onMessage);
         }
 
         public void SubscribeAsync<T>(string subscriptionId, Func<T, Task> onMessage) where T : class
         {
             TryConnect();
-            _bus.PubSub.SubscribeAsync(subscriptionId, onMessage);
+            _bus!.PubSub.SubscribeAsync(subscriptionId, onMessage);
         }
 
         public TResponse Request<TRequest, TResponse>(TRequest request)
@@ -51,7 +51,7 @@ namespace EducaOnline.MessageBus
             where TResponse : ResponseMessage
         {
             TryConnect();
-            return _bus.Rpc.Request<TRequest, TResponse>(request);
+            return _bus!.Rpc.Request<TRequest, TResponse>(request);
         }
 
         public async Task<TResponse> RequestAsync<TRequest, TResponse>(TRequest request)
@@ -59,7 +59,7 @@ namespace EducaOnline.MessageBus
             where TResponse : ResponseMessage
         {
             TryConnect();
-            return await _bus.Rpc.RequestAsync<TRequest, TResponse>(request);
+            return await _bus!.Rpc.RequestAsync<TRequest, TResponse>(request);
         }
 
         public IDisposable Respond<TRequest, TResponse>(Func<TRequest, TResponse> responder)
@@ -67,7 +67,7 @@ namespace EducaOnline.MessageBus
             where TResponse : ResponseMessage
         {
             TryConnect();
-            return _bus.Rpc.Respond(responder);
+            return _bus!.Rpc.Respond(responder);
         }
 
         public IDisposable RespondAsync<TRequest, TResponse>(Func<TRequest, Task<TResponse>> responder)
@@ -75,7 +75,7 @@ namespace EducaOnline.MessageBus
             where TResponse : ResponseMessage
         {
             TryConnect();
-            return _bus.Rpc.RespondAsync(responder).GetAwaiter().GetResult();
+            return _bus!.Rpc.RespondAsync(responder).GetAwaiter().GetResult();
         }
 
         private void TryConnect()

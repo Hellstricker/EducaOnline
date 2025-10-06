@@ -19,30 +19,28 @@ namespace EducaOnline.Conteudo.API.Configuration
 
                 c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                 {
-                    Description = "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\"",
+                    Description = "Insira o token JWT desta maneira: Bearer {seu token}",
                     Name = "Authorization",
+                    Scheme = "Bearer",
+                    BearerFormat = "JWT",
                     In = ParameterLocation.Header,
-                    Type = SecuritySchemeType.ApiKey,
-                    Scheme = "Bearer"
+                    Type = SecuritySchemeType.ApiKey
                 });
 
-                c.AddSecurityRequirement(new OpenApiSecurityRequirement {
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement
+                {
                     {
-                        new OpenApiSecurityScheme {
-                            Reference = new OpenApiReference {
-                                    Type = ReferenceType.SecurityScheme,
-                                        Id = "Bearer"
-                                },
-                                Scheme = "oauth2",
-                                Name = "Bearer",
-                                In = ParameterLocation.Header,
-
+                        new OpenApiSecurityScheme
+                        {
+                            Reference = new OpenApiReference
+                            {
+                                Type = ReferenceType.SecurityScheme,
+                                Id = "Bearer"
+                            }
                         },
-                        new List<string> ()
+                        new string[] {}
                     }
-            });
-
-                c.ResolveConflictingActions(apiDescriptions => apiDescriptions.First());
+                });
             });
 
 

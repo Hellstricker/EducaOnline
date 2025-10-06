@@ -1,5 +1,6 @@
 ﻿using EducaOnline.MessageBus;
 using EducaOnline.Core.Utils;
+using EducaOnline.Financeiro.API.Services;
 
 namespace EducaOnline.Financeiro.API.Configurations
 {
@@ -8,7 +9,8 @@ namespace EducaOnline.Financeiro.API.Configurations
         public static void AddMessageBusConfiguration(this IServiceCollection services,
             IConfiguration configuration)
         {
-            services.AddMessageBus(configuration.GetMessageQueueConnection("MessageBus"));
+            services.AddMessageBus(configuration.GetMessageQueueConnection("MessageBus"))
+                .AddHostedService<PagamentoIntegrationHandler>();
         }
     }
 }

@@ -7,7 +7,7 @@ namespace EducaOnline.Conteudo.API.Models
         void AdicionarCurso(Curso curso);
         void AlterarCurso(Curso curso);
         Task<List<Curso>> BuscarCursos();
-        Task<Curso> BuscarCurso(Guid id);
+        Task<Curso?> BuscarCurso(Guid id);
         void RemoverCurso(Curso curso);
     }
 }

@@ -18,7 +18,7 @@ namespace EducaOnline.Conteudo.API.Services
             return await _conteudoRepository.BuscarCursos();
         }
 
-        public async Task<Curso> BuscarCurso(Guid id)
+        public async Task<Curso?> BuscarCurso(Guid id)
         {
             return await _conteudoRepository.BuscarCurso(id);
         }
@@ -34,7 +34,7 @@ namespace EducaOnline.Conteudo.API.Services
         public async Task<Curso> AlterarCurso(Guid id, Curso model)
         {
             var curso = await _conteudoRepository.BuscarCurso(id);
-            if (curso == null)
+            if (curso is null)
                 throw new DomainException("Curso não encontrado");
 
             curso.Atualizar(model);
@@ -49,7 +49,7 @@ namespace EducaOnline.Conteudo.API.Services
         public async Task<Curso> AlterarConteudoProgramaticoCurso(Guid id, ConteudoProgramatico conteudoProgramatico)
         {
             var curso = await _conteudoRepository.BuscarCurso(id);
-            if (curso == null)
+            if (curso is null)
                 throw new DomainException("Curso não encontrado");
 
             curso.AtualizarConteudoProgramatico(conteudoProgramatico);
@@ -63,29 +63,35 @@ namespace EducaOnline.Conteudo.API.Services
 
         public async Task DesativarCurso(Guid id)
         {
-            // TODO: Regra
+            var curso = await _conteudoRepository.BuscarCurso(id);
+            if (curso is null)
+                throw new DomainException("Curso não encontrado");
+
+            curso.Desativar();
+            _conteudoRepository.AlterarCurso(curso);
+            await _conteudoRepository.UnitOfWork.Commit();
         }
 
         public async Task<int> ObterTotalAulasPorCurso(Guid cursoId)
         {
             var curso = await _conteudoRepository.BuscarCurso(cursoId);
 
-            if (curso == null)
+            if (curso is null)
                 throw new DomainException("Curso não encontrado");
 
-            return curso.Aulas.Count();
+            return curso.Aulas!.Count();
         }
 
         public async Task<int> ObterHorasAulasPorCurso(Guid cursoId, Guid aulaId)
         {
             var curso = await _conteudoRepository.BuscarCurso(cursoId);
 
-            if (curso == null)
+            if (curso is null)
                 throw new DomainException("Curso não encontrado");
 
-            var aula = curso.Aulas.FirstOrDefault(p => p.Id == aulaId);
+            var aula = curso.Aulas!.FirstOrDefault(p => p.Id == aulaId);
 
-            if (aula == null)
+            if (aula is null)
                 throw new DomainException("Aula não encontrada");
 
             return aula.TotalHoras;
@@ -94,7 +100,7 @@ namespace EducaOnline.Conteudo.API.Services
         public async Task<Curso> AdicionarAula(Guid cursoId, Aula aula)
         {
             var curso = await _conteudoRepository.BuscarCurso(cursoId);
-            if (curso == null)
+            if (curso is null)
                 throw new DomainException("Curso não encontrado");
 
             curso.AdicionarAula(aula);
@@ -107,7 +113,7 @@ namespace EducaOnline.Conteudo.API.Services
         public async Task<Curso> AlterarAula(Guid cursoId, Guid aulaId, Aula aula)
         {
             var curso = await _conteudoRepository.BuscarCurso(cursoId);
-            if (curso == null)
+            if (curso is null)
                 throw new DomainException("Curso não encontrado");
 
             curso.AlterarAula(aulaId, aula);
@@ -121,7 +127,7 @@ namespace EducaOnline.Conteudo.API.Services
         public async Task<Curso> RemoverAula(Guid cursoId, Guid aulaId)
         {
             var curso = await _conteudoRepository.BuscarCurso(cursoId);
-            if (curso == null)
+            if (curso is null)
                 throw new DomainException("Curso não encontrado");
 
             curso.RemoverAula(aulaId);

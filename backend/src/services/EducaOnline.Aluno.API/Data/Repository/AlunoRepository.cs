@@ -30,6 +30,11 @@ namespace EducaOnline.Aluno.API.Data.Repository
             _context.Alunos.Update(aluno);
         }
 
+        public void AtualizarMatricula(Matricula matricula)
+        {
+            _context.Matriculas.Update(matricula);
+        }
+
         public async Task<int> BuscarUltimoRa(CancellationToken cancellationToken)
         {
             return await _context.Alunos.MaxAsync(p => p.Ra);
@@ -65,6 +70,12 @@ namespace EducaOnline.Aluno.API.Data.Repository
         {
             var ultimoRa = await _context.Alunos.MaxAsync(p => (int?)p.Ra, cancellationToken);
             return ultimoRa.HasValue ? ultimoRa.Value + 1 : 10000; //está correto fazer essa verificação aqui e já retornar o valor certo?
+        }
+
+        public async Task<Matricula?> BuscarMatriculaPorAlunoId(Guid alunoId, CancellationToken cancellationToken)
+        {
+            return await _context.Matriculas
+                .FirstOrDefaultAsync(m => m.AlunoId == alunoId, cancellationToken);
         }
     }
 }

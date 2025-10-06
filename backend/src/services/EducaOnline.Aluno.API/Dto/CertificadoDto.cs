@@ -4,6 +4,6 @@
     {
         public Guid AlunoId { get; set; }
         public Guid CursoId { get; set; }
-        public string Curso { get; set; }
+        public string? Curso { get; set; }
     }
 }

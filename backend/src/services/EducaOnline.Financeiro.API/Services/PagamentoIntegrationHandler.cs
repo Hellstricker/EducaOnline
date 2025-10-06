@@ -20,8 +20,8 @@ namespace EducaOnline.Financeiro.API.Services
 
         private void SetResponder()
         {
-            //_bus.RespondAsync<PedidoIniciadoIntegrationEvent, ResponseMessage>(async request =>
-            //    await AutorizarPagamento(request));
+            _bus.RespondAsync<PedidoIniciadoIntegrationEvent, ResponseMessage>(async request =>
+                await AutorizarPagamento(request));
         }
 
         private void SetSubscribers()
@@ -37,20 +37,44 @@ namespace EducaOnline.Financeiro.API.Services
             return Task.CompletedTask;
         }
 
-        //private async Task<ResponseMessage> AutorizarPagamento(PedidoIniciadoIntegrationEvent message)
+        private async Task<ResponseMessage> AutorizarPagamento(PedidoIniciadoIntegrationEvent message)
+        {
+            using var scope = _serviceProvider.CreateScope();
+            var pagamentoService = scope.ServiceProvider.GetRequiredService<IPagamentoService>();
+            var pagamento = new Pagamento
+            {
+                PedidoId = message.PedidoId,                
+                TipoPagamento = (TipoPagamento)message.TipoPagamento,
+                Valor = message.Valor,
+                CartaoCredito = new CartaoCredito(
+                    message.NomeCartao, message.NumeroCartao, message.MesAnoVencimento, message.CVV)
+            };
+
+            var response = await pagamentoService.AutorizarPagamento(pagamento);
+
+            return response;
+        }
+
+
+        //private async Task<ResponseMessage> AutorizarCapturarPagamento(AlunoPagouMatriculaIntegrationEvent message)
         //{
         //    using var scope = _serviceProvider.CreateScope();
         //    var pagamentoService = scope.ServiceProvider.GetRequiredService<IPagamentoService>();
         //    var pagamento = new Pagamento
         //    {
-        //        PedidoId = message.PedidoId,
+        //        CursoId = message.CursoId,
+        //        AlunoId = message.AlunoId,
         //        TipoPagamento = (TipoPagamento)message.TipoPagamento,
         //        Valor = message.Valor,
         //        CartaoCredito = new CartaoCredito(
-        //            message.NomeCartao, message.NumeroCartao, message.MesAnoVencimento, message.CVV)
+        //            message.NomeCartao, message.NumeroCartao, message.MesAnoExpiracao, message.Ccv)
         //    };
 
         //    var response = await pagamentoService.AutorizarPagamento(pagamento);
+
+        //    if (!response.ValidationResult.IsValid) return response;
+
+        //    response = await pagamentoService.CapturarPagamento(message.AlunoId, message.CursoId);
 
         //    return response;
         //}

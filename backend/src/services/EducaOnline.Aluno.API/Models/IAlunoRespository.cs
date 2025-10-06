@@ -12,6 +12,7 @@ namespace EducaOnline.Aluno.API.Models
         Task<int> BuscarUltimoRa(CancellationToken cancellationToken);
         Task<int> BuscarProximoRa(CancellationToken cancellationToken);
         Task AdicionarMatricula(Matricula matricula, CancellationToken cancellationToken);
-
+        void AtualizarMatricula(Matricula matricula);
+        Task<Matricula?> BuscarMatriculaPorAlunoId(Guid alunoId, CancellationToken cancellationToken);
     }
 }

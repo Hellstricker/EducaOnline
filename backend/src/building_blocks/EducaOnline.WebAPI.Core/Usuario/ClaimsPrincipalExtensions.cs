@@ -13,7 +13,7 @@ namespace EducaOnline.WebAPI.Core.Usuario
             }
 
             var claim = principal.FindFirst(ClaimTypes.NameIdentifier);
-            return claim?.Value;
+            return claim!.Value;
         }
 
         public static string GetUserEmail(this ClaimsPrincipal principal)
@@ -24,7 +24,7 @@ namespace EducaOnline.WebAPI.Core.Usuario
             }
 
             var claim = principal.FindFirst("email");
-            return claim?.Value;
+            return claim!.Value;
         }
 
         public static string GetUserToken(this ClaimsPrincipal principal)

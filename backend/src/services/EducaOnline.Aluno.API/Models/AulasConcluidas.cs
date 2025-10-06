@@ -11,6 +11,6 @@ namespace EducaOnline.Aluno.API.Models
 
         public Guid AlunoId { get; private set; }
         public Guid AulaId { get; private set; }
-        public Aluno Aluno { get; private set; }
+        public Aluno? Aluno { get; private set; }
     }
 }

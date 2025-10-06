@@ -27,7 +27,7 @@ namespace EducaOnline.Conteudo.API.Configuration
 
                 var curso = conteudoContext.Cursos.FirstOrDefault(p => p.Id == Guid.Parse("04effc8b-fa4a-415c-90eb-95cdfdaba1b2"));
 
-                if (curso == null)
+                if (curso is null)
                 {
                     var aulas = new List<Aula>()
                     {
@@ -36,7 +36,7 @@ namespace EducaOnline.Conteudo.API.Configuration
                     };
 
                     var conteudoProgramatico = new ConteudoProgramatico("Conteúdo inicial", "Conteúdo inicial alimento pelo seed", 20, "Lorem Ipsum is simply dummy text of the printing and typesetting industry.");
-                    curso = new Curso(Guid.Parse("04effc8b-fa4a-415c-90eb-95cdfdaba1b2"), "Curso Inicial", conteudoProgramatico, true);
+                    curso = new Curso(Guid.Parse("04effc8b-fa4a-415c-90eb-95cdfdaba1b2"), "Curso Inicial", conteudoProgramatico, true, 10);
 
                     aulas.ForEach(aula => curso.AdicionarAula(aula));
 

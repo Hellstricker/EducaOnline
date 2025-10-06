@@ -55,7 +55,7 @@ namespace EducaOnline.Financeiro.API.Configurations
             app.UseSwagger();
             app.UseSwaggerUI(c =>
             {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "NerdStore Financeiro API V1");
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "EducaOnline Financeiro API V1");
             });
 
             return app;

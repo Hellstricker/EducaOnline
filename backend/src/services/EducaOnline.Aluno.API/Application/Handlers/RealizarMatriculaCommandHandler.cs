@@ -1,4 +1,5 @@
-﻿using EducaOnline.Aluno.API.Application.Commands;
+﻿using EasyNetQ;
+using EducaOnline.Aluno.API.Application.Commands;
 using EducaOnline.Aluno.API.Models;
 using EducaOnline.Aluno.API.Models.Enum;
 using EducaOnline.Core.Messages;
@@ -19,16 +20,16 @@ namespace EducaOnline.Aluno.API.Application.Handlers
 
         public async Task<ValidationResult> Handle(RealizarMatriculaCommand command, CancellationToken cancellationToken)
         {
-            if (!command.EhValido()) return command.ValidationResult;
+            if (!command.EhValido()) return command.ValidationResult!;
 
             var aluno = await _alunoRepository.BuscarAlunoPorId(command.AlunoId, cancellationToken);
-            if (aluno == null)
+            if (aluno is null)
             {
                 AdicionarErro("Aluno não encontrado.");
                 return ValidationResult;
             }
 
-            if (aluno.Matricula != null && aluno.Matricula.Status != StatusMatriculaEnum.CANCELADO)
+            if (aluno.Matricula is not null && aluno.Matricula.Status != StatusMatriculaEnum.CANCELADO)
             {
                 AdicionarErro("Aluno já está com uma matrícula ativa.");
                 return ValidationResult;
@@ -42,9 +43,9 @@ namespace EducaOnline.Aluno.API.Application.Handlers
                 cargaHorariaTotal: command.CargaHorariaTotal
             );
 
-            //aluno.RealizarMatricula(matricula);
+            aluno.RealizarMatricula(matricula);
 
-            await _alunoRepository.AdicionarMatricula(matricula, cancellationToken);
+            await _alunoRepository.AdicionarMatricula(aluno.Matricula!, cancellationToken);
             return await PersistirDados(_alunoRepository.UnitOfWork);
         }
     }

@@ -15,10 +15,10 @@
             Objetivos = objetivos;
         }
 
-        public string Titulo { get; private set; }
-        public string Descricao { get; private set; }
+        public string? Titulo { get; private set; }
+        public string? Descricao { get; private set; }
         public int CargaHoraria { get; private set; }
-        public string Objetivos { get; private set; }
+        public string? Objetivos { get; private set; }
 
         public void AtualizarCargaHoraria(int carga) => CargaHoraria = carga;
     }
