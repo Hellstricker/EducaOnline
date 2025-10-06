@@ -23,20 +23,20 @@ namespace EducaOnline.Financeiro.API.Facade
 
             var cardHashGen = new CardHash(nerdsPagSvc)
             {
-                CardNumber = pagamento.CartaoCredito.NumeroCartao,
-                CardHolderName = pagamento.CartaoCredito.NomeCartao,
-                CardExpirationDate = pagamento.CartaoCredito.MesAnoVencimento,
-                CardCvv = pagamento.CartaoCredito.CVV
+                CardNumber = pagamento.CartaoCredito?.NumeroCartao,
+                CardHolderName = pagamento.CartaoCredito?.NomeCartao,
+                CardExpirationDate = pagamento.CartaoCredito?.MesAnoVencimento,
+                CardCvv = pagamento.CartaoCredito?.CVV
             };
             var cardHash = cardHashGen.Generate();
 
             var transacao = new Transaction(nerdsPagSvc)
             {
                 CardHash = cardHash,
-                CardNumber = pagamento.CartaoCredito.NumeroCartao,
-                CardHolderName = pagamento.CartaoCredito.NomeCartao,
-                CardExpirationDate = pagamento.CartaoCredito.MesAnoVencimento,
-                CardCvv = pagamento.CartaoCredito.CVV,
+                CardNumber = pagamento.CartaoCredito?.NumeroCartao,
+                CardHolderName = pagamento.CartaoCredito?.NomeCartao,
+                CardExpirationDate = pagamento.CartaoCredito?.MesAnoVencimento,
+                CardCvv = pagamento.CartaoCredito?.CVV,
                 PaymentMethod = PaymentMethod.CreditCard,
                 Amount = pagamento.Valor
             };

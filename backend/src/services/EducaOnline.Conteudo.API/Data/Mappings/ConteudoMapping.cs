@@ -9,7 +9,7 @@ namespace EducaOnline.Conteudo.API.Data.Mappings
         public void Configure(EntityTypeBuilder<Curso> builder)
         {
             builder.ToTable("Cursos");
-
+                        
             builder.HasKey(x => x.Id);
 
             builder.OwnsOne(p => p.ConteudoProgramatico)
@@ -27,6 +27,13 @@ namespace EducaOnline.Conteudo.API.Data.Mappings
             builder.HasMany(p => p.Aulas)
                 .WithOne(p => p.Curso)
                 .HasForeignKey(p => p.CursoId);
+
+            builder.Property(p => p.Nome)
+                .IsRequired();
+
+            builder.Property(p => p.Valor)
+                .IsRequired()
+                .HasColumnType("decimal(10,2)");
         }
     }
 

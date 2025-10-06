@@ -6,7 +6,7 @@ namespace EducaOnline.Financeiro.API.Models
     {
         void AdicionarPagamento(Pagamento pagamento);
         void AdicionarTransacao(Transacao transacao);
-        Task<Pagamento> ObterPagamentoPorPedidoId(Guid pedidoId);
-        Task<IEnumerable<Transacao>> ObterTransacaoesPorPedidoId(Guid pedidoId);
+        Task<Pagamento?> ObterPagamento(Guid pedidoId);
+        Task<IEnumerable<Transacao>> ObterTransacaoes(Guid pedidoId);
     }
 }

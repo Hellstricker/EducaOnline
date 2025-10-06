@@ -16,11 +16,11 @@ namespace EducaOnline.Aluno.API.Models
             Numero = $"Cert-{new Random().Next(1, 99999)}";
         }
 
-        public string Curso { get; private set; }
-        public string Numero { get; private set; }
+        public string? Curso { get; private set; }
+        public string? Numero { get; private set; }
         public DateTime DataEmissao { get; private set; }
 
         public Guid AlunoId { get; private set; }
-        public Aluno Aluno { get; private set; }
+        public Aluno? Aluno { get; private set; }
     }
 }

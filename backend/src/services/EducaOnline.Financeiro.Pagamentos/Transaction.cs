@@ -2,7 +2,7 @@
 {
     public class Transaction
     {
-        private readonly PagamentoService PagamentoService;
+        private readonly PagamentoService? PagamentoService;
 
         protected Transaction(){}
         public Transaction(PagamentoService pagamentoService)
@@ -12,29 +12,29 @@
 
         public TransactionStatus Status { get; set; }
 
-        public string CardHash { get; set; }
+        public string? CardHash { get; set; }
 
-        public string CardNumber { get; set; }
+        public string? CardNumber { get; set; }
 
-        public string CardExpirationDate { get; set; }
+        public string? CardExpirationDate { get; set; }
 
-        public string AuthorizationCode { get; set; }
-        public string Tid { get; set; }
-        public string Nsu { get; set; }
+        public string? AuthorizationCode { get; set; }
+        public string? Tid { get; set; }
+        public string? Nsu { get; set; }
 
         public decimal Amount { get; set; }
         public decimal Cost { get; set; }
 
-        public string CardHolderName { get; set; }
+        public string? CardHolderName { get; set; }
 
-        public string CardCvv { get; set; }
-        public string CardBrand { get; set; }
+        public string? CardCvv { get; set; }
+        public string? CardBrand { get; set; }
         public PaymentMethod PaymentMethod { get; set; }
         public DateTime TransactionDate { get; set; }
 
         public Task<Transaction> AuthorizeCardTransaction()
         {
-            var success = new Random().Next(2) == 0;
+            var success = true;// new Random().Next(2) == 0;
             Transaction transaction;
 
             if (success)

@@ -15,11 +15,6 @@ namespace EducaOnline.Core.Communication
             _mediator = mediator;
         }
 
-        //public async Task<bool> EnviarComando<T>(T comando) where T : Command
-        //{
-        //    return await _mediator.Send(comando);
-        //}
-
         public async Task<ValidationResult> EnviarComando<T>(T comando) where T : Command
         {
             return await _mediator.Send(comando);

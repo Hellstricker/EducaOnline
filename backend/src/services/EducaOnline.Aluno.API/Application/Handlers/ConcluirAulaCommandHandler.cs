@@ -18,10 +18,10 @@ namespace EducaOnline.Aluno.API.Application.Handlers
 
         public async Task<ValidationResult> Handle(ConcluirAulaCommand command, CancellationToken cancellationToken)
         {
-            if (!command.EhValido()) return command.ValidationResult;
+            if (!command.EhValido()) return command.ValidationResult!;
 
             var aluno = await _alunoRepository.BuscarAlunoPorId(command.AlunoId, cancellationToken);
-            if (aluno == null)
+            if (aluno is null)
             {
                 AdicionarErro("Aluno não encontrado.");
                 return ValidationResult;

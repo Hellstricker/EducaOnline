@@ -12,10 +12,10 @@ namespace EducaOnline.Financeiro.Pagamentos
             PagamentoService = pagamentoService;
         }        
 
-        public string CardHolderName { get; set; }
-        public string CardNumber { get; set; }
-        public string CardExpirationDate { get; set; }
-        public string CardCvv { get; set; }
+        public string? CardHolderName { get; set; }
+        public string? CardNumber { get; set; }
+        public string? CardExpirationDate { get; set; }
+        public string? CardCvv { get; set; }
 
         public string Generate()
         {

@@ -57,7 +57,7 @@ namespace EducaOnline.Aluno.API.Controllers
         public async Task<IActionResult> ObterAlunoPorId(Guid id, CancellationToken cancellationToken)
         {
             var aluno = await _alunoRepository.BuscarAlunoPorId(id, cancellationToken);
-            if (aluno == null)
+            if (aluno is null)
             {
                 AdicionarErro("Aluno não encontrado");
                 return CustomResponse();
@@ -100,6 +100,19 @@ namespace EducaOnline.Aluno.API.Controllers
             return CustomResponse(result);
         }
 
+        //[HttpPost("{id}/curso/{cursoId}/pagamento-matricula")]
+        //public async Task<IActionResult> RealizarPagamento(Guid id, Guid cursoId, [FromBody] PagamentoMatriculaDto model)
+        //{
+        //    var command = new PagarMatriculaCommand(id, cursoId, model.NomeCartao, model.NumeroCartao, model.ExpiracaoCartao, model.CvvCartao, model.ValorCurso);
+            
+        //    var result = await _mediator.EnviarComando(command);
+
+        //    if (!result.IsValid)
+        //        return CustomResponse(result);
+            
+        //    return CustomResponse("Pagamento efetuado com sucesso!");            
+        //}
+
         [HttpPost("emitir-certificado")]
         public async Task<IActionResult> EmitirCertificado([FromBody] CertificadoDto certificadoDto)
         {
@@ -114,6 +127,18 @@ namespace EducaOnline.Aluno.API.Controllers
                 return CustomResponse(result);
 
             return CustomResponse("Certificado emitido com sucesso!");
+        }
+                
+        [HttpGet("{id:guid}/matricula")]
+        public async Task<IActionResult> ObterMatricula(Guid id, CancellationToken cancellationToken)
+        {            
+            var matricula = await _alunoRepository.BuscarMatriculaPorAlunoId(id, cancellationToken);
+            if (matricula is null)
+            {
+                AdicionarErro("Matricula não encontrada");
+                return CustomResponse();
+            }
+            return Ok(matricula);
         }
     }
 }

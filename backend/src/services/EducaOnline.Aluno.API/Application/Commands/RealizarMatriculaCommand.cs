@@ -10,7 +10,7 @@ namespace EducaOnline.Aluno.API.Application.Commands
         public RealizarMatriculaCommand(
             Guid alunoId,
             Guid cursoId,
-            string cursoNome,
+            string? cursoNome,
             int totalAulas,
             int cargaHorariaTotal 
         )
@@ -24,7 +24,7 @@ namespace EducaOnline.Aluno.API.Application.Commands
 
         public Guid AlunoId { get; }
         public Guid CursoId { get; }
-        public string CursoNome { get; }
+        public string? CursoNome { get; }
         public int TotalAulas { get; }
         public int CargaHorariaTotal { get; }
 

@@ -5,7 +5,7 @@ namespace EducaOnline.Aluno.API.Application.Commands
 {
     public class AdicionarAlunoCommand : Command
     {
-        public AdicionarAlunoCommand(Guid id, string nome, string email)
+        public AdicionarAlunoCommand(Guid id, string? nome, string? email)
         {
             Id = id;
             Nome = nome;
@@ -13,8 +13,8 @@ namespace EducaOnline.Aluno.API.Application.Commands
         }
 
         public Guid Id { get; set; }
-        public string Nome { get; set; }
-        public string Email { get; set; }
+        public string? Nome { get; set; }
+        public string? Email { get; set; }
 
 
         public override bool EhValido()

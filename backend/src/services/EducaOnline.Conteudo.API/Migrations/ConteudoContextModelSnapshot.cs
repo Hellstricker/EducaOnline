@@ -27,11 +27,9 @@ namespace EducaOnline.Conteudo.API.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Descricao")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Titulo")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<int>("TotalHoras")
@@ -54,7 +52,11 @@ namespace EducaOnline.Conteudo.API.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Nome")
+                        .IsRequired()
                         .HasColumnType("TEXT");
+
+                    b.Property<decimal>("Valor")
+                        .HasColumnType("decimal(10,2)");
 
                     b.HasKey("Id");
 
@@ -83,20 +85,17 @@ namespace EducaOnline.Conteudo.API.Migrations
                                 .HasColumnType("INTEGER");
 
                             b1.Property<string>("Descricao")
-                                .IsRequired()
                                 .HasColumnType("TEXT");
 
                             b1.Property<string>("Objetivos")
-                                .IsRequired()
                                 .HasColumnType("TEXT");
 
                             b1.Property<string>("Titulo")
-                                .IsRequired()
                                 .HasColumnType("TEXT");
 
                             b1.HasKey("CursoId");
 
-                            b1.ToTable("Cursos", (string)null);
+                            b1.ToTable("Cursos");
 
                             b1.WithOwner()
                                 .HasForeignKey("CursoId");

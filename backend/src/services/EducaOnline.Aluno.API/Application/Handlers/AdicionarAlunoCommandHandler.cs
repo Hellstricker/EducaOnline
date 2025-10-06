@@ -18,7 +18,7 @@ namespace EducaOnline.Aluno.API.Application.Handlers
 
         public async Task<ValidationResult> Handle(AdicionarAlunoCommand command, CancellationToken cancellationToken)
         {
-            if (!command.EhValido()) return command.ValidationResult;
+            if (!command.EhValido()) return command.ValidationResult!;
 
             var aluno = new Models.Aluno(command.Id, command.Nome, command.Email);
 

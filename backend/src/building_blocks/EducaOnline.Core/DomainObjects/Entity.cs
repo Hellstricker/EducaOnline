@@ -12,8 +12,8 @@ namespace EducaOnline.Core.DomainObjects
             
         }
 
-        private List<Event> _notificacoes;
-        public IReadOnlyCollection<Event> Notificacoes => _notificacoes?.AsReadOnly();
+        private List<Event> _notificacoes = new List<Event>();
+        public IReadOnlyCollection<Event> Notificacoes => _notificacoes.AsReadOnly();
 
         public void AdicionarEvento(Event evento)
         {

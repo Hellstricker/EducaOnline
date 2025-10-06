@@ -6,7 +6,7 @@ namespace EducaOnline.Conteudo.API.Services
     public interface IConteudoService
     {
         Task<List<Curso>> BuscarCursos();
-        Task<Curso> BuscarCurso(Guid id);
+        Task<Curso?> BuscarCurso(Guid id);
         Task AdicionarCurso(Curso curso);
         Task<Curso> AlterarCurso(Guid id, Curso model);
         Task<Curso> AlterarConteudoProgramaticoCurso(Guid id, ConteudoProgramatico conteudoProgramatico);
