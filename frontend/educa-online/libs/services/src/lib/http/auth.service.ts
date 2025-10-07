@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable, Subject, take } from 'rxjs';
 import { environment } from '../configuration';
-import { JwtPayload, LoginModel } from '@educa-online/data';
+import { JwtPayload, LoginModel, NovaContaModel } from '@educa-online/data';
 import { jwtDecode } from 'jwt-decode';
 
 @Injectable({
@@ -18,7 +18,7 @@ export class AuthService {
     private http: HttpClient,
     private router: Router
   ) {
-    this.apiBase = `${environment.apiBase}/autenticacao`;
+    this.apiBase = `${environment.apiIdentidade}/identidade`;
   }
 
   public logout(): void {
@@ -27,8 +27,12 @@ export class AuthService {
     this.router.navigate(['/login']);
   }
 
+  novaConta(model: NovaContaModel): Observable<any> {
+    return this.http.post(`${this.apiBase}/nova-conta`, model, { responseType: 'json' });
+  }
+
   login(model: LoginModel): Observable<any> {
-    return this.http.post(`${this.apiBase}/login`, model, { responseType: 'json' });
+    return this.http.post(`${this.apiBase}/autenticar`, model, { responseType: 'json' });
   }
 
   public isLoggedIn() {
