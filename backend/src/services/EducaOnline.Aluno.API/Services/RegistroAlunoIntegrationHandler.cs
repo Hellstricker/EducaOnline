@@ -1,11 +1,8 @@
-﻿using System;
-using System.Threading;
-using System.Threading.Tasks;
-using FluentValidation.Results;                 
-using EducaOnline.Core.Messages.Integration;          
-using EducaOnline.Core.Communication;                 
-using EducaOnline.Aluno.API.Application.Commands;     
-using EducaOnline.MessageBus;                         
+﻿using FluentValidation.Results;
+using EducaOnline.Core.Messages.Integration;
+using EducaOnline.Core.Communication;
+using EducaOnline.Aluno.API.Application.Commands;
+using EducaOnline.MessageBus;
 
 namespace EducaOnline.Aluno.API.Services
 {
