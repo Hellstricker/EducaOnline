@@ -45,7 +45,6 @@ namespace EducaOnline.Aluno.API.Application.Handlers
 
             aluno.RealizarMatricula(matricula);
 
-            await _alunoRepository.AdicionarMatricula(aluno.Matricula!, cancellationToken);
             return await PersistirDados(_alunoRepository.UnitOfWork);
         }
     }

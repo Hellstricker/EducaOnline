@@ -46,7 +46,7 @@ namespace EducaOnline.Aluno.API.Controllers
             var cmd = new AdicionarAlunoCommand(novoId, alunoDto.Nome, alunoDto.Email);
 
             var result = await _mediator.EnviarComando(cmd);
-            if(!result.IsValid)
+            if (!result.IsValid)
                 return CustomResponse(result);
 
             // Publicar evento caso necessário
@@ -100,23 +100,93 @@ namespace EducaOnline.Aluno.API.Controllers
             return CustomResponse(result);
         }
 
-        //[HttpPost("{id}/curso/{cursoId}/pagamento-matricula")]
-        //public async Task<IActionResult> RealizarPagamento(Guid id, Guid cursoId, [FromBody] PagamentoMatriculaDto model)
-        //{
-        //    var command = new PagarMatriculaCommand(id, cursoId, model.NomeCartao, model.NumeroCartao, model.ExpiracaoCartao, model.CvvCartao, model.ValorCurso);
-            
-        //    var result = await _mediator.EnviarComando(command);
+        [HttpPost("{alunoId}/matricula/{matriculaId}/aula/{aulaId}/finalizar")]
+        public async Task<IActionResult> FinalizarAula(Guid alunoId, Guid matriculaId, Guid aulaId)
+        {
+            var cmd = new FinalizarAulaCommand(alunoId, matriculaId, aulaId);
+            var result = await _mediator.EnviarComando(cmd);
+            if (!result.IsValid)
+                return CustomResponse(result);
 
-        //    if (!result.IsValid)
-        //        return CustomResponse(result);
-            
-        //    return CustomResponse("Pagamento efetuado com sucesso!");            
-        //}
+            return Ok("Aula finalizada com sucesso!");
+        }
+
+        [HttpGet("{alunoId}/matricula/{matriculaId}/progresso")]
+        public async Task<IActionResult> ObterProgresso(Guid alunoId, Guid matriculaId, CancellationToken cancellationToken)
+        {
+            var aluno = await _alunoRepository.BuscarAlunoPorId(alunoId, cancellationToken);
+            if (aluno == null)
+            {
+                AdicionarErro("Aluno não encontrado.");
+                return CustomResponse();
+            }
+
+            var matricula = aluno.Matricula;
+            if (matricula == null || matricula.Id != matriculaId)
+            {
+                AdicionarErro("Matrícula não encontrada para o aluno informado.");
+                return CustomResponse();
+            }
+
+            var historico = aluno.HistoricoAprendizado;
+
+            var totalAulas = historico?.TotalAulas ?? matricula.TotalAulas;
+            var concluidas = historico?.TotalAulasConcluidas ?? matricula.AulasConcluidas;
+            var progresso = historico?.Progresso ??
+                            (totalAulas == 0 ? 0 : Math.Round((double)concluidas / totalAulas * 100, 2));
+
+            var todasAulasConcluidas = totalAulas > 0 && concluidas >= totalAulas;
+
+            var resultado = new
+            {
+                AlunoId = aluno.Id,
+                MatriculaId = matricula.Id,
+                CursoId = matricula.CursoId,
+                CursoNome = matricula.CursoNome,
+                TotalAulas = totalAulas,
+                AulasConcluidas = concluidas,
+                PorcentagemConcluida = progresso,
+                TodasAulasConcluidas = todasAulasConcluidas
+            };
+
+            return Ok(resultado);
+        }
+
+        [HttpPost("{alunoId}/matriculas/{matriculaId}/finalizar")]
+        public async Task<IActionResult> FinalizarCurso(Guid alunoId, Guid matriculaId)
+        {
+            var aluno = await _alunoRepository.BuscarAlunoPorId(alunoId, CancellationToken.None);
+            if (aluno == null)
+            {
+                AdicionarErro("Aluno não encontrado.");
+                return CustomResponse();
+            }
+
+            var matricula = aluno.Matricula;
+            if (matricula == null || matricula.Id != matriculaId)
+            {
+                AdicionarErro("Matrícula não encontrada para o aluno informado.");
+                return CustomResponse();
+            }
+
+            var cmd = new FinalizarCursoCommand(
+                alunoId,
+                matriculaId,
+                aluno.Nome,
+                matricula.CursoNome,
+                matricula.CargaHorariaTotal
+            );
+
+            var result = await _mediator.EnviarComando(cmd);
+            if (!result.IsValid)
+                return CustomResponse(result);
+
+            return Ok("Curso finalizado e certificado emitido com sucesso!");
+        }
 
         [HttpPost("emitir-certificado")]
         public async Task<IActionResult> EmitirCertificado([FromBody] CertificadoDto certificadoDto)
         {
-            // Command recebe CursoId e AlunoId; o handler decide emitir e atualiza status
             var cmd = new EmitirCertificadoCommand(
                 cursoId: certificadoDto.CursoId,
                 alunoId: certificadoDto.AlunoId

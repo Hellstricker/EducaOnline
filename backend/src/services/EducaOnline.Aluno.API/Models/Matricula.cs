@@ -40,7 +40,15 @@ namespace EducaOnline.Aluno.API.Models
 
         public void AtualizarStatus(StatusMatriculaEnum status) => Status = status;
 
-        public void RegistrarConclusaoAula()
+        public void AtualizarTotalAulas(int totalAulas)
+        {
+            if (totalAulas <= 0)
+                throw new DomainException("Total de aulas inválido.");
+
+            TotalAulas = totalAulas;
+        }
+
+        public void RegistrarConclusaoAula(int horasDaAula = 0)
         {
             if (Status == StatusMatriculaEnum.CURSO_CONCLUIDO)
                 throw new DomainException("Curso já concluído.");

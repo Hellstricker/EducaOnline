@@ -20,8 +20,8 @@ namespace EducaOnline.Aluno.API.Models
             DataCadastro = DateTime.UtcNow;
             AulasConcluidas = new HashSet<AulaConcluida>();
         }
-        
-        public string? Nome { get; private set; }
+
+        public string Nome { get; private set; }
         public int Ra { get; private set; }
         public string? Email { get; private set; }
         public DateTime? DataCadastro { get; private set; }
@@ -72,18 +72,16 @@ namespace EducaOnline.Aluno.API.Models
 
             Matricula.RegistrarConclusaoAula();
 
-            HistoricoAprendizado = new HistoricoAprendizado(
-                totalAulasConcluidas: Matricula.AulasConcluidas,
-                totalAulas: Matricula.TotalAulas
-            );
+            HistoricoAprendizado = HistoricoAprendizado is null
+                ? new HistoricoAprendizado(Matricula.AulasConcluidas, Matricula.TotalAulas)
+                : HistoricoAprendizado.Atualizar(Matricula.AulasConcluidas, Matricula.TotalAulas);
         }
-
-
         public void AtualizarStatusMatricula(StatusMatriculaEnum status)
         {
             if (Matricula is null) throw new DomainException("Aluno não possui matrícula.");
             Matricula.AtualizarStatus(status);
         }
+
 
         public void EmitirCertificado(Certificado certificado)
         {
