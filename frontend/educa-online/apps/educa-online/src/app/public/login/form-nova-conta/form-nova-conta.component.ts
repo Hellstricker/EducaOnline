@@ -2,6 +2,8 @@ import { Component, inject, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { AlertComponent, AlertOptions } from '@educa-online/components';
+import { NovaContaFormGroup } from '@educa-online/forms';
+import { AuthService } from '@educa-online/services';
 import { take } from 'rxjs';
 
 @Component({
@@ -14,13 +16,13 @@ import { take } from 'rxjs';
 export class FormaNovaContaComponent implements OnInit {
   private _snackBar = inject(MatSnackBar);
   
-  // form: NovaContaFormGroup;
+  form: NovaContaFormGroup;
 
   constructor(
     private router: Router,
-    // private usuarioService: UsuarioService
+    private authService: AuthService
   ) {
-    // this.form = new NovaContaFormGroup();
+    this.form = new NovaContaFormGroup();
   }
 
   ngOnInit() {
@@ -28,20 +30,44 @@ export class FormaNovaContaComponent implements OnInit {
   }
 
   salvarConta(){
-    // this.usuarioService.post(this.form.value)
-    // .pipe(take(1))
-    // .subscribe(_ => {
-    //   this._snackBar.openFromComponent(AlertComponent, {
-    //     duration: 5000,
-    //     data: {
-    //       title: 'Sucesso!',
-    //       subtitle: 'conta criada!',
-    //       status: 'sucesso'
-    //     } as AlertOptions
-    //   });
-
-    //   this.voltar();
-    // })
+    if(this.form.valid){
+      this.authService.novaConta(this.form.value)
+      .pipe(take(1))
+      .subscribe({
+        next: () => {
+          this._snackBar.openFromComponent(AlertComponent, {
+            duration: 5000,
+            data: {
+              title: 'Sucesso!',
+              subtitle: 'conta criada!',
+              status: 'sucesso'
+            } as AlertOptions
+          });
+    
+          this.voltar();
+        },
+        error: (err) => {
+          this._snackBar.openFromComponent(AlertComponent, {
+            duration: 5000,
+            data: {
+              title: 'Erro!',
+              subtitle: err.erro,
+              status: 'erro'
+            } as AlertOptions
+          });
+        }
+      });
+    } 
+    else {
+      this._snackBar.openFromComponent(AlertComponent, {
+        duration: 5000,
+        data: {
+          title: 'Erro!',
+          subtitle: "Campos inválidos!",
+          status: 'erro'
+        } as AlertOptions
+      });
+    }
   }
 
   voltar(): void {

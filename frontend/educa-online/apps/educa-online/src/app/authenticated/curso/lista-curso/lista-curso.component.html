@@ -42,11 +42,15 @@
     <ng-container matColumnDef="acoes">
       <mat-header-cell *matHeaderCellDef> Ações </mat-header-cell>
       <mat-cell *matCellDef="let element" data-label="Ações">
-        <span class="material-symbols-outlined cursor-pointer">
+        <span class="material-symbols-outlined cursor-pointer" (click)="abrirControleAulas(element.id)">
+          school
+        </span>
+
+        <span class="material-symbols-outlined cursor-pointer" (click)="editarCurso(element.id)">
           edit
         </span>
 
-        <span class="material-symbols-outlined cor-vermelho ms-2 cursor-pointer" >
+        <span class="material-symbols-outlined cor-vermelho ms-2 cursor-pointer" (click)="desativarCurso(element.id)">
           delete
         </span>
       </mat-cell>

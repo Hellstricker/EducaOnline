@@ -1,49 +1,62 @@
 import { Component, inject, OnInit } from "@angular/core";
 import { MatDialog } from "@angular/material/dialog";
 import { MatSnackBar } from "@angular/material/snack-bar";
-import { CreateEditCursoComponent } from "../create-edit-curso/create-edit-curso.component";
 import { filter, switchMap, take } from "rxjs";
+import { ConteudoService, HeaderService } from "@educa-online/services";
+import { AulaResponseModel } from "@educa-online/data";
+import { ActivatedRoute } from "@angular/router";
+import { CreateEditAulaComponent } from "../create-edit-aula/create-edit-aula.component";
 import { AlertComponent, AlertOptions, ModalInfoComponent, ModalInfoModel } from "@educa-online/components";
-import { ConteudoService } from "@educa-online/services";
-import { CursoResponseModel } from "@educa-online/data";
-import { Router } from "@angular/router";
 
 @Component({
-  selector: 'app-lista-curso',
-  templateUrl: 'lista-curso.component.html',
-  styleUrls: ['lista-curso.component.scss'],
+  selector: 'app-lista-aula',
+  templateUrl: 'lista-aula.component.html',
+  styleUrls: ['lista-aula.component.scss'],
   standalone: false
 })
-export class ListaCursoComponent implements OnInit {
+export class ListaAulaComponent implements OnInit {
   readonly dialog = inject(MatDialog);
   private _snackBar = inject(MatSnackBar);
 
-  displayedColumns: string[] = ['nome', 'titulo', 'cargaHoraria', 'ativo', 'acoes'];
+  displayedColumns: string[] = ['titulo', 'descricao', 'totalHoras', 'acoes'];
 
-  cursos: CursoResponseModel[] = [];
+  aulas: AulaResponseModel[] = [];
+
+  cursoId!: string;
 
   constructor(
+    private headerService: HeaderService,
     private conteudoService: ConteudoService,
-    private router: Router
+    private route: ActivatedRoute,
   ) {
+    this.route.params.subscribe(params => {
+		this.cursoId = params['id'];
+	});
   }
 
   ngOnInit() {
-    this.getCursos();
-  }
-
-  getCursos(){
-    this.conteudoService.get()
+    this.conteudoService.getById(this.cursoId)
     .pipe(take(1))
     .subscribe({
       next: (data) => {
-        this.cursos = data;
+        this.aulas = data.aulas;
+        this.headerService.alterarTitulo('Aulas do curso ' + data.nome);
       }
     });
   }
 
-  novoCurso(): void {
-    const ref = this.dialog.open(CreateEditCursoComponent, {
+  getCurso(){
+    this.conteudoService.getById(this.cursoId)
+    .pipe(take(1))
+    .subscribe({
+      next: (data) => {
+        this.aulas = data.aulas;
+      }
+    });
+  }
+
+  novaAula(){
+    const ref = this.dialog.open(CreateEditAulaComponent, {
       width: '40rem',
     });
 
@@ -56,23 +69,19 @@ export class ListaCursoComponent implements OnInit {
           duration: 5000,
           data: {
             title: 'Sucesso!',
-            subtitle: 'Curso criado',
+            subtitle: 'Aula criada',
             status: 'sucesso'
           } as AlertOptions
         });
 
-        this.getCursos();
+        this.getCurso();
       });
   }
 
-  abrirControleAulas(id: string){
-    this.router.navigate([`curso/${id}/aula`]);
-  }
-
-  editarCurso(id: string): void {
-    const ref = this.dialog.open(CreateEditCursoComponent, {
+  editarAula(aula: AulaResponseModel){
+    const ref = this.dialog.open(CreateEditAulaComponent, {
       width: '40rem',
-      data: id
+      data: aula
     });
 
     ref.afterClosed()
@@ -84,20 +93,20 @@ export class ListaCursoComponent implements OnInit {
           duration: 5000,
           data: {
             title: 'Sucesso!',
-            subtitle: 'Curso alterado',
+            subtitle: 'Aula alterada',
             status: 'sucesso'
           } as AlertOptions
         });
 
-        this.getCursos();
+        this.getCurso();
       });
   }
 
-  desativarCurso(id: string){
+  removerAula(id: string){
     const ref = this.dialog.open(ModalInfoComponent, {
       width: '50rem',
       data: {
-        titulo: 'Desativar Curso',
+        titulo: 'Remover aula',
         texto: 'Esta ação não pode ser desfeita, deseja confirma-la?',
         btnOk: 'Confirmar',
         btnCancel: 'Voltar'
@@ -108,18 +117,18 @@ export class ListaCursoComponent implements OnInit {
       .pipe(
         take(1),
         filter(data => data),
-        switchMap(data => this.conteudoService.desativarCurso(id)))
+        switchMap(data => this.conteudoService.removerAula(this.cursoId, id)))
       .subscribe(_ => {
         this._snackBar.openFromComponent(AlertComponent, {
           duration: 5000,
           data: {
             title: 'Sucesso!',
-            subtitle: 'Curso desativado',
+            subtitle: 'Aula removida',
             status: 'sucesso'
           } as AlertOptions
         });
 
-        this.getCursos();
+        this.getCurso();
       });
   }
 }
