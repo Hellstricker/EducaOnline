@@ -1,4 +1,5 @@
 ﻿using EducaOnline.Core.DomainObjects;
+using EducaOnline.Core.Messages.Integration;
 using EducaOnline.MessageBus;
 using EducaOnline.Pedidos.API.Domain;
 
@@ -25,8 +26,8 @@ namespace Educaonline.Pedidos.API.Services
             //_bus.SubscribeAsync<PedidoCanceladoIntegrationEvent>("PedidoCancelado",
             //    async request => await CancelarPedido(request));
 
-            //_bus.SubscribeAsync<PedidoPagoIntegrationEvent>("PedidoPago",
-            //   async request => await FinalizarPedido(request));
+            _bus.SubscribeAsync<PedidoPagoIntegrationEvent>("PedidoPago",
+               async request => await FinalizarPedido(request));
         }
 
         //private async Task CancelarPedido(PedidoCanceladoIntegrationEvent message)
@@ -47,22 +48,22 @@ namespace Educaonline.Pedidos.API.Services
         //    }
         //}
 
-        //private async Task FinalizarPedido(PedidoPagoIntegrationEvent message)
-        //{
-        //    using (var scope = _serviceProvider.CreateScope())
-        //    {
-        //        var pedidoRepository = scope.ServiceProvider.GetRequiredService<IPedidoRepository>();
+        private async Task FinalizarPedido(PedidoPagoIntegrationEvent message)
+        {
+            using (var scope = _serviceProvider.CreateScope())
+            {
+                var pedidoRepository = scope.ServiceProvider.GetRequiredService<IPedidoRepository>();
 
-        //        var pedido = await pedidoRepository.ObterPorId(message.PedidoId);
-        //        pedido.FinalizarPedido();
+                var pedido = await pedidoRepository.ObterPorId(message.PedidoId);
+                pedido.FinalizarPedido();
 
-        //        pedidoRepository.Atualizar(pedido);
+                pedidoRepository.Atualizar(pedido);
 
-        //        if (!await pedidoRepository.UnitOfWork.Commit())
-        //        {
-        //            throw new DomainException($"Problemas ao finalizar o pedido {message.PedidoId}");
-        //        }
-        //    }
-        //}
+                if (!await pedidoRepository.UnitOfWork.Commit())
+                {
+                    throw new DomainException($"Problemas ao finalizar o pedido {message.PedidoId}");
+                }
+            }
+        }
     }
 }

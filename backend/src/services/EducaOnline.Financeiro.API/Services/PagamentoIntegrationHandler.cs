@@ -28,6 +28,9 @@ namespace EducaOnline.Financeiro.API.Services
         {
             //_bus.SubscribeAsync<PedidoCanceladoIntegrationEvent>("PedidoCancelado", async request =>
             //await CancelarPagamento(request));
+            //Não há checkagem a fazer após a autorização, então o pagamento é Capturado
+            _bus.SubscribeAsync<PedidoAutorizadoIntegrationEvent>("PedidoAutorizado", async request =>
+            await CapturarPagamento(request));
         }
 
         protected override Task ExecuteAsync(CancellationToken stoppingToken)
@@ -56,28 +59,20 @@ namespace EducaOnline.Financeiro.API.Services
         }
 
 
-        //private async Task<ResponseMessage> AutorizarCapturarPagamento(AlunoPagouMatriculaIntegrationEvent message)
-        //{
-        //    using var scope = _serviceProvider.CreateScope();
-        //    var pagamentoService = scope.ServiceProvider.GetRequiredService<IPagamentoService>();
-        //    var pagamento = new Pagamento
-        //    {
-        //        CursoId = message.CursoId,
-        //        AlunoId = message.AlunoId,
-        //        TipoPagamento = (TipoPagamento)message.TipoPagamento,
-        //        Valor = message.Valor,
-        //        CartaoCredito = new CartaoCredito(
-        //            message.NomeCartao, message.NumeroCartao, message.MesAnoExpiracao, message.Ccv)
-        //    };
+        private async Task CapturarPagamento(PedidoAutorizadoIntegrationEvent message)
+        {
+            using (var scope = _serviceProvider.CreateScope())
+            {
+                var pagamentoService = scope.ServiceProvider.GetRequiredService<IPagamentoService>();
 
-        //    var response = await pagamentoService.AutorizarPagamento(pagamento);
+                var response = await pagamentoService.CapturarPagamento(message.PedidoId);
 
-        //    if (!response.ValidationResult.IsValid) return response;
+                if (!response.ValidationResult.IsValid)
+                    throw new DomainException($"Falha ao capturar pagamento do pedido {message.PedidoId}");
 
-        //    response = await pagamentoService.CapturarPagamento(message.AlunoId, message.CursoId);
-
-        //    return response;
-        //}
+                await _bus.PublishAsync(new PedidoPagoIntegrationEvent(message.ClienteId, message.PedidoId, message.Itens));
+            }
+        }
 
         //private async Task CancelarPagamento(PedidoCanceladoIntegrationEvent message)
         //{
