@@ -1,24 +1,22 @@
 ﻿using EducaOnline.Aluno.API.Application.Commands;
 using EducaOnline.Aluno.API.Models;
-using EducaOnline.Aluno.API.Models.Enum;
-using EducaOnline.Aluno.API.Models.ValueObjects;
 using EducaOnline.Core.Messages;
 using FluentValidation.Results;
 using MediatR;
 
-namespace EducaOnline.Aluno.API.Application.Handlers
+namespace EducaOnline.Aluno.API.Application.CommandHandlers
 {
-    public class FinalizarCursoCommandHandler : CommandHandler,
-        IRequestHandler<FinalizarCursoCommand, ValidationResult>
+    public class FinalizarAulaCommandHandler : CommandHandler,
+        IRequestHandler<FinalizarAulaCommand, ValidationResult>
     {
         private readonly IAlunoRepository _alunoRepository;
 
-        public FinalizarCursoCommandHandler(IAlunoRepository alunoRepository)
+        public FinalizarAulaCommandHandler(IAlunoRepository alunoRepository)
         {
             _alunoRepository = alunoRepository;
         }
 
-        public async Task<ValidationResult> Handle(FinalizarCursoCommand command, CancellationToken cancellationToken)
+        public async Task<ValidationResult> Handle(FinalizarAulaCommand command, CancellationToken cancellationToken)
         {
             if (!command.EhValido()) return command.ValidationResult;
 
@@ -36,25 +34,9 @@ namespace EducaOnline.Aluno.API.Application.Handlers
                 return ValidationResult;
             }
 
-            if (matricula.AulasConcluidas < matricula.TotalAulas)
-            {
-                AdicionarErro("O aluno ainda não concluiu todas as aulas do curso.");
-                return ValidationResult;
-            }
-
             try
             {
-                aluno.AtualizarStatusMatricula(StatusMatriculaEnum.CURSO_CONCLUIDO);
-
-                var certificado = new Certificado(command.CursoNome);
-                aluno.EmitirCertificado(certificado);
-
-                aluno.HistoricoAprendizado.AtualizarProgresso(
-                     matricula.AulasConcluidas,
-                     matricula.TotalAulas
-                 );
-
-                _alunoRepository.AtualizarAluno(aluno);
+                aluno.ConcluirAula(command.AulaId);
             }
             catch (Exception ex)
             {
@@ -62,6 +44,7 @@ namespace EducaOnline.Aluno.API.Application.Handlers
                 return ValidationResult;
             }
 
+            _alunoRepository.AtualizarAluno(aluno);
             return await PersistirDados(_alunoRepository.UnitOfWork);
         }
     }

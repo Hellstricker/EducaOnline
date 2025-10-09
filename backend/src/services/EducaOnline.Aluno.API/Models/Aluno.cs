@@ -1,4 +1,5 @@
-﻿using EducaOnline.Aluno.API.Models.Enum;
+﻿using EducaOnline.Aluno.API.Application.Events;
+using EducaOnline.Aluno.API.Models.Enum;
 using EducaOnline.Aluno.API.Models.ValueObjects;
 using EducaOnline.Core.DomainObjects;
 
@@ -75,6 +76,8 @@ namespace EducaOnline.Aluno.API.Models
             HistoricoAprendizado = HistoricoAprendizado is null
                 ? new HistoricoAprendizado(Matricula.AulasConcluidas, Matricula.TotalAulas)
                 : HistoricoAprendizado.Atualizar(Matricula.AulasConcluidas, Matricula.TotalAulas);
+
+            AdicionarEvento(new AulaFinalizadaEvent(Id, Matricula.Id, aulaId));
         }
         public void AtualizarStatusMatricula(StatusMatriculaEnum status)
         {

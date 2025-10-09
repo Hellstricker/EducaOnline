@@ -4,34 +4,33 @@ using EducaOnline.Core.Messages;
 using FluentValidation.Results;
 using MediatR;
 
-namespace EducaOnline.Aluno.API.Application.Handlers
+namespace EducaOnline.Aluno.API.Application.CommandHandlers
 {
-    public class AtualizarAlunoCommandHandler : CommandHandler,
-    IRequestHandler<AtualizarAlunoCommand, ValidationResult>
+    public class ConcluirAulaCommandHandler : CommandHandler,
+        IRequestHandler<ConcluirAulaCommand, ValidationResult>
     {
         private readonly IAlunoRepository _alunoRepository;
 
-        public AtualizarAlunoCommandHandler(IAlunoRepository alunoRepository)
+        public ConcluirAulaCommandHandler(IAlunoRepository alunoRepository)
         {
             _alunoRepository = alunoRepository;
         }
 
-        public async Task<ValidationResult> Handle(AtualizarAlunoCommand command, CancellationToken cancellationToken)
+        public async Task<ValidationResult> Handle(ConcluirAulaCommand command, CancellationToken cancellationToken)
         {
             if (!command.EhValido()) return command.ValidationResult!;
 
-            var aluno = await _alunoRepository.BuscarAlunoPorId(command.Id, cancellationToken);
+            var aluno = await _alunoRepository.BuscarAlunoPorId(command.AlunoId, cancellationToken);
             if (aluno is null)
             {
                 AdicionarErro("Aluno não encontrado.");
                 return ValidationResult;
             }
 
-            aluno.AtualizarDados(command.Nome, command.Email);
+            aluno.ConcluirAula(command.AulaId);
 
             _alunoRepository.AtualizarAluno(aluno);
             return await PersistirDados(_alunoRepository.UnitOfWork);
         }
     }
-
 }

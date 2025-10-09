@@ -4,7 +4,7 @@ using EducaOnline.Core.Messages;
 using FluentValidation.Results;
 using MediatR;
 
-namespace EducaOnline.Aluno.API.Application.Handlers
+namespace EducaOnline.Aluno.API.Application.CommandHandlers
 {
     public class AdicionarAlunoCommandHandler : CommandHandler,
      IRequestHandler<AdicionarAlunoCommand, ValidationResult>
