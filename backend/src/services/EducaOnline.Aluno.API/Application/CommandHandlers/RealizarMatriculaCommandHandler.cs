@@ -34,6 +34,11 @@ namespace EducaOnline.Aluno.API.Application.CommandHandlers
                 AdicionarErro("Aluno já está com uma matrícula ativa.");
                 return ValidationResult;
             }
+            if (string.IsNullOrWhiteSpace(command.CursoNome))
+            {
+                AdicionarErro("Nome do curso inválido.");
+                return ValidationResult;
+            }
 
             var matricula = new Matricula(
                 alunoId: command.AlunoId,
