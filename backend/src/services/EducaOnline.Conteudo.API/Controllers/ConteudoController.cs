@@ -26,6 +26,7 @@ namespace EducaOnline.Conteudo.API.Controllers
         [ProducesResponseType(typeof(List<Curso>), 200)]
         //[ProducesResponseType(typeof(InternalServerErrorModel), 500)]
         [HttpGet]
+        [AllowAnonymous]
         public async Task<IActionResult> Get()
         {
             return Ok(await _conteudoService.BuscarCursos());
