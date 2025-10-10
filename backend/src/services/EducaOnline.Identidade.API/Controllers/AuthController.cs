@@ -1,17 +1,18 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.Tokens;
+﻿using EducaOnline.Core.DomainObjects;
+using EducaOnline.Core.Enums;
 using EducaOnline.Core.Messages.Integration;
 using EducaOnline.Identidade.API.Extensions;
 using EducaOnline.Identidade.API.Models;
 using EducaOnline.MessageBus;
 using EducaOnline.WebAPI.Core.Controllers;
 using EducaOnline.WebAPI.Core.Identidade;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using EducaOnline.Core.DomainObjects;
 
 namespace EducaOnline.Identidade.API.Controllers
 {    
@@ -21,15 +22,17 @@ namespace EducaOnline.Identidade.API.Controllers
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly UserManager<IdentityUser> _userManager;
         private readonly JwtSettings _jwtSettings;
+        private readonly RoleManager<IdentityRole> _roleManager;
 
         private readonly IMessageBus _messageBus;
 
-        public AuthController(SignInManager<IdentityUser> signInManager, UserManager<IdentityUser> userManager, IOptions<JwtSettings> jwtSettings, IMessageBus messageBus)
+        public AuthController(SignInManager<IdentityUser> signInManager, UserManager<IdentityUser> userManager, IOptions<JwtSettings> jwtSettings, IMessageBus messageBus, RoleManager<IdentityRole> roleManager)
         {
             _signInManager = signInManager;
             _userManager = userManager;
             _jwtSettings = jwtSettings.Value;
             _messageBus = messageBus;
+            _roleManager = roleManager;
         }
 
         [HttpPost("nova-conta")]
@@ -47,6 +50,12 @@ namespace EducaOnline.Identidade.API.Controllers
             var result = await _userManager.CreateAsync(user, usuarioRegistro.Senha!);
             if (result.Succeeded)
             {
+                var roleExist = await _roleManager.RoleExistsAsync(nameof(PerfilUsuarioEnum.ALUNO));
+                if (!roleExist)
+                    await _roleManager.CreateAsync(new IdentityRole(nameof(PerfilUsuarioEnum.ALUNO)));
+
+                await _userManager.AddToRoleAsync(user, nameof(PerfilUsuarioEnum.ALUNO));
+
                 var clienteResult = await RegistrarAluno(usuarioRegistro);
                 if (!clienteResult.ValidationResult.IsValid)
                 {
