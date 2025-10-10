@@ -2,3 +2,8 @@
 obj
 bin
 src/services/EducaOnline.Identidade.API/UserDatabase.db
+backend/src/services/EducaOnline.Conteudo.API/ConteudoDatabase.db-wal
+backend/src/services/EducaOnline.Conteudo.API/ConteudoDatabase.db-shm
+backend/src/services/EducaOnline.Aluno.API/AlunoDatabase.db-wal
+backend/src/services/EducaOnline.Aluno.API/AlunoDatabase.db-shm
+backend/src/services/EducaOnline.Aluno.API/AlunoDatabase.db
