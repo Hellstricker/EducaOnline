@@ -6,14 +6,16 @@ namespace EducaOnline.Aluno.API.Application.Events
     {
         public Guid AlunoId { get; }
         public Guid MatriculaId { get; }
+        public Guid CursoId { get; }
         public Guid AulaId { get; }
 
-        public AulaFinalizadaEvent(Guid alunoId, Guid matriculaId, Guid aulaId)
+        public AulaFinalizadaEvent(Guid alunoId, Guid matriculaId, Guid cursoId, Guid aulaId)
         {
+            AggregateId = alunoId;
             AlunoId = alunoId;
             MatriculaId = matriculaId;
+            CursoId = cursoId;
             AulaId = aulaId;
         }
     }
-
 }

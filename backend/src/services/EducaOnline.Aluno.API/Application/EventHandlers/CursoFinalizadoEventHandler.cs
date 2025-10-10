@@ -22,17 +22,17 @@ namespace EducaOnline.Aluno.API.Application.EventHandlers
             var aluno = await _alunoRepository.BuscarAlunoPorId(notification.AlunoId, cancellationToken);
             if (aluno == null) return;
 
-            var matricula = aluno.Matricula;
-            if (matricula == null || matricula.Id != notification.MatriculaId) return;
+            var matricula = aluno.Matriculas.FirstOrDefault(m => m.Id == notification.MatriculaId);
+            if (matricula == null) return;
 
-            aluno.AtualizarStatusMatricula(StatusMatriculaEnum.CURSO_CONCLUIDO);
+            aluno.AtualizarStatusMatricula(matricula.Id, StatusMatriculaEnum.CURSO_CONCLUIDO);
 
             var certificado = new Certificado(matricula.CursoNome);
-            aluno.EmitirCertificado(certificado);
+
+            aluno.EmitirCertificado(matricula.CursoId, certificado);
 
             _alunoRepository.AtualizarAluno(aluno);
             await _alunoRepository.UnitOfWork.Commit();
-
             await _mediatorHandler.PublicarEvento(
                 new CertificadoEmitidoEvent(aluno.Id, matricula.CursoId, certificado.Id)
             );

@@ -27,8 +27,8 @@ namespace EducaOnline.Aluno.API.Application.CommandHandlers
                 return ValidationResult;
             }
 
-            var matricula = aluno.Matricula;
-            if (matricula == null || matricula.Id != command.MatriculaId)
+            var matricula = aluno.Matriculas.FirstOrDefault(m => m.Id == command.MatriculaId);
+            if (matricula == null)
             {
                 AdicionarErro("Matrícula não encontrada para o aluno informado.");
                 return ValidationResult;
@@ -36,7 +36,8 @@ namespace EducaOnline.Aluno.API.Application.CommandHandlers
 
             try
             {
-                aluno.ConcluirAula(command.AulaId);
+                var novaAula = aluno.ConcluirAula(matricula.CursoId, command.AulaId);
+                _alunoRepository.AdicionarAulaConcluida(novaAula);
             }
             catch (Exception ex)
             {
@@ -44,7 +45,6 @@ namespace EducaOnline.Aluno.API.Application.CommandHandlers
                 return ValidationResult;
             }
 
-            _alunoRepository.AtualizarAluno(aluno);
             return await PersistirDados(_alunoRepository.UnitOfWork);
         }
     }

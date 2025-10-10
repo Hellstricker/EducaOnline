@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EducaOnline.Identidade.API.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250816114749_Initial")]
-    partial class Initial
+    [Migration("20251010004637_Inicial_Atualizada")]
+    partial class Inicial_Atualizada
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

@@ -34,6 +34,11 @@ namespace EducaOnline.Aluno.API.Data.Repository
         {
             _context.Matriculas.Update(matricula);
         }
+        public void AdicionarAulaConcluida(AulaConcluida aula)
+        {
+            _context.AulasConcluidas.Add(aula);
+        }
+
 
         public async Task<int> BuscarUltimoRa(CancellationToken cancellationToken)
         {
@@ -43,28 +48,32 @@ namespace EducaOnline.Aluno.API.Data.Repository
         public async Task<IEnumerable<Models.Aluno>> BuscarAlunos(CancellationToken cancellationToken)
         {
             return await _context.Alunos
-                .Include(p => p.Matricula)
+                .Include(p => p.Matriculas)
                 .Include(p => p.AulasConcluidas)
-                .Include(p => p.Certificado)
+                .Include(p => p.Certificados)
                 .ToListAsync();
         }
 
         public async Task<Models.Aluno?> BuscarAlunoPorId(Guid id, CancellationToken cancellationToken)
         {
             return await _context.Alunos
-                .Include(p => p.Matricula)
+                .Include(p => p.Matriculas)
                 .Include(p => p.AulasConcluidas)
-                .Include(p => p.Certificado)
+                .Include(p => p.Certificados)
                 .FirstOrDefaultAsync(p => p.Id == id);
         }
 
         public async Task<Models.Aluno?> BuscarAlunoPorRa(int ra, CancellationToken cancellationToken = default)
         {
             return await _context.Alunos
-                .Include(p => p.Matricula)
+                .Include(p => p.Matriculas)
                 .Include(p => p.AulasConcluidas)
-                .Include(p => p.Certificado)
+                .Include(p => p.Certificados)
                 .FirstOrDefaultAsync(p => p.Ra == ra);
+        }
+        public async Task<Models.Aluno?> BuscarPorEmail(string email, CancellationToken cancellationToken)
+        {
+            return await _context.Alunos.FirstOrDefaultAsync(a => a.Email == email, cancellationToken);
         }
         public async Task<int> BuscarProximoRa(CancellationToken cancellationToken = default)
         {

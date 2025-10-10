@@ -21,13 +21,17 @@ namespace EducaOnline.Aluno.API.Application.EventHandlers
             var aluno = await _alunoRepository.BuscarAlunoPorId(notification.AlunoId, cancellationToken);
             if (aluno == null) return;
 
-            var matricula = aluno.Matricula;
-            if (matricula == null || matricula.Id != notification.MatriculaId) return;
+            var matricula = aluno.Matriculas.FirstOrDefault(m => m.Id == notification.MatriculaId);
+            if (matricula == null) return;
 
-            if (matricula.AulasConcluidas >= matricula.TotalAulas)
+            if (matricula.AulasConcluidas >= matricula.TotalAulas && matricula.TotalAulas > 0)
             {
                 await _mediatorHandler.PublicarEvento(
-                    new CursoFinalizadoEvent(aluno.Id, matricula.Id)
+                    new CursoFinalizadoEvent(
+                        alunoId: aluno.Id,
+                        matriculaId: matricula.Id,
+                        cursoId: matricula.CursoId
+                    )
                 );
             }
         }

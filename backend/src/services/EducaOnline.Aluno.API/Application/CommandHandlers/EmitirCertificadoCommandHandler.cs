@@ -27,19 +27,21 @@ namespace EducaOnline.Aluno.API.Application.CommandHandlers
                 return ValidationResult;
             }
 
-            if (aluno.Matricula is null)
+            var matricula = aluno.Matriculas.FirstOrDefault(m => m.CursoId == command.CursoId);
+            if (matricula is null)
             {
-                AdicionarErro("Aluno não possui matrícula.");
+                AdicionarErro("Matrícula do curso não encontrada para este aluno.");
                 return ValidationResult;
             }
 
-            if (!aluno.Matricula.PodeEmitirCertificado())
+            if (!matricula.PodeEmitirCertificado())
             {
                 AdicionarErro("Progresso insuficiente para emitir certificado.");
                 return ValidationResult;
             }
 
-            aluno.EmitirCertificado(new Certificado(aluno.Matricula.CursoNome!));
+            var certificado = new Certificado(matricula.CursoNome);
+            aluno.EmitirCertificado(matricula.CursoId, certificado);
 
             _alunoRepository.AtualizarAluno(aluno);
             return await PersistirDados(_alunoRepository.UnitOfWork);

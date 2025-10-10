@@ -7,7 +7,7 @@ namespace EducaOnline.Aluno.API.Application.Commands
 {
     public class AtualizarAlunoCommand : Command
     {
-        public AtualizarAlunoCommand(Guid id, string nome, string email)
+        public AtualizarAlunoCommand(Guid id, string? nome, string? email)
         {
             Id = id;
             Nome = nome;
@@ -15,8 +15,8 @@ namespace EducaOnline.Aluno.API.Application.Commands
         }
 
         public Guid Id { get; private set; }
-        public string Nome { get; private set; }
-        public string Email { get; private set; }
+        public string? Nome { get; private set; }
+        public string? Email { get; private set; }
 
         public override bool EhValido()
         {
@@ -33,14 +33,16 @@ namespace EducaOnline.Aluno.API.Application.Commands
                 .NotEqual(Guid.Empty)
                 .WithMessage("Id do aluno inválido");
 
-            RuleFor(c => c.Nome)
-                .NotEmpty()
-                .WithMessage("Nome não informado.");
+            RuleFor(c => c)
+                .Must(c => !string.IsNullOrWhiteSpace(c.Nome) || !string.IsNullOrWhiteSpace(c.Email))
+                .WithMessage("Informe ao menos o nome ou o e-mail para atualização.");
 
-            RuleFor(c => c.Email)
-                .NotEmpty()
-                .EmailAddress()
-                .WithMessage("E-mail inválido.");
+            When(c => !string.IsNullOrWhiteSpace(c.Email), () =>
+            {
+                RuleFor(c => c.Email)
+                    .EmailAddress()
+                    .WithMessage("E-mail inválido.");
+            });
         }
     }
 }

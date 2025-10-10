@@ -29,11 +29,12 @@ namespace EducaOnline.Aluno.API.Application.CommandHandlers
                 return ValidationResult;
             }
 
-            if (aluno.Matricula is not null && aluno.Matricula.Status != StatusMatriculaEnum.CANCELADO)
+            if (aluno.JaEstaMatriculadoNoCurso(command.CursoId))
             {
-                AdicionarErro("Aluno já está com uma matrícula ativa.");
+                AdicionarErro("Aluno já possui matrícula ativa neste curso.");
                 return ValidationResult;
             }
+
             if (string.IsNullOrWhiteSpace(command.CursoNome))
             {
                 AdicionarErro("Nome do curso inválido.");
@@ -49,6 +50,7 @@ namespace EducaOnline.Aluno.API.Application.CommandHandlers
             );
 
             aluno.RealizarMatricula(matricula);
+            await _alunoRepository.AdicionarMatricula(matricula, cancellationToken);
 
             return await PersistirDados(_alunoRepository.UnitOfWork);
         }

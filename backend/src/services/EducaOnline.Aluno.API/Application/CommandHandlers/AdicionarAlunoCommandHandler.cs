@@ -20,6 +20,12 @@ namespace EducaOnline.Aluno.API.Application.CommandHandlers
         {
             if (!command.EhValido()) return command.ValidationResult!;
 
+            var alunoExistente = await _alunoRepository.BuscarPorEmail(command.Email, cancellationToken);
+            if (alunoExistente is not null)
+            {
+                AdicionarErro($"Já existe um aluno cadastrado com o e-mail '{command.Email}'.");
+                return ValidationResult;
+            }
             var aluno = new Models.Aluno(command.Id, command.Nome, command.Email);
 
             var ra = await _alunoRepository.BuscarProximoRa(cancellationToken);

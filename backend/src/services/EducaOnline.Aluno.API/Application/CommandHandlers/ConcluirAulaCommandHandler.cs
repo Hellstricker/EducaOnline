@@ -27,7 +27,7 @@ namespace EducaOnline.Aluno.API.Application.CommandHandlers
                 return ValidationResult;
             }
 
-            aluno.ConcluirAula(command.AulaId);
+            aluno.ConcluirAula(command.CursoId, command.AulaId);
 
             _alunoRepository.AtualizarAluno(aluno);
             return await PersistirDados(_alunoRepository.UnitOfWork);

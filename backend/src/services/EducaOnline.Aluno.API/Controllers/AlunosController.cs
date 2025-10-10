@@ -7,6 +7,7 @@ using EducaOnline.MessageBus;
 using EducaOnline.WebAPI.Core.Controllers;
 using EducaOnline.WebAPI.Core.Usuario;
 using Microsoft.AspNetCore.Mvc;
+using System.Reflection.Metadata.Ecma335;
 using System.Threading;
 
 
@@ -100,10 +101,10 @@ namespace EducaOnline.Aluno.API.Controllers
             return CustomResponse(result);
         }
 
-        [HttpPost("{alunoId}/matricula/{matriculaId}/aula/{aulaId}/finalizar")]
-        public async Task<IActionResult> FinalizarAula(Guid alunoId, Guid matriculaId, Guid aulaId)
+        [HttpPost("aulas/finalizar")]
+        public async Task<IActionResult> FinalizarAula([FromBody] FinalizarAulaDto dto, CancellationToken cancellationToken)
         {
-            var cmd = new FinalizarAulaCommand(alunoId, matriculaId, aulaId);
+            var cmd = new FinalizarAulaCommand(dto.AlunoId, dto.MatriculaId, dto.AulaId);
             var result = await _mediator.EnviarComando(cmd);
             if (!result.IsValid)
                 return CustomResponse(result);
@@ -111,7 +112,7 @@ namespace EducaOnline.Aluno.API.Controllers
             return Ok("Aula finalizada com sucesso!");
         }
 
-        [HttpGet("{alunoId}/matricula/{matriculaId}/progresso")]
+        [HttpGet("{alunoId}/matriculas/{matriculaId}/progresso")]
         public async Task<IActionResult> ObterProgresso(Guid alunoId, Guid matriculaId, CancellationToken cancellationToken)
         {
             var aluno = await _alunoRepository.BuscarAlunoPorId(alunoId, cancellationToken);
@@ -121,8 +122,8 @@ namespace EducaOnline.Aluno.API.Controllers
                 return CustomResponse();
             }
 
-            var matricula = aluno.Matricula;
-            if (matricula == null || matricula.Id != matriculaId)
+            var matricula = aluno.Matriculas.FirstOrDefault(m => m.Id == matriculaId);
+            if (matricula == null)
             {
                 AdicionarErro("Matrícula não encontrada para o aluno informado.");
                 return CustomResponse();
@@ -132,6 +133,7 @@ namespace EducaOnline.Aluno.API.Controllers
 
             var totalAulas = historico?.TotalAulas ?? matricula.TotalAulas;
             var concluidas = historico?.TotalAulasConcluidas ?? matricula.AulasConcluidas;
+
             var progresso = historico?.Progresso ??
                             (totalAulas == 0 ? 0 : Math.Round((double)concluidas / totalAulas * 100, 2));
 
@@ -152,37 +154,6 @@ namespace EducaOnline.Aluno.API.Controllers
             return Ok(resultado);
         }
 
-        [HttpPost("{alunoId}/matriculas/{matriculaId}/finalizar")]
-        public async Task<IActionResult> FinalizarCurso(Guid alunoId, Guid matriculaId)
-        {
-            var aluno = await _alunoRepository.BuscarAlunoPorId(alunoId, CancellationToken.None);
-            if (aluno == null)
-            {
-                AdicionarErro("Aluno não encontrado.");
-                return CustomResponse();
-            }
-
-            var matricula = aluno.Matricula;
-            if (matricula == null || matricula.Id != matriculaId)
-            {
-                AdicionarErro("Matrícula não encontrada para o aluno informado.");
-                return CustomResponse();
-            }
-
-            var cmd = new FinalizarCursoCommand(
-                alunoId,
-                matriculaId,
-                aluno.Nome,
-                matricula.CursoNome,
-                matricula.CargaHorariaTotal
-            );
-
-            var result = await _mediator.EnviarComando(cmd);
-            if (!result.IsValid)
-                return CustomResponse(result);
-
-            return Ok("Curso finalizado e certificado emitido com sucesso!");
-        }
 
         [HttpPost("emitir-certificado")]
         public async Task<IActionResult> EmitirCertificado([FromBody] CertificadoDto certificadoDto)
@@ -197,18 +168,6 @@ namespace EducaOnline.Aluno.API.Controllers
                 return CustomResponse(result);
 
             return CustomResponse("Certificado emitido com sucesso!");
-        }
-                
-        [HttpGet("{id:guid}/matricula")]
-        public async Task<IActionResult> ObterMatricula(Guid id, CancellationToken cancellationToken)
-        {            
-            var matricula = await _alunoRepository.BuscarMatriculaPorAlunoId(id, cancellationToken);
-            if (matricula is null)
-            {
-                AdicionarErro("Matricula não encontrada");
-                return CustomResponse();
-            }
-            return Ok(matricula);
         }
     }
 }

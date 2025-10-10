@@ -1,7 +1,6 @@
 ﻿using EducaOnline.Aluno.API.Application.Commands;
 using EducaOnline.Aluno.API.Models;
 using EducaOnline.Aluno.API.Models.Enum;
-using EducaOnline.Aluno.API.Models.ValueObjects;
 using EducaOnline.Core.Messages;
 using FluentValidation.Results;
 using MediatR;
@@ -20,19 +19,19 @@ namespace EducaOnline.Aluno.API.Application.CommandHandlers
 
         public async Task<ValidationResult> Handle(FinalizarCursoCommand command, CancellationToken cancellationToken)
         {
-            if (!command.EhValido()) return command.ValidationResult;
+            if (!command.EhValido()) return command.ValidationResult!;
 
             var aluno = await _alunoRepository.BuscarAlunoPorId(command.AlunoId, cancellationToken);
-            if (aluno == null)
+            if (aluno is null)
             {
                 AdicionarErro("Aluno não encontrado.");
                 return ValidationResult;
             }
 
-            var matricula = aluno.Matricula;
-            if (matricula == null || matricula.Id != command.MatriculaId)
+            var matricula = aluno.Matriculas.FirstOrDefault(m => m.CursoId == command.CursoId);
+            if (matricula is null)
             {
-                AdicionarErro("Matrícula não encontrada para o aluno informado.");
+                AdicionarErro("Matrícula do curso não encontrada para este aluno.");
                 return ValidationResult;
             }
 
@@ -44,15 +43,12 @@ namespace EducaOnline.Aluno.API.Application.CommandHandlers
 
             try
             {
-                aluno.AtualizarStatusMatricula(StatusMatriculaEnum.CURSO_CONCLUIDO);
+                matricula.AtualizarStatus(StatusMatriculaEnum.CURSO_CONCLUIDO);
 
-                var certificado = new Certificado(command.CursoNome);
-                aluno.EmitirCertificado(certificado);
+                var certificado = new Certificado(matricula.CursoNome);
+                aluno.EmitirCertificado(matricula.CursoId, certificado);
 
-                aluno.HistoricoAprendizado.AtualizarProgresso(
-                     matricula.AulasConcluidas,
-                     matricula.TotalAulas
-                 );
+                aluno.AtualizarHistoricoAprendizado(matricula.AulasConcluidas, matricula.TotalAulas);
 
                 _alunoRepository.AtualizarAluno(aluno);
             }
