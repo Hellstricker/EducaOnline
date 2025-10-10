@@ -1,21 +1,18 @@
 ﻿using EducaOnline.Core.Messages;
 using FluentValidation;
-using FluentValidation.Results;
-using MediatR;
-
 
 namespace EducaOnline.Aluno.API.Application.Commands
 {
     public class EmitirCertificadoCommand : Command
     {
-        public EmitirCertificadoCommand(Guid cursoId, Guid alunoId)
+        public EmitirCertificadoCommand(Guid alunoId, Guid cursoId)
         {
-            CursoId = cursoId;
             AlunoId = alunoId;
+            CursoId = cursoId;
         }
 
-        public Guid CursoId { get; set; }
-        public Guid AlunoId { get; set; }
+        public Guid AlunoId { get; private set; }
+        public Guid CursoId { get; private set; }
 
         public override bool EhValido()
         {
@@ -28,13 +25,13 @@ namespace EducaOnline.Aluno.API.Application.Commands
     {
         public EmitirCertificadoValidation()
         {
+            RuleFor(c => c.AlunoId)
+                .NotEqual(Guid.Empty)
+                .WithMessage("Id do aluno inválido.");
+
             RuleFor(c => c.CursoId)
                 .NotEqual(Guid.Empty)
-                .WithMessage("Id do curso inválido");
-
-            RuleFor(c => c.AlunoId)
-                   .NotEqual(Guid.Empty)
-                   .WithMessage("Id do aluno inválido");
+                .WithMessage("Id do curso inválido.");
         }
     }
 }

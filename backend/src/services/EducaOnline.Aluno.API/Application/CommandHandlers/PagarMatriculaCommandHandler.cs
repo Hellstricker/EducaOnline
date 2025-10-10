@@ -8,7 +8,7 @@ using EducaOnline.MessageBus;
 using FluentValidation.Results;
 using MediatR;
 
-namespace EducaOnline.Aluno.API.Application.Handlers
+namespace EducaOnline.Aluno.API.Application.CommandHandlers
 {
     public class PagarMatriculaCommandHandler : CommandHandler,
         IRequestHandler<PagarMatriculaCommand, ValidationResult>

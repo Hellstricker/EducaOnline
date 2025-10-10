@@ -10,24 +10,21 @@ namespace EducaOnline.Aluno.API.Data.Mappings
         {
             builder.ToTable("Alunos");
 
-            builder.HasKey(x => x.Id);
+            builder.HasKey(a => a.Id);
 
-            builder.OwnsOne(p => p.HistoricoAprendizado)
-                .Property(p => p.TotalAulasConcluidas);
+            builder.OwnsOne(p => p.HistoricoAprendizado);
 
-            builder.OwnsOne(p => p.HistoricoAprendizado)
-               .Property(p => p.Progresso);
+            builder.HasMany(a => a.Matriculas)
+                   .WithOne(m => m.Aluno)
+                   .HasForeignKey(m => m.AlunoId);
 
-            builder.OwnsOne(p => p.HistoricoAprendizado)
-              .Property(p => p.TotalAulas);              
+            builder.HasMany(a => a.Certificados)
+                   .WithOne()
+                   .HasForeignKey("AlunoId");
 
-            builder.HasOne(p => p.Matricula);
-
-            builder.HasOne(p => p.Certificado);
-
-            builder.HasMany(p => p.AulasConcluidas)
-                .WithOne(p => p.Aluno)
-                .HasForeignKey(p => p.AlunoId);
+            builder.HasMany(a => a.AulasConcluidas)
+                   .WithOne(a => a.Aluno)
+                   .HasForeignKey(a => a.AlunoId);
         }
     }
 
@@ -39,7 +36,13 @@ namespace EducaOnline.Aluno.API.Data.Mappings
 
             builder.HasKey(x => x.Id);
 
-            builder.Property(p => p.Status);
+            builder.Property(x => x.Status)
+                   .IsRequired();
+
+            builder.HasOne(m => m.Aluno)
+                   .WithMany(a => a.Matriculas)
+                   .HasForeignKey(m => m.AlunoId)
+                   .OnDelete(DeleteBehavior.Restrict);
         }
     }
 

@@ -6,7 +6,7 @@ namespace EducaOnline.Aluno.API.Models.ValueObjects
     {
         public int? TotalAulasConcluidas { get; private set; }
         public int? TotalAulas { get; private set; }
-        public double? Progresso { get; private set; } // 0..100
+        public double? Progresso { get; private set; } 
 
         private HistoricoAprendizado() { }
 
@@ -38,5 +38,22 @@ namespace EducaOnline.Aluno.API.Models.ValueObjects
             if (total <= 0) return 0;
             return Math.Round((double)((decimal)concluidas / total * 100m), 0, MidpointRounding.AwayFromZero);
         }
+        public HistoricoAprendizado Atualizar(int concluidas, int total)
+        {
+            return new HistoricoAprendizado(concluidas, total);
+        }
+
+        public void AtualizarProgresso(int totalAulasConcluidas, int totalAulas)
+        {
+            if (totalAulas < 0) throw new DomainException("Total de aulas inválido.");
+            if (totalAulasConcluidas < 0) throw new DomainException("Total de aulas concluídas inválido.");
+            if (totalAulasConcluidas > totalAulas) totalAulasConcluidas = totalAulas;
+
+            TotalAulasConcluidas = totalAulasConcluidas;
+            TotalAulas = totalAulas;
+            Progresso = CalcularProgresso(totalAulasConcluidas, totalAulas);
+        }
+
+
     }
 }

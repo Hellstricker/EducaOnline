@@ -6,7 +6,7 @@ using EducaOnline.Core.Messages;
 using FluentValidation.Results;
 using MediatR;
 
-namespace EducaOnline.Aluno.API.Application.Handlers
+namespace EducaOnline.Aluno.API.Application.CommandHandlers
 {
     public class RealizarMatriculaCommandHandler : CommandHandler,
         IRequestHandler<RealizarMatriculaCommand, ValidationResult>
@@ -29,9 +29,15 @@ namespace EducaOnline.Aluno.API.Application.Handlers
                 return ValidationResult;
             }
 
-            if (aluno.Matricula is not null && aluno.Matricula.Status != StatusMatriculaEnum.CANCELADO)
+            if (aluno.JaEstaMatriculadoNoCurso(command.CursoId))
             {
-                AdicionarErro("Aluno já está com uma matrícula ativa.");
+                AdicionarErro("Aluno já possui matrícula ativa neste curso.");
+                return ValidationResult;
+            }
+
+            if (string.IsNullOrWhiteSpace(command.CursoNome))
+            {
+                AdicionarErro("Nome do curso inválido.");
                 return ValidationResult;
             }
 
@@ -44,8 +50,8 @@ namespace EducaOnline.Aluno.API.Application.Handlers
             );
 
             aluno.RealizarMatricula(matricula);
+            await _alunoRepository.AdicionarMatricula(matricula, cancellationToken);
 
-            await _alunoRepository.AdicionarMatricula(aluno.Matricula!, cancellationToken);
             return await PersistirDados(_alunoRepository.UnitOfWork);
         }
     }

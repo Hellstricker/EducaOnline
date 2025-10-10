@@ -1,4 +1,5 @@
-﻿using EducaOnline.Aluno.API.Models.Enum;
+﻿using EducaOnline.Aluno.API.Application.Events;
+using EducaOnline.Aluno.API.Models.Enum;
 using EducaOnline.Aluno.API.Models.ValueObjects;
 using EducaOnline.Core.DomainObjects;
 
@@ -8,92 +9,122 @@ namespace EducaOnline.Aluno.API.Models
     {
         protected Aluno()
         {
+            Nome = string.Empty;
+            Email = string.Empty;
             DataCadastro = DateTime.UtcNow;
             AulasConcluidas = new HashSet<AulaConcluida>();
+            Matriculas = new HashSet<Matricula>();
+            HistoricoAprendizado = new HistoricoAprendizado(0, 0);
         }
 
-        public Aluno(Guid id, string? nome, string? email)
+        public Aluno(Guid id, string nome, string email)
         {
+            if (string.IsNullOrWhiteSpace(nome))
+                throw new DomainException("Nome inválido.");
+            if (string.IsNullOrWhiteSpace(email))
+                throw new DomainException("E-mail inválido.");
+
             Id = id;
             Nome = nome;
             Email = email;
             DataCadastro = DateTime.UtcNow;
             AulasConcluidas = new HashSet<AulaConcluida>();
+            Matriculas = new HashSet<Matricula>();
+            HistoricoAprendizado = new HistoricoAprendizado(0, 0);
         }
-        
-        public string? Nome { get; private set; }
-        public int Ra { get; private set; }
-        public string? Email { get; private set; }
-        public DateTime? DataCadastro { get; private set; }
-        public HistoricoAprendizado? HistoricoAprendizado { get; private set; }
-        public ICollection<AulaConcluida> AulasConcluidas { get; private set; }
-        public Matricula? Matricula { get; private set; }
-        public Certificado? Certificado { get; private set; }
 
+        public string Nome { get; private set; }
+        public int Ra { get; private set; }
+        public string Email { get; private set; }
+        public DateTime? DataCadastro { get; private set; }
+        public HistoricoAprendizado HistoricoAprendizado { get; private set; }
+
+        public ICollection<AulaConcluida> AulasConcluidas { get; private set; }
+        public ICollection<Matricula> Matriculas { get; private set; }
+        public ICollection<Certificado> Certificados { get; private set; } = new List<Certificado>();
 
         public void AtualizarDados(string? nome, string? email)
         {
-            if (string.IsNullOrWhiteSpace(nome)) throw new DomainException("Nome inválido.");
-            if (string.IsNullOrWhiteSpace(email)) throw new DomainException("E-mail inválido.");
-            Nome = nome;
-            Email = email;
+            var nomeInformado = !string.IsNullOrWhiteSpace(nome);
+            var emailInformado = !string.IsNullOrWhiteSpace(email);
+
+            if (!nomeInformado && !emailInformado)
+                throw new DomainException("Nenhum dado informado para atualização.");
+
+            if (nomeInformado)
+                Nome = nome!;
+
+            if (emailInformado && !Email.Equals(email, StringComparison.OrdinalIgnoreCase))
+            {
+                if (!email!.Contains("@") || !email.Contains("."))
+                    throw new DomainException("E-mail inválido.");
+                Email = email;
+            }
         }
 
         public void VincularRa(int ra) => Ra = ra;
 
         public void RealizarMatricula(Matricula nova)
         {
-            if (nova is null) throw new DomainException("Matrícula inválida.");
-            if (Matricula is not null && Matricula.Status != StatusMatriculaEnum.CANCELADO)
-                throw new DomainException("Aluno já possui matrícula ativa.");
-
+            if (nova is null)
+                throw new DomainException("Matrícula inválida.");
+            if (Matriculas.Any(m => m.CursoId == nova.CursoId && m.Status != StatusMatriculaEnum.CANCELADO))
+                throw new DomainException("Aluno já possui matrícula ativa nesse curso.");
             if (nova.AlunoId != Id)
                 throw new DomainException("Matrícula não pertence a este aluno.");
 
-            Matricula = nova;
-
-            HistoricoAprendizado = new HistoricoAprendizado(
-                totalAulasConcluidas: Matricula.AulasConcluidas,
-                totalAulas: Matricula.TotalAulas
-            );
+            Matriculas.Add(nova);
         }
-        public void ConcluirAula(Guid aulaId)
+
+        public Matricula ObterMatricula(Guid cursoId)
         {
-            if (Matricula is null) throw new DomainException("Aluno não possui matrícula.");
-            if (Matricula.Status == StatusMatriculaEnum.PENDENTE_PAGAMENTO)
-                throw new DomainException("Não é possível concluir aula sem pagamento.");
-            if (Matricula.Status == StatusMatriculaEnum.CURSO_CONCLUIDO)
+            var matricula = Matriculas.FirstOrDefault(m => m.CursoId == cursoId);
+            if (matricula is null)
+                throw new DomainException($"Aluno não está matriculado no curso {cursoId}");
+            return matricula;
+        }
+
+        public AulaConcluida ConcluirAula(Guid cursoId, Guid aulaId)
+        {
+            var matricula = Matriculas.FirstOrDefault(m => m.CursoId == cursoId);
+            if (matricula is null)
+                throw new DomainException("Matrícula não encontrada para o curso informado.");
+
+            //if (matricula.Status == StatusMatriculaEnum.PENDENTE_PAGAMENTO)
+            //    throw new DomainException("Não é possível concluir aula sem pagamento.");
+
+            if (matricula.Status == StatusMatriculaEnum.CURSO_CONCLUIDO)
                 throw new DomainException("Curso já concluído.");
 
             if (AulasConcluidas.Any(a => a.AulaId == aulaId))
                 throw new DomainException("Aula já concluída.");
 
-            AulasConcluidas.Add(new AulaConcluida(aulaId));
+            var aulaConcluida = new AulaConcluida(aulaId);
+            AulasConcluidas.Add(aulaConcluida);
 
-            Matricula.RegistrarConclusaoAula();
+            matricula.RegistrarConclusaoAula();
 
-            HistoricoAprendizado = new HistoricoAprendizado(
-                totalAulasConcluidas: Matricula.AulasConcluidas,
-                totalAulas: Matricula.TotalAulas
+            HistoricoAprendizado = HistoricoAprendizado.Atualizar(
+                matricula.AulasConcluidas,
+                matricula.TotalAulas
             );
+
+            AdicionarEvento(new AulaFinalizadaEvent(Id, matricula.Id, matricula.CursoId, aulaId));
+
+            return aulaConcluida;
         }
 
 
-        public void AtualizarStatusMatricula(StatusMatriculaEnum status)
-        {
-            if (Matricula is null) throw new DomainException("Aluno não possui matrícula.");
-            Matricula.AtualizarStatus(status);
-        }
 
-        public void EmitirCertificado(Certificado certificado)
+        public void EmitirCertificado(Guid cursoId, Certificado certificado)
         {
-            if (Matricula is null) throw new DomainException("Aluno não possui matrícula.");
-            var progresso = Matricula.ObterProgressoPercentual();
+            var matricula = ObterMatricula(cursoId);
 
-            if (progresso >= 100 && Matricula.AulasConcluidas >= Matricula.TotalAulas)
+            var progresso = matricula.ObterProgressoPercentual();
+            if (progresso >= 100 && matricula.AulasConcluidas >= matricula.TotalAulas)
             {
-                AtualizarStatusMatricula(StatusMatriculaEnum.CURSO_CONCLUIDO);
-                Certificado = certificado;
+                matricula.AtualizarStatus(StatusMatriculaEnum.CURSO_CONCLUIDO);
+                Certificados.Add(certificado);
             }
             else
             {
@@ -103,22 +134,22 @@ namespace EducaOnline.Aluno.API.Models
 
         public void PagarMatricula(Guid cursoId)
         {
-            if(Matricula is null) throw new DomainException("Aluno não possui matrícula.");
-            if(Matricula.CursoId != cursoId) throw new DomainException("Aluno não matriculado neste curso.");
-
-            Matricula?.Pagar();
+            var matricula = ObterMatricula(cursoId);
+            matricula.Pagar();
         }
-
-        public bool EstaMatriculado(Guid cursoId)
+        public void AtualizarHistoricoAprendizado(int aulasConcluidas, int totalAulas)
         {
-            return Matricula is not null && Matricula.CursoId == cursoId;
+            HistoricoAprendizado = HistoricoAprendizado.Atualizar(aulasConcluidas, totalAulas);
         }
-
-        public Matricula? ObterMatricula(Guid cursoId)
+        public bool JaEstaMatriculadoNoCurso(Guid cursoId)
         {
-            if (!EstaMatriculado(cursoId)) throw new DomainException($"Aluno não está matriculado no curso com id {cursoId}");
-            return Matricula;
+            return Matriculas.Any(m => m.CursoId == cursoId && m.Status != StatusMatriculaEnum.CANCELADO);
+        }
+        public void AtualizarStatusMatricula(Guid matriculaId, StatusMatriculaEnum status)
+        {
+            var matricula = Matriculas.FirstOrDefault(m => m.Id == matriculaId);
+            if (matricula == null) throw new DomainException("Matrícula não encontrada.");
+            matricula.AtualizarStatus(status);
         }
     }
 }
-    

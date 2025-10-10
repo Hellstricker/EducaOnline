@@ -4,7 +4,7 @@ using EducaOnline.Core.Messages;
 using FluentValidation.Results;
 using MediatR;
 
-namespace EducaOnline.Aluno.API.Application.Handlers
+namespace EducaOnline.Aluno.API.Application.CommandHandlers
 {
     public class ConcluirAulaCommandHandler : CommandHandler,
         IRequestHandler<ConcluirAulaCommand, ValidationResult>
@@ -27,7 +27,7 @@ namespace EducaOnline.Aluno.API.Application.Handlers
                 return ValidationResult;
             }
 
-            aluno.ConcluirAula(command.AulaId);
+            aluno.ConcluirAula(command.CursoId, command.AulaId);
 
             _alunoRepository.AtualizarAluno(aluno);
             return await PersistirDados(_alunoRepository.UnitOfWork);
