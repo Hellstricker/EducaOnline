@@ -14,67 +14,23 @@ $cor-sombra: rgba(187, 186, 207, 0.6);
 
 .content-login {
   display: flex;
+  justify-content: center;
   height: 100vh;
 }
 
-// Lado animacoes (esquerdo)
-.lado-animacao {
-  flex: 1;
-  position: relative;
-  background-image: url('../../../assets/imgs/login.png');
-  background-repeat: no-repeat;
-  background-size: cover;
-}
-
-@media (max-width: $break-desktop) {
-  .lado-animacao {
-    display: none;
-  }
-}
 
 .position-relative {
   position: relative;
 }
 
-.content-descricao {
-  position: absolute;
-  left: 50%;
-  bottom: 2rem;
-  transform: translateX(-50%);
-  width: 39rem;
-  text-align: center;
-
-  .titulo {
-    color: $cor-branco;
-    font-weight: 600;
-    font-size: 2rem;
-    margin-bottom: 2rem;
-  }
-
-  .descricao {
-    color: $cor-branco;
-    font-size: $size-16;
-    opacity: .6;
-  }
-}
-
 // Lado form (direita)
 .lado-form {
-  flex: 0 0 46.125rem;
+  flex: 0 0 50rem;
   position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
 
-  &:before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 0;
-    bottom: 0;
-    width: $size-10;
-    background: $gradiente-login;
-  }
 }
 @media (max-width: $break-desktop) {
   .lado-form {

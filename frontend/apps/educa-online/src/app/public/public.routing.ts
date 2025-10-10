@@ -8,12 +8,15 @@ const routes: Routes = [
   {
     path: '',
     pathMatch: 'full',
-    redirectTo: 'login',
+    redirectTo: 'home',
   },
   {
     path: '',
     loadChildren: () => import('./login/login.module').then(m => m.LoginModule),
-    // canActivate: [LoginGuard]
+  },
+  {
+    path: '',
+    loadChildren: () => import('./home/home.module').then(m => m.HomeModule),
   }
 ]
 

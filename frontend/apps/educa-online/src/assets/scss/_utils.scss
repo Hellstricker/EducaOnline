@@ -155,16 +155,16 @@
   margin-bottom: 1rem;
 
 
-  &:after {
-    content: '';
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    bottom: -$size-5;
-    height: $size-4;
-    width: 2rem;
-    background-color: $cor-secundaria;
-  }
+  // &:after {
+  //   content: '';
+  //   position: absolute;
+  //   left: 50%;
+  //   transform: translateX(-50%);
+  //   bottom: -$size-5;
+  //   height: $size-4;
+  //   width: 2rem;
+  //   background-color: $cor-secundaria;
+  // }
 }
 
 .titulo,
