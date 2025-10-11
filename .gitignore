@@ -5,3 +5,6 @@ bin
 *.db-shm
 *.db
 *.user
+*.db
+*.db-shm
+*.db-wal

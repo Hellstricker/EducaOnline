@@ -20,26 +20,11 @@ namespace EducaOnline.Bff.Models
 
         #endregion
 
-        #region Cartão
-
-        [Required(ErrorMessage = "Informe o número do cartão")]
-        [DisplayName("Número do Cartão")]
-        public string? NumeroCartao { get; set; }
-
-        [Required(ErrorMessage = "Informe o nome do portador do cartão")]
-        [DisplayName("Nome do Portador")]
-        public string? NomeCartao { get; set; }
-
-        [RegularExpression(@"(0[1-9]|1[0-2])\/[0-9]{2}", ErrorMessage = "O vencimento deve estar no padrão MM/AA")]
-        [CartaoExpiracao(ErrorMessage = "Cartão Expirado")]
-        [Required(ErrorMessage = "Informe o vencimento")]
-        [DisplayName("Data de Vencimento MM/AA")]
+        #region Cartão        
+        public string? NumeroCartao { get; set; }        
+        public string? NomeCartao { get; set; }        
         public string? ExpiracaoCartao { get; set; }
-
-        [Required(ErrorMessage = "Informe o código de segurança")]
-        [DisplayName("Código de Segurança")]
         public string? CvvCartao { get; set; }
-
         #endregion
     }
 
@@ -54,7 +39,10 @@ namespace EducaOnline.Bff.Models
     {
         public Guid AlunoId { get; set; }
         public Guid CursoId { get; set; }        
-        public int Status { get; set; }
+        public int Status { get; set; }        
+        public string? CursoNome { get; set; }
+        public int TotalAulas { get; set; }
+        public int CargaHorariaTotal { get; set; }
     }
 
     public class CursoDto
@@ -62,5 +50,7 @@ namespace EducaOnline.Bff.Models
         public Guid Id { get; set; }
         public string? Nome { get; set; }
         public decimal Valor { get; set; }
+        public int TotalAulas { get; set; }
+        public int CargaHorariaTotal { get; set; }
     }
 }

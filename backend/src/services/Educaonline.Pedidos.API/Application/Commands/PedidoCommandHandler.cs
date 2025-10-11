@@ -34,13 +34,12 @@ namespace EducaOnLine.Pedidos.API.Application.Commands
             if (!ValidarPedido(pedido)) return ValidationResult;
 
             // Processar pagamento
-            if (!await AutorizarPagamento(pedido, message)) return ValidationResult;
+            if (!await RealizarPagamento(pedido, message)) return ValidationResult;
 
             // Se pagamento tudo ok!
-            pedido.AutorizarPedido();
-
-            // Adicionar Evento
-            pedido.AdicionarEvento(new PedidoRealizadoEvent(pedido.Id, pedido.ClienteId));
+            pedido.FinalizarPedido();
+            
+            pedido.AdicionarEvento(new PedidoPagoEvent(message.ClienteId, pedido.Id, [.. pedido.PedidoItems!.Select(p => p.ProdutoId)]));
 
             // Adicionar Pedido Repositorio
             _pedidoRepository.Adicionar(pedido);
@@ -72,7 +71,7 @@ namespace EducaOnLine.Pedidos.API.Application.Commands
             return true;
         }
 
-        public async Task<bool> AutorizarPagamento(Pedido pedido, AdicionarPedidoCommand message)
+        private async Task<bool> AutorizarPagamento(Pedido pedido, AdicionarPedidoCommand message)
         {
             var pedidoIniciado = new PedidoIniciadoIntegrationEvent
             {
@@ -98,5 +97,33 @@ namespace EducaOnLine.Pedidos.API.Application.Commands
 
             return false;
         }
+
+        private async Task<bool> RealizarPagamento(Pedido pedido, AdicionarPedidoCommand message)
+        {
+            var pedidoIniciado = new PedidoIniciadoIntegrationEvent
+            {
+                PedidoId = pedido.Id,
+                ClienteId = pedido.ClienteId,
+                Valor = pedido.ValorTotal,
+                TipoPagamento = 1, // fixo. Alterar se tiver mais tipos
+                NomeCartao = message.NomeCartao,
+                NumeroCartao = message.NumeroCartao,
+                MesAnoVencimento = message.ExpiracaoCartao,
+                CVV = message.CvvCartao
+            };
+
+            var result = await _bus
+                .RequestAsync<PedidoIniciadoIntegrationEvent, ResponseMessage>(pedidoIniciado);
+
+            if (result.ValidationResult.IsValid) return true;
+
+            foreach (var erro in result.ValidationResult.Errors)
+            {
+                AdicionarErro(erro.ErrorMessage);
+            }
+
+            return false;
+        }
+
     }
 }

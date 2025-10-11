@@ -26,7 +26,7 @@ namespace EducaOnline.Bff.Controllers
 
         [HttpPost]
         [Route("compras/pedido")]
-        public async Task<IActionResult> AdicionarPedido(PedidoDTO pedido)
+        public async Task<IActionResult> AdicionarPedido(PagamentoCartaoViewModel viewModel)
         {   
             var matricula = await _alunoService.ObterMatricula(_user.ObterUserId());
             if (matricula is null)
@@ -42,15 +42,17 @@ namespace EducaOnline.Bff.Controllers
                 return CustomResponse();
             }
             
-            PopularDadosPedido(matricula, curso , pedido);
+            var pedido = PopularDadosPedido(matricula, curso , viewModel);            
 
             var result = await _pedidoService.IniciarPedido(pedido);
 
             return CustomResponse(result);
         }
 
-        private void PopularDadosPedido(MatriculaDto matricula, CursoDto curso, PedidoDTO pedido)
+        private PedidoDTO PopularDadosPedido(MatriculaDto matricula, CursoDto curso, PagamentoCartaoViewModel dadosCartao)
         {
+            var pedido = new PedidoDTO();
+            
             pedido.PedidoItems = new List<ItemDTO>()
             {
                 new ItemDTO()
@@ -60,7 +62,14 @@ namespace EducaOnline.Bff.Controllers
                     Valor = curso.Valor                    
                 }
             };
-            pedido.ValorTotal = curso.Valor;                        
+            pedido.ValorTotal = curso.Valor;
+            
+            pedido.NumeroCartao = dadosCartao.NumeroCartao;
+            pedido.NomeCartao = dadosCartao.NomeCartao;
+            pedido.ExpiracaoCartao = dadosCartao.ExpiracaoCartao;
+            pedido.CvvCartao = dadosCartao.CvvCartao;
+
+            return pedido;
         }
     }
 }

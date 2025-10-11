@@ -1,8 +1,10 @@
-﻿using FluentValidation.Results;
-using EducaOnline.Core.Messages.Integration;
+﻿using EducaOnline.Aluno.API.Application.Commands;
 using EducaOnline.Core.Communication;
-using EducaOnline.Aluno.API.Application.Commands;
+using EducaOnline.Core.DomainObjects;
+using EducaOnline.Core.Messages.Integration;
 using EducaOnline.MessageBus;
+using FluentValidation.Results;
+using MediatR;
 
 namespace EducaOnline.Aluno.API.Services
 {
@@ -25,9 +27,18 @@ namespace EducaOnline.Aluno.API.Services
             _bus.AdvancedBus.Connected += OnConnect;
         }
 
+        private void SetSubscribers()
+        {
+            //_bus.SubscribeAsync<PedidoCanceladoIntegrationEvent>("PedidoCancelado",
+            //    async request => await CancelarPedido(request));
+            _bus.SubscribeAsync<PedidoPagoIntegrationEvent>("PedidoPago",
+               async request => await PagarMatriculaAluno(request));
+        }
+
         protected override Task ExecuteAsync(CancellationToken stoppingToken)
         {
             SetResponder();
+            SetSubscribers();
             return Task.CompletedTask;
         }
 
@@ -48,6 +59,19 @@ namespace EducaOnline.Aluno.API.Services
             }
 
             return new ResponseMessage(resultado);
+        }
+
+        private async Task PagarMatriculaAluno(PedidoPagoIntegrationEvent message)
+        {
+            using (var scope = _serviceProvider.CreateScope())
+            {
+                var command = new PagarMatriculaCommand(message.ClienteId, message.Itens.First());
+                var mediator = scope.ServiceProvider.GetRequiredService<IMediatorHandler>();
+                var response = await mediator.EnviarComando(command);
+
+                if (!response.IsValid)
+                    throw new DomainException($"Falha ao pagar setar matricula como paga {message.PedidoId}");
+            }
         }
     }
 }
