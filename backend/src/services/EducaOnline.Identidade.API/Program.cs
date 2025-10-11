@@ -19,6 +19,7 @@ builder.Services
     .AddMessageBusConfiguration(builder.Configuration);
 
 var app = builder.Build();
+DbMigrationHelpers.EnsureSeedData(app).Wait();
 
 app
     .UseSwaggerConfiguration()

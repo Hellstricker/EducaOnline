@@ -1,7 +1,7 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AlertComponent, AlertOptions } from '@educa-online/components';
 import { AuthService } from '@educa-online/services';
 import { take } from 'rxjs';
@@ -18,47 +18,59 @@ export class FormLoginComponent implements OnInit {
   private _snackBar = inject(MatSnackBar);
 
   form: FormGroup;
+  cursoId: any;
 
   constructor(
     private fb: FormBuilder,
     private router: Router,
-    private authService: AuthService
+    private authService: AuthService,
+    private route: ActivatedRoute
   ) {
     this.form = fb.group({
       email: ['', [Validators.required, Validators.email]],
       senha: ['', [Validators.required]]
-    })
+    });
+
+    this.route.queryParams.subscribe(params => {
+      this.cursoId = params['cursoId'];
+    });
   }
 
   ngOnInit() { }
 
 
-  login():void {
+  login(): void {
     const { value, valid } = this.form;
 
-    if(valid) {
+    if (valid) {
       this.authService.login(value)
-      .pipe(take(1))
-      .subscribe({
-        next: (token) => {
-          if(token) {
-            console.log(token);
-            this.authService.setToken(JSON.stringify(token));
-            this.authService.setUrl('inicio');
-            this.router.navigate(['/inicio']);
+        .pipe(take(1))
+        .subscribe({
+          next: (token) => {
+            if (token) {
+              console.log(token);
+              this.authService.setToken(JSON.stringify(token));
+
+              if (!this.cursoId) {
+                this.authService.setUrl('inicio');
+                this.router.navigate(['/inicio']);
+              }else {
+                this.authService.setUrl('matricula');
+                this.router.navigate(['/matricula', this.cursoId]);
+              }
+            }
+          },
+          error: (err) => {
+            this._snackBar.openFromComponent(AlertComponent, {
+              duration: 5000,
+              data: {
+                title: 'Erro!',
+                subtitle: 'Usuário ou senha inválidos',
+                status: 'erro'
+              } as AlertOptions
+            });
           }
-        },
-        error: (err) => {
-          this._snackBar.openFromComponent(AlertComponent, {
-            duration: 5000,
-            data: {
-              title: 'Erro!',
-              subtitle: err.error,
-              status: 'erro'
-            } as AlertOptions
-          });
-        }
-      });
+        });
     }
   }
 
