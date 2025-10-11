@@ -4,3 +4,4 @@ bin
 *.db-wal
 *.db-shm
 *.db
+*.user
