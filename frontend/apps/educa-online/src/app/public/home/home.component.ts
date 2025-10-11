@@ -14,12 +14,14 @@ import { take } from 'rxjs';
 export class HomeComponent implements OnInit {
     cursos: CursoResponseModel[] = [];
     usuario: any;
+    role: string;
 
-    constructor(private conteudoService: ConteudoService, private authService: AuthService, private router: Router) { 
+    constructor(private conteudoService: ConteudoService, private authService: AuthService, private router: Router) {
+        this.usuario = this.authService.decodeToken();
+        this.role = this.usuario?.role;
     }
 
-    ngOnInit() { 
-       this.usuario = this.authService.decodeToken();
+    ngOnInit() {
 
         this.conteudoService.get()
             .pipe(take(1))
@@ -27,9 +29,13 @@ export class HomeComponent implements OnInit {
     }
 
     redirectToLogin(matricular: boolean = false, cursoId: string = ''): void {
-        if(!this.usuario && matricular)
-            this.router.navigate([`/login`], {queryParams: {cursoId}});
+        if (!this.usuario && matricular)
+            this.router.navigate([`/login`], { queryParams: { cursoId } });
         else
-            this.router.navigate(['/login']);
-    } 
+            this.router.navigate(['/matricula', cursoId]);
+    }
+
+    redirectToPanel(): void {
+        this.router.navigate(['/inicio']);
+    }
 }

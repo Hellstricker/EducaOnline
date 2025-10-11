@@ -17,13 +17,13 @@ export class HeaderComponent implements OnInit, OnDestroy {
   constructor(
     private router: Router,
     private headerService: HeaderService,
-    // public authService: AuthService
+    public authService: AuthService
   ) {
     this.headerService.obterNovoTitulo()
       .pipe(takeUntil(this.destroy$))
       .subscribe(titulo => this.titulo = titulo);
 
-    // this.authService.decodeToken();
+    const token = this.authService.decodeToken();
   }
 
   ngOnInit(): void {
@@ -35,6 +35,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   logout(): void {
-    // this.authService.logout();
+    this.authService.logout();
+    this.router.navigate(["/home"]);
   }
 }

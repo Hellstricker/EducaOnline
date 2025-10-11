@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace EducaOnline.Bff.Controllers
 {
     [Authorize]
+    [Route("pedido-bff")]
     public class PedidoController : MainController
     {
         private readonly IPedidoService _pedidoService;

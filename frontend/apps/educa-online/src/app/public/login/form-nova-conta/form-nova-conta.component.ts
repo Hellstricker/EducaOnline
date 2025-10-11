@@ -51,7 +51,7 @@ export class FormaNovaContaComponent implements OnInit {
             duration: 5000,
             data: {
               title: 'Erro!',
-              subtitle: err.erro,
+              subtitle: 'E-mail ou senha inávlidos',
               status: 'erro'
             } as AlertOptions
           });

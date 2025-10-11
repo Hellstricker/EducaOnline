@@ -4,6 +4,8 @@ import { RouterModule } from "@angular/router";
 import { AuthenticatedRouting } from "./authenticated.routing";
 import { AuthenticatedComponent } from "./authenticated.component";
 import { HeaderModule, MenuModule } from "@educa-online/components";
+import { AlunoBffService, ConteudoService } from "@educa-online/services";
+import { MAT_DATE_LOCALE } from "@angular/material/core";
 
 @NgModule({
     imports: [
@@ -14,8 +16,8 @@ import { HeaderModule, MenuModule } from "@educa-online/components";
       HeaderModule,
     ],
     exports: [],
-    declarations: [AuthenticatedComponent],
-    providers: [],
+    declarations: [AuthenticatedComponent,],
+    providers: [{provide: MAT_DATE_LOCALE, useValue: 'pt'}],
 })
 
 export class AuthenticatedModule {}

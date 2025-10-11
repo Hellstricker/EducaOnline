@@ -14,7 +14,7 @@ export const TokenInterceptor: HttpInterceptorFn = (req, next) => {
   const token = authService.getToken();
 
   if (token) {
-    authReq = addTokenHeader(req, token);
+    authReq = addTokenHeader(req, token.accessToken);
   }
 
   return next(authReq).pipe(catchError(data => {

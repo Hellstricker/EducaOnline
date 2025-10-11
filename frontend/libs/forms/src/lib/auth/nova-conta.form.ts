@@ -18,8 +18,8 @@ export class NovaContaFormGroup extends FormGroupBase {
     return this.get('senha') as FormControl;
   }
 
-  get confirmarSenha(): FormControl {
-    return this.get('confirmarSenha') as FormControl;
+  get senhaConfirmacao(): FormControl {
+    return this.get('senhaConfirmacao') as FormControl;
   }
 
   constructor() {
@@ -27,9 +27,9 @@ export class NovaContaFormGroup extends FormGroupBase {
       nome: fb.control('', [Validators.required]),
       email: fb.control('', [Validators.required, Validators.email]),
       senha: fb.control('', [Validators.required]),
-      confirmarSenha: fb.control('', [Validators.required])
+      senhaConfirmacao: fb.control('', [Validators.required])
     }, {
-      validators: passwordMatchValidator('senha', 'confirmarSenha')
+      validators: passwordMatchValidator('senha', 'senhaConfirmacao')
     });
   }
 }

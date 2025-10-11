@@ -129,6 +129,10 @@
   font-weight: 500;
 }
 
+.cursor-pointer {
+  cursor: pointer;
+}
+
 .font-titulo {
   font-size: 2rem;
   font-weight: 600;
@@ -241,10 +245,6 @@
 
 .cor-cinza-opaco {
   color: $cor-cinza-opaco;
-}
-
-.cursor-pointer {
-  cursor: pointer;
 }
 
 .cursor-default {

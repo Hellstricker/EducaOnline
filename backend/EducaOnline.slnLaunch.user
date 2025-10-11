@@ -18,16 +18,6 @@
         "DebugTarget": "IIS Express - Development"
       },
       {
-        "Path": "src\\services\\EducaOnline.Aluno.API\\EducaOnline.Aluno.API.csproj",
-        "Action": "Start",
-        "DebugTarget": "IIS Express"
-      },
-      {
-        "Path": "src\\services\\Educaonline.Pedidos.API\\EducaOnline.Pedidos.API.csproj",
-        "Action": "Start",
-        "DebugTarget": "IIS Express - Development"
-      },
-      {
         "Path": "src\\services\\EducaOnline.Bff\\EducaOnline.Bff.csproj",
         "Action": "Start",
         "DebugTarget": "IIS Express - Development"

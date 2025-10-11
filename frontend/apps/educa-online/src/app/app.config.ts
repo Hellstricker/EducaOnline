@@ -9,9 +9,11 @@ import { provideHttpClient, withFetch, withInterceptors } from '@angular/common/
 import { LoadingInterceptor } from '@educa-online/components';
 import { TokenInterceptor } from '@educa-online/services';
 import { provideNgxMask } from 'ngx-mask';
+import { provideNativeDateAdapter } from '@angular/material/core';
 
 export const appConfig: ApplicationConfig = {
   providers: [
+    provideNativeDateAdapter(),
     provideHttpClient(
       withInterceptors([LoadingInterceptor, TokenInterceptor]),
       withFetch()

@@ -6,6 +6,20 @@ namespace EducaOnline.Identidade.API.Configurations
     {
         public static IServiceCollection AddApiConfiguration(this IServiceCollection services)
         {
+
+            services.AddCors(options =>
+            {
+                options.AddPolicy("Total",
+                    builder =>
+                        builder
+                         .WithOrigins("http://localhost:4200")
+                         .AllowAnyMethod()
+                         .AllowAnyHeader()
+                         .AllowCredentials()
+                         .WithExposedHeaders("X-Pagination"));
+            });
+
+
             services.AddControllers();
             return services;
         }
@@ -16,6 +30,8 @@ namespace EducaOnline.Identidade.API.Configurations
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UseCors("Total");
 
             app.UseHttpsRedirection();
 
