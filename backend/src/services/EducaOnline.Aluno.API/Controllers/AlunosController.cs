@@ -169,5 +169,17 @@ namespace EducaOnline.Aluno.API.Controllers
 
             return CustomResponse("Certificado emitido com sucesso!");
         }
+
+        [HttpGet("{id:guid}/matricula")]
+        public async Task<IActionResult> ObterMatricula(Guid id, CancellationToken cancellationToken)
+        {
+            var matricula = await _alunoRepository.BuscarMatriculaPorAlunoId(id, cancellationToken);
+            if (matricula is null)
+            {
+                AdicionarErro("Matricula não encontrada");
+                return CustomResponse();
+            }
+            return Ok(matricula);
+        }
     }
 }
