@@ -9,26 +9,24 @@ namespace EducaOnline.Core.DomainObjects
         protected Entity()
         {
             Id = Guid.NewGuid();
-            
         }
 
-        private List<Event> _notificacoes = new List<Event>();
+        private readonly List<Event> _notificacoes = new List<Event>();
         public IReadOnlyCollection<Event> Notificacoes => _notificacoes.AsReadOnly();
 
         public void AdicionarEvento(Event evento)
         {
-            _notificacoes = _notificacoes ?? new List<Event>();
             _notificacoes.Add(evento);
         }
 
         public void RemoverEvento(Event eventItem)
         {
-            _notificacoes?.Remove(eventItem);
+            _notificacoes.Remove(eventItem);
         }
 
         public void LimparEventos()
         {
-            _notificacoes?.Clear();
+            _notificacoes.Clear();
         }
 
         public override bool Equals(object? obj)
@@ -41,7 +39,7 @@ namespace EducaOnline.Core.DomainObjects
             return Id.Equals(compareTo.Id);
         }
 
-        public static bool operator ==(Entity a, Entity b)
+        public static bool operator ==(Entity? a, Entity? b)
         {
             if (ReferenceEquals(a, null) && ReferenceEquals(b, null))
                 return true;
@@ -52,7 +50,7 @@ namespace EducaOnline.Core.DomainObjects
             return a.Equals(b);
         }
 
-        public static bool operator !=(Entity a, Entity b)
+        public static bool operator !=(Entity? a, Entity? b)
         {
             return !(a == b);
         }

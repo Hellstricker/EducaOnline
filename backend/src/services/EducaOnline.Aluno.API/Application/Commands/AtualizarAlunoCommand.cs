@@ -33,14 +33,16 @@ namespace EducaOnline.Aluno.API.Application.Commands
                 .NotEqual(Guid.Empty)
                 .WithMessage("Id do aluno inválido");
 
-            RuleFor(c => c.Nome)
-                .NotEmpty()
-                .WithMessage("Nome não informado.");
+            RuleFor(c => c)
+                .Must(c => !string.IsNullOrWhiteSpace(c.Nome) || !string.IsNullOrWhiteSpace(c.Email))
+                .WithMessage("Informe ao menos o nome ou o e-mail para atualização.");
 
-            RuleFor(c => c.Email)
-                .NotEmpty()
-                .EmailAddress()
-                .WithMessage("E-mail inválido.");
+            When(c => !string.IsNullOrWhiteSpace(c.Email), () =>
+            {
+                RuleFor(c => c.Email)
+                    .EmailAddress()
+                    .WithMessage("E-mail inválido.");
+            });
         }
     }
 }

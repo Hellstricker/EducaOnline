@@ -1,4 +1,10 @@
 .vs
 obj
 bin
-src/services/EducaOnline.Identidade.API/UserDatabase.db
+*.db-wal
+*.db-shm
+*.db
+*.user
+*.db
+*.db-shm
+*.db-wal
