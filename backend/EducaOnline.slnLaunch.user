@@ -5,12 +5,17 @@
       {
         "Path": "src\\services\\EducaOnline.Conteudo.API\\EducaOnline.Conteudo.API.csproj",
         "Action": "Start",
-        "DebugTarget": "https"
+        "DebugTarget": "IIS Express"
       },
       {
         "Path": "src\\services\\EducaOnline.Identidade.API\\EducaOnline.Identidade.API.csproj",
         "Action": "Start",
-        "DebugTarget": "Self Hosting - Development"
+        "DebugTarget": "IIS Express - Development"
+      },
+      {
+        "Path": "src\\services\\EducaOnline.Aluno.API\\EducaOnline.Aluno.API.csproj",
+        "Action": "Start",
+        "DebugTarget": "IIS Express"
       }
     ]
   }

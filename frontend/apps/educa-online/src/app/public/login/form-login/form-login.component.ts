@@ -43,13 +43,12 @@ export class FormLoginComponent implements OnInit {
         next: (token) => {
           if(token) {
             console.log(token);
-            this.authService.setToken(token.data.accessToken);
+            this.authService.setToken(JSON.stringify(token));
             this.authService.setUrl('inicio');
-            this.router.navigate(['inicio']);
+            this.router.navigate(['/inicio']);
           }
         },
         error: (err) => {
-          debugger;
           this._snackBar.openFromComponent(AlertComponent, {
             duration: 5000,
             data: {
