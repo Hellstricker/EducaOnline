@@ -5,7 +5,9 @@
 
             <div class="user-area">
                 @if (usuario) {
-                <span class="welcome">Olá, {{ usuario.nome }} 👋</span>
+                <span class="welcome cursor-pointer" (click)="redirectToPanel()">Painel</span>
+                <span class="welcome me-3">Olá, {{ usuario.nome }} 👋</span>
+
                 } @else {
                 <button class="login-btn" (click)="redirectToLogin()">Entrar</button>
                 }
@@ -26,19 +28,21 @@
             <h3>{{ curso.nome }}</h3>
 
             @if (curso.conteudoProgramatico) {
-                <p>{{ curso.conteudoProgramatico.descricao }}</p>
-                <p class="my-2"><b>{{ curso.conteudoProgramatico.titulo }}</b></p>
-                <p><b>Objetivos:</b> {{ curso.conteudoProgramatico.objetivos }}</p>
+            <p>{{ curso.conteudoProgramatico.descricao }}</p>
+            <p class="my-2"><b>{{ curso.conteudoProgramatico.titulo }}</b></p>
+            <p><b>Objetivos:</b> {{ curso.conteudoProgramatico.objetivos }}</p>
 
-                <div class="d-flex justify-content-between mt-3">
-                    <p><b>Carga horária:</b> {{ curso.conteudoProgramatico.cargaHoraria }} horas</p>
-                    <p><b>Aulas:</b> {{ curso.aulas.length }} aula(s)</p>
-                </div>
+            <div class="d-flex justify-content-between mt-3">
+                <p><b>Carga horária:</b> {{ curso.conteudoProgramatico.cargaHoraria }} horas</p>
+                <p><b>Aulas:</b> {{ curso.aulas.length }} aula(s)</p>
+            </div>
             }
 
-            <div class="d-flex justify-content-center">
-                <button (click)="redirectToLogin(true, curso.id)">Matricular-se</button>
-            </div>
+            @if (!role || role == 'ALUNO') {
+                <div class="d-flex justify-content-center">
+                    <button (click)="redirectToLogin(true, curso.id)">Matricular-se</button>
+                </div>
+            }
         </div>
         }
 

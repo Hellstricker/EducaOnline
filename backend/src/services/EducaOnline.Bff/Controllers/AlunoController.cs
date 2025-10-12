@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace EducaOnline.Bff.Controllers
 {
     [Authorize]
+    [Route("api/aluno-bff")]
     public class AlunoController : MainController
     {
 
