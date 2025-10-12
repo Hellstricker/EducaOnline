@@ -22,7 +22,7 @@ namespace Educaonline.Pedidos.API.Services
             _logger.LogInformation("Serviço de pedidos iniciado.");
 
             _timer = new Timer(ProcessarPedidos, null, TimeSpan.Zero,
-                TimeSpan.FromSeconds(15));
+                TimeSpan.FromSeconds(120));
 
             return Task.CompletedTask;
         }
@@ -38,8 +38,7 @@ namespace Educaonline.Pedidos.API.Services
 
                 var bus = scope.ServiceProvider.GetRequiredService<IMessageBus>();
 
-                var pedidoAutorizado = new PedidoAutorizadoIntegrationEvent(pedido.ClienteId, pedido.Id,
-                    pedido.PedidoItems!.Select(p => p.ProdutoId));
+                var pedidoAutorizado = new PedidoAutorizadoIntegrationEvent(pedido.ClienteId, pedido.Id,pedido.PedidoItems!.Select(p => p.ProdutoId));
 
                 await bus.PublishAsync(pedidoAutorizado);
 

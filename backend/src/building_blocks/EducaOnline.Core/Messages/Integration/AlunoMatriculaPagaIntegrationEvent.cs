@@ -1,16 +1,13 @@
 ﻿namespace EducaOnline.Core.Messages.Integration
 {
-    public class PedidoPagoIntegrationEvent : IntegrationEvent
+    public class AlunoMatriculaPagaIntegrationEvent : IntegrationEvent
     {
         public Guid ClienteId { get; private set; }
         public Guid PedidoId { get; private set; }
-        //public IEnumerable<Guid> Itens { get; private set; }
-
-        public PedidoPagoIntegrationEvent(Guid clienteId, Guid pedidoId)
+        public AlunoMatriculaPagaIntegrationEvent(Guid clienteId, Guid pedidoId)
         {
             ClienteId = clienteId;
             PedidoId = pedidoId;
-            //Itens = itens;
         }
     }
 }

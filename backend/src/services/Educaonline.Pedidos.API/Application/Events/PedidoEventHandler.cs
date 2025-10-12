@@ -6,7 +6,7 @@ using MediatR;
 
 namespace EducaOnLine.Pedidos.API.Application.Events
 {
-    public class PedidoEventHandler : INotificationHandler<PedidoRealizadoEvent>, INotificationHandler<PedidoPagoEvent>
+    public class PedidoEventHandler : INotificationHandler<PedidoRealizadoEvent>
     {
         private readonly IMessageBus _bus;
 
@@ -20,10 +20,10 @@ namespace EducaOnLine.Pedidos.API.Application.Events
             await _bus.PublishAsync(new PedidoRealizadoIntegrationEvent(message.ClienteId));
         }
 
-        public async Task Handle(PedidoPagoEvent message, CancellationToken cancellationToken)
-        {
-            await _bus.PublishAsync(new PedidoPagoIntegrationEvent(message.ClienteId, message.PedidoId, message.Itens));
-        }
+        //public async Task Handle(PedidoPagoEvent message, CancellationToken cancellationToken)
+        //{
+        //    await _bus.PublishAsync(new PedidoPagoIntegrationEvent(message.ClienteId, message.PedidoId, message.Itens));
+        //}
 
         
     }

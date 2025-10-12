@@ -26,8 +26,8 @@ namespace Educaonline.Pedidos.API.Services
             //_bus.SubscribeAsync<PedidoCanceladoIntegrationEvent>("PedidoCancelado",
             //    async request => await CancelarPedido(request));
 
-            //_bus.SubscribeAsync<PedidoPagoIntegrationEvent>("PedidoPago",
-            //   async request => await FinalizarPedido(request));
+            _bus.SubscribeAsync<PedidoPagoIntegrationEvent>("PedidoPago",
+               async request => await FinalizarPedido(request));
         }
 
         //private async Task CancelarPedido(PedidoCanceladoIntegrationEvent message)
@@ -55,6 +55,12 @@ namespace Educaonline.Pedidos.API.Services
                 var pedidoRepository = scope.ServiceProvider.GetRequiredService<IPedidoRepository>();
 
                 var pedido = await pedidoRepository.ObterPorId(message.PedidoId);
+
+                if (pedido is null)
+                {
+                    throw new DomainException($"Pedido inexistente {message.PedidoId}");
+                }
+
                 pedido.FinalizarPedido();
 
                 pedidoRepository.Atualizar(pedido);

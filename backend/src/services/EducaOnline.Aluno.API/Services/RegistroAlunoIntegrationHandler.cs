@@ -31,7 +31,7 @@ namespace EducaOnline.Aluno.API.Services
         {
             //_bus.SubscribeAsync<PedidoCanceladoIntegrationEvent>("PedidoCancelado",
             //    async request => await CancelarPedido(request));
-            _bus.SubscribeAsync<PedidoPagoIntegrationEvent>("PedidoPago",
+            _bus.SubscribeAsync<PedidoAutorizadoIntegrationEvent>("PedidoAutorizado",
                async request => await PagarMatriculaAluno(request));
         }
 
@@ -61,7 +61,7 @@ namespace EducaOnline.Aluno.API.Services
             return new ResponseMessage(resultado);
         }
 
-        private async Task PagarMatriculaAluno(PedidoPagoIntegrationEvent message)
+        private async Task PagarMatriculaAluno(PedidoAutorizadoIntegrationEvent message)
         {
             using (var scope = _serviceProvider.CreateScope())
             {
@@ -71,6 +71,8 @@ namespace EducaOnline.Aluno.API.Services
 
                 if (!response.IsValid)
                     throw new DomainException($"Falha ao pagar setar matricula como paga {message.PedidoId}");
+
+                _bus.PublishAsync(new AlunoMatriculaPagaIntegrationEvent(message.ClienteId, message.PedidoId) );
             }
         }
     }

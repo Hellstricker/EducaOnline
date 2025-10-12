@@ -97,7 +97,7 @@ namespace EducaOnline.Financeiro.API.Services
             if (transacao.Status != StatusTransacao.Autorizado)
             {
                 validationResult.Errors.Add(new ValidationFailure("Pagamento",
-                        "Pagamento recusado, entre em contato com a sua operadora de cartão"));
+                        "Pagamento recusado, entre em contato com a sua operadora de cartão"));                
 
                 return new ResponseMessage(validationResult);
             }

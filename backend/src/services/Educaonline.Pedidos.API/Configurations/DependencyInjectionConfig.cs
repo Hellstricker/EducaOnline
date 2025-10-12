@@ -24,7 +24,7 @@ namespace EducaOnline.Pedidos.API.Configurations
 
             // Events
             services.AddScoped<INotificationHandler<PedidoRealizadoEvent>, PedidoEventHandler>();
-            services.AddScoped<INotificationHandler<PedidoPagoEvent>, PedidoEventHandler>();
+            //services.AddScoped<INotificationHandler<PedidoPagoEvent>, PedidoEventHandler>();
 
             // Application
             services.AddScoped<IMediatorHandler, MediatorHandler>();            

@@ -33,18 +33,19 @@ namespace EducaOnLine.Pedidos.API.Application.Commands
             // Validar pedido
             if (!ValidarPedido(pedido)) return ValidationResult;
 
-            // Processar pagamento
-            if (!await RealizarPagamento(pedido, message)) return ValidationResult;
+            // Processar autorização pagamento
+            if (!await AutorizarPagamento(pedido, message)) return ValidationResult;
 
             // Se pagamento tudo ok!
-            pedido.FinalizarPedido();
-            
-            pedido.AdicionarEvento(new PedidoPagoEvent(message.ClienteId, pedido.Id, [.. pedido.PedidoItems!.Select(p => p.ProdutoId)]));
+            pedido.AutorizarPedido();
+
+            //pedido.AdicionarEvento(new PedidoPagoEvent(message.ClienteId, pedido.Id, [.. pedido.PedidoItems!.Select(p => p.ProdutoId)]));
+            pedido.AdicionarEvento(new PedidoRealizadoEvent(pedido.Id, pedido.ClienteId));
 
             // Adicionar Pedido Repositorio
             _pedidoRepository.Adicionar(pedido);
 
-            // Persistir dados de pedido e voucher
+            // Persistir dados de pedido
             return await PersistirDados(_pedidoRepository.UnitOfWork);
         }
 
