@@ -22,7 +22,7 @@ namespace Educaonline.Pedidos.API.Services
             _logger.LogInformation("Serviço de pedidos iniciado.");
 
             _timer = new Timer(ProcessarPedidos, null, TimeSpan.Zero,
-                TimeSpan.FromSeconds(120));
+                TimeSpan.FromSeconds(15));
 
             return Task.CompletedTask;
         }

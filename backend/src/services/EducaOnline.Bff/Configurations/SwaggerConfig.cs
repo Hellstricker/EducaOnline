@@ -43,7 +43,6 @@ namespace EducaOnline.Bff.Configurations
                 c.ResolveConflictingActions(apiDescriptions => apiDescriptions.First());
             });
 
-
             return services;
         }
 

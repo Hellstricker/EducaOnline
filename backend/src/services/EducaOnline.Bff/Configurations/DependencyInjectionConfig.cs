@@ -32,9 +32,6 @@ namespace EducaOnline.Bff.Configurations
                 .AddPolicyHandler(PollyExtensions.EsperarTentar())
                 .AddTransientHttpErrorPolicy(
                     p => p.CircuitBreakerAsync(5, TimeSpan.FromSeconds(30)));
-
-
-
             return services;
         }
     }

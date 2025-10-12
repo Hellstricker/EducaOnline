@@ -9,14 +9,14 @@ namespace EducaOnline.Bff.Controllers
 {
     [Authorize]
     [Route("pedido-bff")]
-    public class PedidoController : MainController
+    public class PedidosController : MainController
     {
         private readonly IPedidoService _pedidoService;
         private readonly IAlunoService _alunoService;
         private readonly IConteudoService _conteudoService;
         private readonly IAspNetUser _user;
 
-        public PedidoController(IPedidoService pedidoService, IAlunoService alunoService, IConteudoService conteudoService, IAspNetUser user)
+        public PedidosController(IPedidoService pedidoService, IAlunoService alunoService, IConteudoService conteudoService, IAspNetUser user)
         {
             _pedidoService = pedidoService;
             _alunoService = alunoService;

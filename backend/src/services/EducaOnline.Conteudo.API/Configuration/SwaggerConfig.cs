@@ -12,8 +12,8 @@ namespace EducaOnline.Conteudo.API.Configuration
             {
                 c.SwaggerDoc("v1", new OpenApiInfo()
                 {
-                    Title = "Educa Online Api",
-                    Description = "Api de integração web",
+                    Title = "EducaOnline Conteudo API",
+                    Description = "Esta API faz parte do curso MBA DevExpert Módulo 4",                    
                     Contact = new OpenApiContact { Name = "Educa Online", Email = "jairo@devgram.com.br", Url = new Uri("https://localhost:7294/home") }
                 });
 

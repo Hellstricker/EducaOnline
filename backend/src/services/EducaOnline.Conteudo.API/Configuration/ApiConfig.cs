@@ -1,5 +1,6 @@
 ﻿using EducaOnline.Conteudo.API.Data;
 using EducaOnline.Core.Middlewares;
+using EducaOnline.WebAPI.Core.Identidade;
 using Microsoft.EntityFrameworkCore;
 
 namespace EducaOnline.Conteudo.API.Configuration

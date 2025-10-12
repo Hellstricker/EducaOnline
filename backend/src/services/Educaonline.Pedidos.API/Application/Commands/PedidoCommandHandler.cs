@@ -38,8 +38,7 @@ namespace EducaOnLine.Pedidos.API.Application.Commands
 
             // Se pagamento tudo ok!
             pedido.AutorizarPedido();
-
-            //pedido.AdicionarEvento(new PedidoPagoEvent(message.ClienteId, pedido.Id, [.. pedido.PedidoItems!.Select(p => p.ProdutoId)]));
+            
             pedido.AdicionarEvento(new PedidoRealizadoEvent(pedido.Id, pedido.ClienteId));
 
             // Adicionar Pedido Repositorio
@@ -98,33 +97,5 @@ namespace EducaOnLine.Pedidos.API.Application.Commands
 
             return false;
         }
-
-        private async Task<bool> RealizarPagamento(Pedido pedido, AdicionarPedidoCommand message)
-        {
-            var pedidoIniciado = new PedidoIniciadoIntegrationEvent
-            {
-                PedidoId = pedido.Id,
-                ClienteId = pedido.ClienteId,
-                Valor = pedido.ValorTotal,
-                TipoPagamento = 1, // fixo. Alterar se tiver mais tipos
-                NomeCartao = message.NomeCartao,
-                NumeroCartao = message.NumeroCartao,
-                MesAnoVencimento = message.ExpiracaoCartao,
-                CVV = message.CvvCartao
-            };
-
-            var result = await _bus
-                .RequestAsync<PedidoIniciadoIntegrationEvent, ResponseMessage>(pedidoIniciado);
-
-            if (result.ValidationResult.IsValid) return true;
-
-            foreach (var erro in result.ValidationResult.Errors)
-            {
-                AdicionarErro(erro.ErrorMessage);
-            }
-
-            return false;
-        }
-
     }
 }

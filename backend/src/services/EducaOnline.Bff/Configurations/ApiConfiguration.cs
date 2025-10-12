@@ -1,6 +1,5 @@
 ﻿using EducaOnline.Bff.Extensions;
 using EducaOnline.WebAPI.Core.Identidade;
-using Microsoft.Extensions.Configuration;
 
 namespace EducaOnline.Bff.Configurations
 {

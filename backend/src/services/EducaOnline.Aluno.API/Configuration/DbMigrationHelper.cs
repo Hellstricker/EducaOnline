@@ -1,10 +1,6 @@
 ﻿using EducaOnline.Aluno.API.Data;
-using EducaOnline.Aluno.API.Models;
-using EducaOnline.Core.Enums;
 using EducaOnline.WebAPI.Core.Configuration;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using System.Threading;
 
 namespace EducaOnline.Aluno.API.Configuration
 {

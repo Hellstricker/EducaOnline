@@ -10,14 +10,14 @@ namespace EducaOnline.Bff.Controllers
 {
     [Authorize]
     [Route("api/aluno-bff")]
-    public class AlunoController : MainController
+    public class AlunosController : MainController
     {
 
         private readonly IConteudoService _conteudoService;
         private readonly IAspNetUser _user;
         private readonly IAlunoService _alunoService;
 
-        public AlunoController(IConteudoService conteudoService, IAspNetUser user, IAlunoService alunoService)
+        public AlunosController(IConteudoService conteudoService, IAspNetUser user, IAlunoService alunoService)
         {
             _conteudoService = conteudoService;
             _user = user;
