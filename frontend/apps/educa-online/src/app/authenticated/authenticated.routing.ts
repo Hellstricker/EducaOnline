@@ -29,6 +29,11 @@ const routes: Routes = [
           loadChildren: () =>
             import('./curso/curso.module').then((x) => x.CursoModule)
         },
+        {
+          path: 'matricula/:cursoId',
+          loadChildren:() => 
+            import('./matricula/matricula.module').then((x) => x.MatriculaModule)
+        }
       ],
     },
   ];

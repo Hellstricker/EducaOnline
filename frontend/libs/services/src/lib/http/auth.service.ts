@@ -40,7 +40,7 @@ export class AuthService {
   }
 
   decodeToken(): JwtPayload  | null{
-    const token = this.getToken();
+    const token = this.getToken()?.accessToken;
 
     if(token) {
       return jwtDecode(token);
@@ -57,8 +57,8 @@ export class AuthService {
     localStorage.setItem('token', token);
   }
 
-  public getToken(): string | null {
-    return localStorage.getItem('token');
+  public getToken(): any | null {
+    return JSON.parse(localStorage.getItem('token') ?? '{}');
   }
 
   public getEmail(): string | undefined {
