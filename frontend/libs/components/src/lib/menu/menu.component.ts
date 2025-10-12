@@ -19,9 +19,9 @@ export class MenuComponent {
   }
 
   ativo(menu: string): boolean {
-    if (this.router.url.indexOf('inicio') >= 0 && menu === 'inicio')
+    if(this.router.url.indexOf('usuario') >= 0 && menu === 'usuario')
       return true;
-    else if(this.router.url.indexOf('usuario') >= 0 && menu === 'usuario')
+    else if(this.router.url.indexOf('curso') >= 0 && menu === 'curso')
       return true;
 
     return false;

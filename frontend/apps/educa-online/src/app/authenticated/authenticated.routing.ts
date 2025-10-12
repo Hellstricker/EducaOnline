@@ -15,11 +15,6 @@ const routes: Routes = [
           redirectTo: 'inicio',
         },
         {
-          path: 'inicio',
-          loadChildren: () =>
-            import('./inicio/inicio.module').then((x) => x.InicioModule)
-        },
-        {
           path: 'usuario',
           loadChildren: () =>
             import('./usuario/usuario.module').then((x) => x.UsuarioModule)
