@@ -27,30 +27,4 @@ namespace EducaOnline.Bff.Models
         public string? CvvCartao { get; set; }
         #endregion
     }
-
-    public class ItemDTO
-    {
-        public Guid ProdutoId { get; set; }
-        public string? Nome { get; set; }
-        public decimal Valor { get; set; }
-    }
-
-    public class MatriculaDto
-    {
-        public Guid AlunoId { get; set; }
-        public Guid CursoId { get; set; }        
-        public int Status { get; set; }        
-        public string? CursoNome { get; set; }
-        public int TotalAulas { get; set; }
-        public int CargaHorariaTotal { get; set; }
-    }
-
-    public class CursoDto
-    {
-        public Guid Id { get; set; }
-        public string? Nome { get; set; }
-        public decimal Valor { get; set; }
-        public int TotalAulas { get; set; }
-        public int CargaHorariaTotal { get; set; }
-    }
 }

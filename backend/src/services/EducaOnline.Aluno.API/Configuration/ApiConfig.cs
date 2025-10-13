@@ -1,5 +1,6 @@
 ﻿using EducaOnline.Aluno.API.Data;
 using EducaOnline.Aluno.API.Middlewares;
+using EducaOnline.WebAPI.Core.Identidade;
 using Microsoft.EntityFrameworkCore;
 
 namespace EducaOnline.Aluno.API.Configuration
@@ -53,7 +54,7 @@ namespace EducaOnline.Aluno.API.Configuration
 
             app.UseCors("Total");
 
-            //app.UseIdentityConfig();
+            app.UseAuthConfiguration();
 
             app.MapControllers();
         }

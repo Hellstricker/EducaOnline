@@ -17,7 +17,7 @@ namespace EducaOnline.Bff.Controllers
         private readonly IAspNetUser _user;
         private readonly IAlunoService _alunoService;
 
-        public AlunoController(IConteudoService conteudoService, IAspNetUser user, IAlunoService alunoService)
+        public AlunosController(IConteudoService conteudoService, IAspNetUser user, IAlunoService alunoService)
         {
             _conteudoService = conteudoService;
             _user = user;

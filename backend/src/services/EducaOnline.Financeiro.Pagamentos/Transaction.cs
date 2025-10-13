@@ -34,7 +34,7 @@
 
         public Task<Transaction> AuthorizeCardTransaction()
         {
-            var success = true;// new Random().Next(2) == 0;
+            var success = new Random().Next(2) == 0;
             Transaction transaction;
 
             if (success)

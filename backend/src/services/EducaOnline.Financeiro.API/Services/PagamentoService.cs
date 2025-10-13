@@ -89,58 +89,6 @@ namespace EducaOnline.Financeiro.API.Services
             return new ResponseMessage(validationResult);
         }
 
-        public async Task<ResponseMessage> AutorizarCapturarPagamento(Pagamento pagamento)
-        {
-            var transacao = await _pagamentoFacade.AutorizarPagamento(pagamento);
-            var validationResult = new ValidationResult();
-
-            if (transacao.Status != StatusTransacao.Autorizado)
-            {
-                validationResult.Errors.Add(new ValidationFailure("Pagamento",
-                        "Pagamento recusado, entre em contato com a sua operadora de cartão"));
-
-                return new ResponseMessage(validationResult);
-            }
-
-            pagamento.AdicionarTransacao(transacao);
-            _pagamentoRepository.AdicionarPagamento(pagamento);
-            if (!await _pagamentoRepository.UnitOfWork.Commit())
-            {
-                validationResult.Errors.Add(new ValidationFailure("Pagamento",
-                    "Houve um erro ao realizar o pagamento."));
-
-                // Cancelar pagamento no gateway
-                await CancelarPagamento(pagamento.PedidoId);
-
-                return new ResponseMessage(validationResult);
-            }
-
-
-            var transacaoCapturada = await _pagamentoFacade.CapturarPagamento(transacao);
-
-
-            if (transacaoCapturada.Status != StatusTransacao.Pago)
-            {
-                validationResult.Errors.Add(new ValidationFailure("Pagamento",
-                    $"Não foi possível capturar o pagamento para a o pedido {pagamento.PedidoId}"));
-
-                return new ResponseMessage(validationResult);
-            }
-
-            transacaoCapturada.PagamentoId = transacao.PagamentoId;
-            _pagamentoRepository.AdicionarTransacao(transacaoCapturada);
-
-            if (!await _pagamentoRepository.UnitOfWork.Commit())
-            {
-                validationResult.Errors.Add(new ValidationFailure("Pagamento",
-                    $"Não foi possível persistir a captura do pagamento para o pedido {pagamento.PedidoId}"));
-
-                return new ResponseMessage(validationResult);
-            }
-
-            return new ResponseMessage(validationResult);
-        }
-
         public async Task<ResponseMessage> CancelarPagamento(Guid pedidoId)
         {
             var transacoes = await _pagamentoRepository.ObterTransacaoes(pedidoId);

@@ -38,8 +38,7 @@ namespace Educaonline.Pedidos.API.Services
 
                 var bus = scope.ServiceProvider.GetRequiredService<IMessageBus>();
 
-                var pedidoAutorizado = new PedidoAutorizadoIntegrationEvent(pedido.ClienteId, pedido.Id,
-                    pedido.PedidoItems!.Select(p => p.ProdutoId));
+                var pedidoAutorizado = new PedidoAutorizadoIntegrationEvent(pedido.ClienteId, pedido.Id,pedido.PedidoItems!.Select(p => p.ProdutoId));
 
                 await bus.PublishAsync(pedidoAutorizado);
 

@@ -33,18 +33,18 @@ namespace EducaOnLine.Pedidos.API.Application.Commands
             // Validar pedido
             if (!ValidarPedido(pedido)) return ValidationResult;
 
-            // Processar pagamento
-            if (!await RealizarPagamento(pedido, message)) return ValidationResult;
+            // Processar autorização pagamento
+            if (!await AutorizarPagamento(pedido, message)) return ValidationResult;
 
             // Se pagamento tudo ok!
-            pedido.FinalizarPedido();
+            pedido.AutorizarPedido();
             
-            pedido.AdicionarEvento(new PedidoPagoEvent(message.ClienteId, pedido.Id, [.. pedido.PedidoItems!.Select(p => p.ProdutoId)]));
+            pedido.AdicionarEvento(new PedidoRealizadoEvent(pedido.Id, pedido.ClienteId));
 
             // Adicionar Pedido Repositorio
             _pedidoRepository.Adicionar(pedido);
 
-            // Persistir dados de pedido e voucher
+            // Persistir dados de pedido
             return await PersistirDados(_pedidoRepository.UnitOfWork);
         }
 
@@ -97,33 +97,5 @@ namespace EducaOnLine.Pedidos.API.Application.Commands
 
             return false;
         }
-
-        private async Task<bool> RealizarPagamento(Pedido pedido, AdicionarPedidoCommand message)
-        {
-            var pedidoIniciado = new PedidoIniciadoIntegrationEvent
-            {
-                PedidoId = pedido.Id,
-                ClienteId = pedido.ClienteId,
-                Valor = pedido.ValorTotal,
-                TipoPagamento = 1, // fixo. Alterar se tiver mais tipos
-                NomeCartao = message.NomeCartao,
-                NumeroCartao = message.NumeroCartao,
-                MesAnoVencimento = message.ExpiracaoCartao,
-                CVV = message.CvvCartao
-            };
-
-            var result = await _bus
-                .RequestAsync<PedidoIniciadoIntegrationEvent, ResponseMessage>(pedidoIniciado);
-
-            if (result.ValidationResult.IsValid) return true;
-
-            foreach (var erro in result.ValidationResult.Errors)
-            {
-                AdicionarErro(erro.ErrorMessage);
-            }
-
-            return false;
-        }
-
     }
 }

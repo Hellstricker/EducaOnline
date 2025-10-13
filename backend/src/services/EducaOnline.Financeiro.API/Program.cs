@@ -1,4 +1,5 @@
 using EducaOnline.Financeiro.API.Configurations;
+using EducaOnline.WebAPI.Core.Identidade;
 
 var builder = WebApplication.CreateBuilder(args);
 

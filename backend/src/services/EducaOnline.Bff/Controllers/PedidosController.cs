@@ -8,7 +8,6 @@ using Microsoft.AspNetCore.Mvc;
 namespace EducaOnline.Bff.Controllers
 {
     [Authorize]
-    [Route("pedido-bff")]
     public class PedidoController : MainController
     {
         private readonly IPedidoService _pedidoService;
@@ -16,7 +15,7 @@ namespace EducaOnline.Bff.Controllers
         private readonly IConteudoService _conteudoService;
         private readonly IAspNetUser _user;
 
-        public PedidoController(IPedidoService pedidoService, IAlunoService alunoService, IConteudoService conteudoService, IAspNetUser user)
+        public PedidosController(IPedidoService pedidoService, IAlunoService alunoService, IConteudoService conteudoService, IAspNetUser user)
         {
             _pedidoService = pedidoService;
             _alunoService = alunoService;
@@ -35,6 +34,13 @@ namespace EducaOnline.Bff.Controllers
                 AdicionarErro("Aluno não possui matrícula ativa");
                 return CustomResponse();
             }
+
+            if(matricula.Status != 1) // 1 = AguardandoPagamento
+            {
+                AdicionarErro("Matrícula não está com o status aguardando pagamento");
+                return CustomResponse();
+            }
+
             var curso = await _conteudoService.BuscarCurso(matricula.CursoId);
 
             if (curso is null)
@@ -42,6 +48,8 @@ namespace EducaOnline.Bff.Controllers
                 AdicionarErro($"Curso inexistente  com id {matricula.CursoId}");
                 return CustomResponse();
             }
+
+
             
             var pedido = PopularDadosPedido(matricula, curso , viewModel);            
 

@@ -14,9 +14,6 @@ namespace Educaonline.Pedidos.API.Application.DTO
         public DateTime Data { get; set; }
         public decimal ValorTotal { get; set; }
 
-        
-        
-
         public List<PedidoItemDTO>? PedidoItems { get; set; }
 
 
