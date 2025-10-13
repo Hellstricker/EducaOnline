@@ -3,7 +3,6 @@ using EducaOnline.Core.Messages;
 using EducaOnline.Core.Messages.Integration;
 using EducaOnline.MessageBus;
 using EducaOnline.Pedidos.API.Domain;
-using EducaOnLine.Pedidos.API.Application.Events;
 using FluentValidation.Results;
 using MediatR;
 
@@ -37,9 +36,7 @@ namespace EducaOnLine.Pedidos.API.Application.Commands
             if (!await AutorizarPagamento(pedido, message)) return ValidationResult;
 
             // Se pagamento tudo ok!
-            pedido.AutorizarPedido();
-            
-            pedido.AdicionarEvento(new PedidoRealizadoEvent(pedido.Id, pedido.ClienteId));
+            pedido.AutorizarPedido();            
 
             // Adicionar Pedido Repositorio
             _pedidoRepository.Adicionar(pedido);

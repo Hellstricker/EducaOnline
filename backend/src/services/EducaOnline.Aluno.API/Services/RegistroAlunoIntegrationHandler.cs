@@ -72,7 +72,7 @@ namespace EducaOnline.Aluno.API.Services
                 if (!response.IsValid)
                     throw new DomainException($"Falha ao pagar setar matricula como paga {message.PedidoId}");
 
-                _bus.PublishAsync(new AlunoMatriculaPagaIntegrationEvent(message.ClienteId, message.PedidoId) );
+                await _bus.PublishAsync(new AlunoMatriculaPagaIntegrationEvent(message.ClienteId, message.PedidoId) );
             }
         }
     }

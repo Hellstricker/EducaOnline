@@ -1,8 +1,8 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using EducaOnline.Identidade.API.Data;
+﻿using EducaOnline.Identidade.API.Data;
 using EducaOnline.Identidade.API.Extensions;
 using EducaOnline.WebAPI.Core.Identidade;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace EducaOnline.Identidade.API.Configurations
 {

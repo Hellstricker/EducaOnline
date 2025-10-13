@@ -2,7 +2,6 @@
 using EducaOnline.Pedidos.API.Domain;
 using EducaOnline.WebAPI.Core.Usuario;
 using EducaOnLine.Pedidos.API.Application.Commands;
-using EducaOnLine.Pedidos.API.Application.Events;
 using EducaOnLine.Pedidos.API.Application.Queries;
 using EducaOnLine.Pedidos.API.Data;
 using EducaOnLine.Pedidos.API.Data.Repository;
@@ -21,9 +20,6 @@ namespace EducaOnline.Pedidos.API.Configurations
 
             // Commands
             services.AddScoped<IRequestHandler<AdicionarPedidoCommand, ValidationResult>, PedidoCommandHandler>();
-
-            // Events
-            services.AddScoped<INotificationHandler<PedidoRealizadoEvent>, PedidoEventHandler>();            
 
             // Application
             services.AddScoped<IMediatorHandler, MediatorHandler>();            
