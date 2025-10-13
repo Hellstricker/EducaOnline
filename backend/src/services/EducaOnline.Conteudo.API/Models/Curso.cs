@@ -5,19 +5,23 @@ namespace EducaOnline.Conteudo.API.Models
 {
     public class Curso : Entity, IAggregateRoot
     {
-        protected Curso()
+        public Curso()
         {
             Aulas = new HashSet<Aula>();
         }
 
-        public Curso(Guid id, string? nome, ConteudoProgramatico? conteudoProgramatico, bool ativo, decimal valor)
+        public Curso(string? nome, ConteudoProgramatico? conteudoProgramatico, bool ativo, decimal valor)
         {
-            Id = id;
             Nome = nome;
             ConteudoProgramatico = conteudoProgramatico;
             Aulas = new HashSet<Aula>();
             Ativo = ativo;
             Valor = valor;
+        }
+        public Curso(Guid id, string nome, ConteudoProgramatico conteudoProgramatico, bool ativo, decimal valor)
+            : this(nome, conteudoProgramatico, ativo, valor)
+        {
+            Id = id; 
         }
 
         public string? Nome { get; private set; }
@@ -79,9 +83,6 @@ namespace EducaOnline.Conteudo.API.Models
         {
             Validacoes.ValidarSeVazio(Nome!, "O campo Nome do curso não pode estar vazio");
             ValidarConteudoProgramtico();
-
-            if (!Aulas!.Any())
-                throw new DomainException("É necessário adicionar pelo menos uma aula ao curso");
         }
 
         public void ValidarConteudoProgramtico()

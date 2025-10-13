@@ -3,6 +3,7 @@ using EducaOnline.Aluno.API.Dto;
 using EducaOnline.Aluno.API.DTO;
 using EducaOnline.Aluno.API.Models;
 using EducaOnline.Core.Communication;
+using EducaOnline.Core.Enums;
 using EducaOnline.MessageBus;
 using EducaOnline.WebAPI.Core.Controllers;
 using EducaOnline.WebAPI.Core.Usuario;
@@ -52,6 +53,21 @@ namespace EducaOnline.Aluno.API.Controllers
 
             // Publicar evento caso necessário
             return Ok("Aluno criado com sucesso!");
+        }
+
+        [Authorize(Roles = nameof(PerfilUsuarioEnum.ADM))]
+        [HttpGet]
+        public async Task<IActionResult> ObterTodos(CancellationToken cancellationToken)
+        {
+            var alunos = await _alunoRepository.BuscarAlunos(cancellationToken);
+
+            if (alunos == null || !alunos.Any())
+            {
+                AdicionarErro("Nenhum aluno encontrado.");
+                return CustomResponse();
+            }
+
+            return CustomResponse(alunos);
         }
 
         [HttpGet("{id:guid}")]
