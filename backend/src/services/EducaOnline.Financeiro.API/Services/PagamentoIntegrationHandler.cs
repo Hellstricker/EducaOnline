@@ -19,22 +19,13 @@ namespace EducaOnline.Financeiro.API.Services
         }
 
         private void SetResponder()
-        {
-            //_bus.RespondAsync<PedidoIniciadoIntegrationEvent, ResponseMessage>(async request =>
-            //    await AutorizarCapturarPagamento(request));
-
-            //_bus.RespondAsync<PedidoAutorizadoIntegrationEvent, ResponseMessage>(async request =>
-            //    await CapturarPagamento(request));
-            
+        {   
             _bus.RespondAsync<PedidoIniciadoIntegrationEvent, ResponseMessage>(async request =>
                 await AutorizarPagamento(request));
         }
 
         private void SetSubscribers()
-        {
-            //_bus.SubscribeAsync<PedidoCanceladoIntegrationEvent>("PedidoCancelado", async request =>
-            //await CancelarPagamento(request));
-            //Não há checkagem a fazer após a autorização, então o pagamento é Capturado
+        {            
             _bus.SubscribeAsync<AlunoMatriculaPagaIntegrationEvent>("PedidoAutorizado", async request =>
             await CapturarPagamento(request));
         }
