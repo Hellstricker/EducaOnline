@@ -19,7 +19,7 @@ namespace EducaOnline.Conteudo.API.Models
             Ativo = ativo;
             Valor = valor;
         }
-        
+
         public string? Nome { get; private set; }
         public bool Ativo { get; private set; }
         public decimal Valor { get; set; }

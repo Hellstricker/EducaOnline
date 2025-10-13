@@ -31,13 +31,15 @@
     <ng-container matColumnDef="acoes">
       <mat-header-cell *matHeaderCellDef> Ações </mat-header-cell>
       <mat-cell *matCellDef="let element" data-label="Ações">
-        <span class="material-symbols-outlined cursor-pointer" (click)="editarAula(element)">
-          edit
-        </span>
-
-        <span class="material-symbols-outlined cor-vermelho ms-2 cursor-pointer" (click)="removerAula(element.id)">
-          delete
-        </span>
+        @if(usuarioAdmin){
+          <span class="material-symbols-outlined cursor-pointer" (click)="editarAula(element)">
+            edit
+          </span>
+  
+          <span class="material-symbols-outlined cor-vermelho ms-2 cursor-pointer" (click)="removerAula(element.id)">
+            delete
+          </span>
+        }
       </mat-cell>
     </ng-container>
 

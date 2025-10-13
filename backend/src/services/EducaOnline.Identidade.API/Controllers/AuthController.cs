@@ -112,6 +112,7 @@ namespace EducaOnline.Identidade.API.Controllers
             claims.Add(new Claim(JwtRegisteredClaimNames.Nbf, ToUnixEpocheDate(DateTime.UtcNow).ToString()));
             claims.Add(new Claim(JwtRegisteredClaimNames.Iat, ToUnixEpocheDate(DateTime.Now).ToString(), ClaimValueTypes.Integer64));
             claims.Add(new Claim("nome", user.UserName!));
+            claims.Add(new Claim("id", user.Id!));
 
             foreach (var role in roles)
                 claims.Add(new Claim("role", role));

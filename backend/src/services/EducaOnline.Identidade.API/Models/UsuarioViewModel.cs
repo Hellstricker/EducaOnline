@@ -41,6 +41,7 @@ namespace EducaOnline.Identidade.API.Models
     {
         public string? Id { get; internal set; }
         public string? Email { get; internal set; }
+        public string? Nome { get; internal set; }
         public object? Claims { get; internal set; }
     }
 

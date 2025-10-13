@@ -11,7 +11,7 @@ export class AlunoBffService {
 
 
     matricular(model: MatriculaModel): Observable<BffResponseModel> {
-        return this.httpClient.post<BffResponseModel>(`${environment.apiConteudo}/aluno-bff/matricular`, model)
+        return this.httpClient.post<BffResponseModel>(`${environment.alunoBff}/aluno-bff/matricular`, model)
     }
     
 }

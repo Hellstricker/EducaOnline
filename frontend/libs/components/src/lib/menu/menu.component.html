@@ -5,15 +5,17 @@
       <p>Educa online</p>
     </div>
 
-    <div class="menu-item" [routerLink]="['usuario']">
-      <div class="d-flex" [ngClass]="{'ativo': ativo('usuario')}">
-        <span class="material-symbols-outlined">
-          person
-        </span>
-
-        <p class="opcao font-16 ms-1">Usuários</p>
+    @if(perfil == "ADM"){
+      <div class="menu-item" [routerLink]="['aluno']">
+        <div class="d-flex" [ngClass]="{'ativo': ativo('aluno')}">
+          <span class="material-symbols-outlined">
+            person
+          </span>
+  
+          <p class="opcao font-16 ms-1">Alunos</p>
+        </div>
       </div>
-    </div>
+    }
 
     <div class="menu-item" [routerLink]="['curso']">
       <div class="d-flex" [ngClass]="{'ativo': ativo('curso')}">

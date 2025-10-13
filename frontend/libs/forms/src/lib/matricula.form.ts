@@ -47,8 +47,8 @@ export class CartaoFormGroup extends FormGroupBase {
         Validators.pattern(/^[A-Za-zÀ-ÿ\s]+$/) // apenas letras e espaços
       ]),
       expiracaoCartao: fb.control('', [
-        Validators.required,
-        Validators.pattern(/^(0[1-9]|1[0-2])\/\d{2}$/) // formato MM/AA
+        Validators.required
+        // Validators.pattern(/^(0[1-9]|1[0-2])\/\d{2}$/) // formato MM/AA
       ]),
       ccvCartao: fb.control('', [
         Validators.required,

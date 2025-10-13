@@ -11,7 +11,7 @@ export class PedidoBffService {
 
 
     realizarPedido(model: PagamentoCartaoModel): Observable<BffResponseModel> {
-        return this.httpClient.post<BffResponseModel>(`${environment.apiConteudo}/pedido-bff/compras/pedido`, model)
+        return this.httpClient.post<BffResponseModel>(`${environment.alunoBff}/pedido-bff/compras/pedido`, model)
     }
     
 }

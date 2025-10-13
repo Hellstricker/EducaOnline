@@ -31,6 +31,8 @@ namespace EducaOnline.Bff.Configurations
 
             app.UseHttpsRedirection();
 
+            app.UseCors("Total");
+
             app.UseAuthConfiguration();
 
             app.MapControllers();

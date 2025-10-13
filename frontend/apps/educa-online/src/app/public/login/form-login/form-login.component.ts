@@ -49,9 +49,8 @@ export class FormLoginComponent implements OnInit {
             if (token) {
               console.log(token);
               this.authService.setToken(JSON.stringify(token));
-              // const role = token.find((p: any) => p.type == "role");
-              // this.authService.setPerfil(role?.value!);
-              debugger;
+              const role = token.userToken.claims.find((p: any) => p.type == "role");
+              this.authService.setPerfil(role?.value!);
               if (!this.cursoId) {
                 this.authService.setUrl('curso');
                 this.router.navigate(['/curso']);

@@ -8,4 +8,5 @@ export interface JwtPayload {
   nameid: string;
   nbf: number;
   role: string;
+  id: string;
 }

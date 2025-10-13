@@ -4,8 +4,8 @@ import { MatSnackBar } from "@angular/material/snack-bar";
 import { CreateEditCursoComponent } from "../create-edit-curso/create-edit-curso.component";
 import { filter, switchMap, take } from "rxjs";
 import { AlertComponent, AlertOptions, ModalInfoComponent, ModalInfoModel } from "@educa-online/components";
-import { ConteudoService } from "@educa-online/services";
-import { CursoResponseModel } from "@educa-online/data";
+import { AlunoService, AuthService, ConteudoService } from "@educa-online/services";
+import { CursoResponseModel, MatriculaResponseModel } from "@educa-online/data";
 import { Router } from "@angular/router";
 
 @Component({
@@ -19,17 +19,27 @@ export class ListaCursoComponent implements OnInit {
   private _snackBar = inject(MatSnackBar);
 
   displayedColumns: string[] = ['nome', 'titulo', 'cargaHoraria', 'ativo', 'acoes'];
+  displayedColumnsMatricula: string[] = ['cursoNome', 'totalAulas', 'cargaHorariaTotal', 'status', 'aulasConcluidas', 'acoes'];
 
   cursos: CursoResponseModel[] = [];
+  matriculas: MatriculaResponseModel[] = [];
+
+  usuarioAdmin = false;
 
   constructor(
     private conteudoService: ConteudoService,
-    private router: Router
+    private router: Router,
+    private authService: AuthService,
+    private alunoService: AlunoService
   ) {
+    this.usuarioAdmin = this.authService.getPerfil() == "ADM";
   }
 
   ngOnInit() {
-    this.getCursos();
+    if(this.usuarioAdmin)
+      this.getCursos();
+    else
+      this.getMatriculasAluno()
   }
 
   getCursos(){
@@ -38,6 +48,16 @@ export class ListaCursoComponent implements OnInit {
     .subscribe({
       next: (data) => {
         this.cursos = data;
+      }
+    });
+  }
+
+  getMatriculasAluno(){
+    this.alunoService.getMatriculas(this.authService.getId())
+    .pipe(take(1))
+    .subscribe({
+      next: (data) => {
+        this.matriculas = data;
       }
     });
   }
