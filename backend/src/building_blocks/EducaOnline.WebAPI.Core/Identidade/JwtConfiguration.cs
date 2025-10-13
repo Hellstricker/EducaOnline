@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
+namespace EducaOnline.WebAPI.Core.Identidade;
 public static class JwtConfiguration
 {
     public static IServiceCollection AddJwtConfiguration(this IServiceCollection services, IConfiguration configuration)

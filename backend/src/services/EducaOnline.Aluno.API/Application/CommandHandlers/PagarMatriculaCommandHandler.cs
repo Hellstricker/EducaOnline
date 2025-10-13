@@ -1,9 +1,6 @@
-﻿using EasyNetQ;
-using EducaOnline.Aluno.API.Application.Commands;
+﻿using EducaOnline.Aluno.API.Application.Commands;
 using EducaOnline.Aluno.API.Models;
-using EducaOnline.Aluno.API.Models.Enum;
 using EducaOnline.Core.Messages;
-using EducaOnline.Core.Messages.Integration;
 using EducaOnline.MessageBus;
 using FluentValidation.Results;
 using MediatR;
@@ -41,30 +38,15 @@ namespace EducaOnline.Aluno.API.Application.CommandHandlers
                 return ValidationResult;
             }
 
-            // Processar pagamento
-            //if (!await ProcessarPagamento(command)) return ValidationResult;
+            if (!matricula.PodeSerPaga())
+            {
+                AdicionarErro("Matrícula não está pendente de pagamento.");
+                return ValidationResult;
+            }
 
             aluno.PagarMatricula(matricula.CursoId);            
             _alunoRepository.AtualizarMatricula(matricula);
             return await PersistirDados(_alunoRepository.UnitOfWork);
         }
-
-
-        //public async Task<bool> ProcessarPagamento(PagarMatriculaCommand command)
-        //{
-        //    var @event = new AlunoPagouMatriculaIntegrationEvent(command.AlunoId, command.CursoId, command.ValorCurso, command.NomeCartao, command.NumeroCartao, command.ExpiracaoCartao, command.CvvCartao);
-
-        //    var result = await _bus
-        //        .RequestAsync<AlunoPagouMatriculaIntegrationEvent, ResponseMessage>(@event);
-
-        //    if (result.ValidationResult.IsValid) return true;
-
-        //    foreach (var erro in result.ValidationResult.Errors)
-        //    {
-        //        AdicionarErro(erro.ErrorMessage);
-        //    }
-
-        //    return false;
-        //}
     }
 }

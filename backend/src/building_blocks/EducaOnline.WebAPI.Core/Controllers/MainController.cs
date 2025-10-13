@@ -6,37 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace EducaOnline.WebAPI.Core.Controllers
-{
-    //[ApiController]
-    //public abstract class MainController : Controller
-    //{
-    //    private readonly DomainNotificationHandler _notifications;
-    //    protected readonly IMediatorHandler _mediatorHandler;
-
-    //    protected MainController(INotificationHandler<DomainNotification> notifications,
-    //                             IMediatorHandler mediatorHandler)
-    //    {
-    //        _notifications = (DomainNotificationHandler)notifications;
-    //        _mediatorHandler = mediatorHandler;
-    //    }
-
-    //    protected bool OperacaoValida()
-    //    {
-    //        return !_notifications.TemNotificacao();
-    //    }
-
-    //    protected IEnumerable<string> ObterMensagensErro()
-    //    {
-    //        return _notifications.ObterNotificacoes().Select(c => c.Value).ToList();
-    //    }
-
-    //    protected void NotificarErro(string codigo, string mensagem)
-    //    {
-    //        _mediatorHandler.PublicarNotificacao(new DomainNotification(codigo, mensagem));
-    //    }
-    //}
-
-
+{   
     [ApiController]
     public abstract class MainController : Controller
     {
@@ -47,7 +17,7 @@ namespace EducaOnline.WebAPI.Core.Controllers
                 return Ok(result);
 
             return BadRequest(
-                new ValidationProblemDetails(new Dictionary<string, string[]> { { "Messages", Erros.ToArray() } })
+                new ValidationProblemDetails(new Dictionary<string, string[]> { { "messages", Erros.ToArray() } })
             );
         }
 

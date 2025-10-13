@@ -1,7 +1,5 @@
-﻿using EasyNetQ;
-using EducaOnline.Aluno.API.Application.Commands;
+﻿using EducaOnline.Aluno.API.Application.Commands;
 using EducaOnline.Aluno.API.Models;
-using EducaOnline.Aluno.API.Models.Enum;
 using EducaOnline.Core.Messages;
 using FluentValidation.Results;
 using MediatR;

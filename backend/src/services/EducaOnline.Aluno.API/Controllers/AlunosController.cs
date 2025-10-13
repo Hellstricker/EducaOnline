@@ -6,13 +6,13 @@ using EducaOnline.Core.Communication;
 using EducaOnline.MessageBus;
 using EducaOnline.WebAPI.Core.Controllers;
 using EducaOnline.WebAPI.Core.Usuario;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Reflection.Metadata.Ecma335;
-using System.Threading;
 
 
 namespace EducaOnline.Aluno.API.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class AlunosController : MainController
