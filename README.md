@@ -157,7 +157,7 @@ dotnet run
 ```bash
 cd frontend
 npm install
-ng serve
+nx s educa-online
 ```
 Acesse em: http://localhost:4200
 ---
@@ -166,10 +166,13 @@ Acesse em: http://localhost:4200
 
 1. Acesse o Swagger da API de **Identidade**
    - URL: `https://localhost:7001/swagger`
-2. Realize login com:
+2. Realize login do aluno com:
    - **Usuário:** aluno@educaonline.com.br  
    - **Senha:** Teste@123  
-3. Copie o JWT retornado e insira no botão **“Authorize”** dos outros serviços.
+3. Realize login do admin com:
+   - **Usuário:** admin@educaonline.com.br  
+   - **Senha:** Teste@123  
+4. Copie o JWT retornado e insira no botão **“Authorize”** dos outros serviços.
 
 ---
 
