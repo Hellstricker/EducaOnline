@@ -1,7 +1,7 @@
+using EducaOnline.Conteudo.API.Dtos;
 using EducaOnline.Conteudo.API.Models;
 using EducaOnline.Conteudo.API.Models.ValueObjects;
 using EducaOnline.Conteudo.API.Services;
-using EducaOnline.Conteudo.API.ViewModels;
 using EducaOnline.Core.Enums;
 using EducaOnline.WebAPI.Core.Controllers;
 using Microsoft.AspNetCore.Authorization;
@@ -23,99 +23,174 @@ namespace EducaOnline.Conteudo.API.Controllers
         /// <summary>
         /// Lista os cursos
         /// </summary>
-        [ProducesResponseType(typeof(List<Curso>), 200)]
-        //[ProducesResponseType(typeof(InternalServerErrorModel), 500)]
-        [HttpGet]
         [AllowAnonymous]
+        [HttpGet]
+        [ProducesResponseType(typeof(List<Curso>), 200)]
         public async Task<IActionResult> Get()
         {
-            return Ok(await _conteudoService.BuscarCursos());
+            var cursos = await _conteudoService.BuscarCursos();
+            if (cursos == null || !cursos.Any())
+                AdicionarErro("Nenhum curso encontrado.");
+
+            return CustomResponse(cursos);
         }
 
         /// <summary>
         /// Busca um curso específico por id
         /// </summary>
-        /// <response code="401">Token não autorizado. Favor contatar o suporte</response>
+        [HttpGet("{id:guid}")]
         [ProducesResponseType(typeof(Curso), 200)]
-        [HttpGet("{id}")]
+        [ProducesResponseType(404)]
         public async Task<IActionResult> Get(Guid id)
         {
-            return Ok(await _conteudoService.BuscarCurso(id));
+            var curso = await _conteudoService.BuscarCurso(id);
+            if (curso == null)
+            {
+                AdicionarErro("Curso não encontrado.");
+                return CustomResponse();
+            }
+
+            return CustomResponse(curso);
         }
 
         /// <summary>
         /// Adicionar um novo curso
         /// </summary>
-        /// <response code="401">Token não autorizado. Favor contatar o suporte</response>
         [Authorize(Roles = nameof(PerfilUsuarioEnum.ADM))]
         [HttpPost]
-        public async Task<IActionResult> AdicionarCurso(Curso model)
+        public async Task<IActionResult> AdicionarCurso([FromBody] AdicionarCursoDto model)
         {
-            await _conteudoService.AdicionarCurso(model);
-            return Ok();
+            if (!ModelState.IsValid)
+                return CustomResponse(ModelState);
+
+            var conteudoProgramatico = new ConteudoProgramatico(
+                model.Titulo,
+                model.Descricao,
+                model.CargaHoraria,
+                model.Objetivos
+            );
+
+            var curso = new Curso(
+                model.Nome,
+                conteudoProgramatico,
+                model.Ativo,
+                model.Valor
+            );
+
+            try
+            {
+                await _conteudoService.AdicionarCurso(curso);
+            }
+            catch (Exception ex)
+            {
+                AdicionarErro(ex.Message);
+                return CustomResponse();
+            }
+
+            return CustomResponse(new { message = "Curso adicionado com sucesso." });
         }
 
         /// <summary>
         /// Atualiza os dados de um curso específico
         /// </summary>
-        /// <response code="401">Token não autorizado. Favor contatar o suporte</response>
         [Authorize(Roles = nameof(PerfilUsuarioEnum.ADM))]
-        [HttpPut("{id}")]
-        public async Task<IActionResult> AtualizarCurso(Guid id, Curso model)
+        [HttpPut("{id:guid}")]
+        public async Task<IActionResult> AtualizarCurso(Guid id, [FromBody] Curso model)
         {
             if (!ModelState.IsValid)
                 return CustomResponse(ModelState);
-            
-            await _conteudoService.AlterarCurso(id, model);
-            return Ok();
+
+            try
+            {
+                await _conteudoService.AlterarCurso(id, model);
+            }
+            catch (Exception ex)
+            {
+                AdicionarErro(ex.Message);
+                return CustomResponse();
+            }
+
+            return CustomResponse(new { message = "Curso atualizado com sucesso." });
         }
 
         /// <summary>
-        /// Desatia um curso
+        /// Desativa um curso
         /// </summary>
-        /// <response code="401">Token não autorizado. Favor contatar o suporte</response>
         [Authorize(Roles = nameof(PerfilUsuarioEnum.ADM))]
-        [HttpPut("{id}/desativar")]
+        [HttpPut("{id:guid}/desativar")]
         public async Task<IActionResult> DesativarCurso(Guid id)
         {
-            await _conteudoService.DesativarCurso(id);
-            return Ok();
+            try
+            {
+                await _conteudoService.DesativarCurso(id);
+            }
+            catch (Exception ex)
+            {
+                AdicionarErro(ex.Message);
+                return CustomResponse();
+            }
+
+            return CustomResponse(new { message = "Curso desativado com sucesso." });
         }
 
         /// <summary>
         /// Adiciona uma aula ao curso informado
         /// </summary>
-        /// <response code="401">Token não autorizado. Favor contatar o suporte</response>
         [Authorize(Roles = nameof(PerfilUsuarioEnum.ADM))]
-        [HttpPost("{id}/aula")]
-        [ProducesResponseType(typeof(List<Curso>), 200)]
-        public async Task<IActionResult> AdicionarAula(Guid id, Aula aula)
+        [HttpPost("{id:guid}/aula")]
+        [ProducesResponseType(typeof(Curso), 200)]
+        public async Task<IActionResult> AdicionarAula(Guid id, [FromBody] Aula aula)
         {
-            return Ok(await _conteudoService.AdicionarAula(id, aula));
+            try
+            {
+                var curso = await _conteudoService.AdicionarAula(id, aula);
+                return CustomResponse(curso);
+            }
+            catch (Exception ex)
+            {
+                AdicionarErro(ex.Message);
+                return CustomResponse();
+            }
         }
 
         /// <summary>
         /// Altera uma aula do curso informado
         /// </summary>
-        /// <response code="401">Token não autorizado. Favor contatar o suporte</response>
         [Authorize(Roles = nameof(PerfilUsuarioEnum.ADM))]
-        [HttpPut("{id}/aula/{aulaId}")]
-        [ProducesResponseType(typeof(List<Curso>), 200)]
-        public async Task<IActionResult> AlterarAula(Guid id, Guid aulaId, Aula aula)
+        [HttpPut("{id:guid}/aula/{aulaId:guid}")]
+        [ProducesResponseType(typeof(Curso), 200)]
+        public async Task<IActionResult> AlterarAula(Guid id, Guid aulaId, [FromBody] Aula aula)
         {
-            return Ok(await _conteudoService.AlterarAula(id, aulaId, aula));
+            try
+            {
+                var curso = await _conteudoService.AlterarAula(id, aulaId, aula);
+                return CustomResponse(curso);
+            }
+            catch (Exception ex)
+            {
+                AdicionarErro(ex.Message);
+                return CustomResponse();
+            }
         }
 
         /// <summary>
         /// Remove uma aula do curso informado
         /// </summary>
-        /// <response code="401">Token não autorizado. Favor contatar o suporte</response>
         [Authorize(Roles = nameof(PerfilUsuarioEnum.ADM))]
-        [HttpDelete("{id}/aula/{aulaId}")]
-        [ProducesResponseType(typeof(List<Curso>), 200)]
+        [HttpDelete("{id:guid}/aula/{aulaId:guid}")]
+        [ProducesResponseType(typeof(Curso), 200)]
         public async Task<IActionResult> RemoverAula(Guid id, Guid aulaId)
         {
-            return Ok(await _conteudoService.RemoverAula(id, aulaId));
+            try
+            {
+                var curso = await _conteudoService.RemoverAula(id, aulaId);
+                return CustomResponse(curso);
+            }
+            catch (Exception ex)
+            {
+                AdicionarErro(ex.Message);
+                return CustomResponse();
+            }
         }
     }
 }
