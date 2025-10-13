@@ -1,4 +1,5 @@
-﻿using EducaOnLine.Pedidos.API.Data;
+﻿using EducaOnline.WebAPI.Core.Identidade;
+using EducaOnLine.Pedidos.API.Data;
 using Microsoft.EntityFrameworkCore;
 
 namespace EducaOnline.Pedidos.API.Configurations

@@ -19,21 +19,15 @@ namespace EducaOnline.Financeiro.API.Services
         }
 
         private void SetResponder()
-        {
+        {   
             _bus.RespondAsync<PedidoIniciadoIntegrationEvent, ResponseMessage>(async request =>
-                await AutorizarCapturarPagamento(request));
-
-            //_bus.RespondAsync<PedidoAutorizadoIntegrationEvent, ResponseMessage>(async request =>
-            //    await CapturarPagamento(request));
+                await AutorizarPagamento(request));
         }
 
         private void SetSubscribers()
-        {
-            //_bus.SubscribeAsync<PedidoCanceladoIntegrationEvent>("PedidoCancelado", async request =>
-            //await CancelarPagamento(request));
-            //Não há checkagem a fazer após a autorização, então o pagamento é Capturado
-            //_bus.SubscribeAsync<PedidoAutorizadoIntegrationEvent>("PedidoAutorizado", async request =>
-            //await CapturarPagamento(request));
+        {            
+            _bus.SubscribeAsync<AlunoMatriculaPagaIntegrationEvent>("AlunoMatriculaPaga", async request =>
+            await CapturarPagamento(request));
         }
 
         protected override Task ExecuteAsync(CancellationToken stoppingToken)
@@ -45,83 +39,38 @@ namespace EducaOnline.Financeiro.API.Services
 
         private async Task<ResponseMessage> AutorizarPagamento(PedidoIniciadoIntegrationEvent message)
         {
-            using var scope = _serviceProvider.CreateScope();
-            var pagamentoService = scope.ServiceProvider.GetRequiredService<IPagamentoService>();
-            var pagamento = new Pagamento
-            {
-                PedidoId = message.PedidoId,                
-                TipoPagamento = (TipoPagamento)message.TipoPagamento,
-                Valor = message.Valor,
-                CartaoCredito = new CartaoCredito(
-                    message.NomeCartao, message.NumeroCartao, message.MesAnoVencimento, message.CVV)
-            };
+            
+                using var scope = _serviceProvider.CreateScope();
+                var pagamentoService = scope.ServiceProvider.GetRequiredService<IPagamentoService>();
+                var pagamento = new Pagamento
+                {
+                    PedidoId = message.PedidoId,
+                    TipoPagamento = (TipoPagamento)message.TipoPagamento,
+                    Valor = message.Valor,
+                    CartaoCredito = new CartaoCredito(
+                        message.NomeCartao, message.NumeroCartao, message.MesAnoVencimento, message.CVV)
+                };
 
-            var response = await pagamentoService.AutorizarPagamento(pagamento);
+                var response = await pagamentoService.AutorizarPagamento(pagamento);
 
-            return response;
-        }
-
-
-        //private async Task CapturarPagamento(PedidoAutorizadoIntegrationEvent message)
-        //{
-        //    using (var scope = _serviceProvider.CreateScope())
-        //    {
-        //        var pagamentoService = scope.ServiceProvider.GetRequiredService<IPagamentoService>();
-
-        //        var response = await pagamentoService.CapturarPagamento(message.PedidoId);
-
-        //        if (!response.ValidationResult.IsValid)
-        //            throw new DomainException($"Falha ao capturar pagamento do pedido {message.PedidoId}");
-
-        //        await _bus.PublishAsync(new PedidoPagoIntegrationEvent(message.ClienteId, message.PedidoId, message.Itens));
-        //    }
-        //}
-
-        private async Task<ResponseMessage> CapturarPagamento(PedidoAutorizadoIntegrationEvent message)
-        {
-            using var scope = _serviceProvider.CreateScope();
-
-            var pagamentoService = scope.ServiceProvider.GetRequiredService<IPagamentoService>();
-
-            var response = await pagamentoService.CapturarPagamento(message.PedidoId);
-
-            return response;
-        }
-
-
-
-        private async Task<ResponseMessage> AutorizarCapturarPagamento(PedidoIniciadoIntegrationEvent message)
-        {
-            using var scope = _serviceProvider.CreateScope();
-            var pagamentoService = scope.ServiceProvider.GetRequiredService<IPagamentoService>();
-            var pagamento = new Pagamento
-            {
-                PedidoId = message.PedidoId,
-                TipoPagamento = (TipoPagamento)message.TipoPagamento,
-                Valor = message.Valor,
-                CartaoCredito = new CartaoCredito(
-                    message.NomeCartao, message.NumeroCartao, message.MesAnoVencimento, message.CVV)
-            };
-
-            var response = await pagamentoService.AutorizarCapturarPagamento(pagamento);
-
-            if (!response.ValidationResult.IsValid)
                 return response;
-
-            return response;
+            
         }
 
-        //private async Task CancelarPagamento(PedidoCanceladoIntegrationEvent message)
-        //{
-        //    using (var scope = _serviceProvider.CreateScope())
-        //    {
-        //        var pagamentoService = scope.ServiceProvider.GetRequiredService<IPagamentoService>();
 
-        //        var response = await pagamentoService.CancelarPagamento(message.PedidoId);
+        private async Task CapturarPagamento(AlunoMatriculaPagaIntegrationEvent message)
+        {
+            using (var scope = _serviceProvider.CreateScope())
+            {
+                var pagamentoService = scope.ServiceProvider.GetRequiredService<IPagamentoService>();
 
-        //        if (!response.ValidationResult.IsValid)
-        //            throw new DomainException($"Falha ao cancelar pagamento do pedido {message.PedidoId}");
-        //    }
-        //}
+                var response = await pagamentoService.CapturarPagamento(message.PedidoId);
+
+                if (!response.ValidationResult.IsValid)
+                    throw new DomainException($"Falha ao capturar pagamento do pedido {message.PedidoId}");
+
+                await _bus.PublishAsync(new PedidoPagoIntegrationEvent(message.ClienteId, message.PedidoId));
+            }
+        }
     }
 }

@@ -1,4 +1,5 @@
 using EducaOnline.Pedidos.API.Configurations;
+using EducaOnline.WebAPI.Core.Identidade;
 
 var builder = WebApplication.CreateBuilder(args);
 
