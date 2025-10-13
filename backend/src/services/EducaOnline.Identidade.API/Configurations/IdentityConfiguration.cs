@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using EducaOnline.Identidade.API.Data;
 using EducaOnline.Identidade.API.Extensions;
+using EducaOnline.WebAPI.Core.Identidade;
 
 namespace EducaOnline.Identidade.API.Configurations
 {

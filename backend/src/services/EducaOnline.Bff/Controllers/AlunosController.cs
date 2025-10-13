@@ -10,7 +10,7 @@ namespace EducaOnline.Bff.Controllers
 {
     [Authorize]
     [Route("api/aluno-bff")]
-    public class AlunosController : MainController
+    public class AlunoController : MainController
     {
 
         private readonly IConteudoService _conteudoService;
