@@ -64,10 +64,10 @@ namespace EducaOnline.Conteudo.API.Controllers
                 return CustomResponse(ModelState);
 
             var conteudoProgramatico = new ConteudoProgramatico(
-                model.Titulo,
-                model.Descricao,
-                model.CargaHoraria,
-                model.Objetivos
+                model.ConteudoProgramatico.Titulo,
+                model.ConteudoProgramatico.Descricao,
+                model.ConteudoProgramatico.CargaHoraria,
+                model.ConteudoProgramatico.Objetivos
             );
 
             var curso = new Curso(
@@ -95,14 +95,28 @@ namespace EducaOnline.Conteudo.API.Controllers
         /// </summary>
         [Authorize(Roles = nameof(PerfilUsuarioEnum.ADM))]
         [HttpPut("{id:guid}")]
-        public async Task<IActionResult> AtualizarCurso(Guid id, [FromBody] Curso model)
+        public async Task<IActionResult> AtualizarCurso(Guid id, [FromBody] AtualizarCursoDto model)
         {
             if (!ModelState.IsValid)
                 return CustomResponse(ModelState);
 
             try
             {
-                await _conteudoService.AlterarCurso(id, model);
+                var conteudoProgramatico = new ConteudoProgramatico(
+                    model.ConteudoProgramatico.Titulo,
+                    model.ConteudoProgramatico.Descricao,
+                    model.ConteudoProgramatico.CargaHoraria,
+                    model.ConteudoProgramatico.Objetivos
+                );
+
+                var curso = new Curso(
+                    model.Nome,
+                    conteudoProgramatico,
+                    model.Ativo,
+                    model.Valor
+                );
+
+                await _conteudoService.AlterarCurso(id, curso);
             }
             catch (Exception ex)
             {

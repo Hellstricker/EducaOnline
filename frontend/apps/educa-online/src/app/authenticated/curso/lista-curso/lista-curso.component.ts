@@ -53,11 +53,11 @@ export class ListaCursoComponent implements OnInit {
   }
 
   getMatriculasAluno(){
-    this.alunoService.getMatriculas(this.authService.getId())
+    this.alunoService.getbyId(this.authService.getId())
     .pipe(take(1))
     .subscribe({
       next: (data) => {
-        this.matriculas = data;
+        this.matriculas = data.matriculas;
       }
     });
   }

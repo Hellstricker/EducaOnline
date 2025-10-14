@@ -1,6 +1,6 @@
 ﻿namespace EducaOnline.Conteudo.API.Dtos
 {
-    public class AdicionarCursoDto
+    public class AtualizarCursoDto
     {
         public string Nome { get; set; } = string.Empty;
         public bool Ativo { get; set; }

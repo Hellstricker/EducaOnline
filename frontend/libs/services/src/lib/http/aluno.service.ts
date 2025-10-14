@@ -2,7 +2,7 @@ import { Injectable } from "@angular/core";
 import { environment } from "../configuration";
 import { HttpClient } from "@angular/common/http";
 import { Observable } from "rxjs";
-import { AlunoResponseModel, MatriculaResponseModel } from "@educa-online/data";
+import { AlunoMatriculaResponseModel, AlunoResponseModel, MatriculaResponseModel } from "@educa-online/data";
 
 @Injectable()
 export class AlunoService {
@@ -15,8 +15,8 @@ export class AlunoService {
     this.apiBase = `${environment.apiAluno}/Alunos`;
   }
 
-  getMatriculas(id: string): Observable<MatriculaResponseModel[]> {
-    return this.httpCliente.get<MatriculaResponseModel[]>(`${this.apiBase}/${id}/matricula`);
+  getbyId(id: string): Observable<AlunoMatriculaResponseModel> {
+    return this.httpCliente.get<AlunoMatriculaResponseModel>(`${this.apiBase}/${id}`);
   }
 
   getAll(): Observable<AlunoResponseModel[]> {

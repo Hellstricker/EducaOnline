@@ -38,7 +38,6 @@ export class CreateEditCursoComponent implements OnInit {
 
   salvar(): void {
     const { valid, value } = this.form;
-debugger;
     if(valid && this.data) {
       this.editar();
     } else if(valid) {

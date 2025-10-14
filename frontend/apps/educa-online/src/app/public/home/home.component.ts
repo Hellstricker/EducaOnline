@@ -38,6 +38,6 @@ export class HomeComponent implements OnInit {
     }
 
     redirectToPanel(): void {
-        this.router.navigate(['/inicio']);
+        this.router.navigate(['/curso']);
     }
 }

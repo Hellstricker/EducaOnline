@@ -6,9 +6,11 @@
     </mat-form-field>
   </div>
 
-  <div class="d-flex justify-content-end">
-    <button class="width-10" mat-flat-button (click)="novoCurso()">Novo curso</button>
-  </div>
+  @if(usuarioAdmin){
+    <div class="d-flex justify-content-end">
+      <button class="width-10" mat-flat-button (click)="novoCurso()">Novo curso</button>
+    </div>
+  }
 </div>
 
 @if(usuarioAdmin){
@@ -80,7 +82,7 @@
         <mat-cell *matCellDef="let element" data-label="Carga horária"> {{element.cargaHorariaTotal}} </mat-cell>
       </ng-container>
   
-      <ng-container matColumnDef="Status">
+      <ng-container matColumnDef="status">
         <mat-header-cell *matHeaderCellDef> Status </mat-header-cell>
         <mat-cell *matCellDef="let element" data-label="Status"> {{element.status}} </mat-cell>
       </ng-container>
@@ -93,7 +95,7 @@
       <ng-container matColumnDef="acoes">
         <mat-header-cell *matHeaderCellDef> Ações </mat-header-cell>
         <mat-cell *matCellDef="let element" data-label="Ações">
-          <span class="material-symbols-outlined cursor-pointer" (click)="abrirControleAulas(element.id)">
+          <span class="material-symbols-outlined cursor-pointer" (click)="abrirControleAulas(element.cursoId)">
             school
           </span>
         </mat-cell>
