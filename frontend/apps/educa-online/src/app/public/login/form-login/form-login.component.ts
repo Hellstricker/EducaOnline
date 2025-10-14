@@ -38,7 +38,6 @@ export class FormLoginComponent implements OnInit {
 
   ngOnInit() { }
 
-
   login(): void {
     const { value, valid } = this.form;
 
@@ -50,10 +49,11 @@ export class FormLoginComponent implements OnInit {
             if (token) {
               console.log(token);
               this.authService.setToken(JSON.stringify(token));
-
+              const role = token.userToken.claims.find((p: any) => p.type == "role");
+              this.authService.setPerfil(role?.value!);
               if (!this.cursoId) {
-                this.authService.setUrl('inicio');
-                this.router.navigate(['/inicio']);
+                this.authService.setUrl('curso');
+                this.router.navigate(['/curso']);
               }else {
                 this.authService.setUrl('matricula');
                 this.router.navigate(['/matricula', this.cursoId]);

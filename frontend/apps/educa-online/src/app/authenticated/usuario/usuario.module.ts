@@ -10,6 +10,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { UsuarioRouting } from "./usuario.routing";
 import { UsuarioComponent } from "./usuario.component";
 import { ListaUsuarioComponent } from "./lista-usuario/lista-usuario.component";
+import { AlunoService } from "@educa-online/services";
 
 @NgModule({
   imports: [UsuarioRouting, MatTableModule,
@@ -23,6 +24,6 @@ import { ListaUsuarioComponent } from "./lista-usuario/lista-usuario.component";
   ],
   exports: [],
   declarations: [UsuarioComponent, ListaUsuarioComponent],
-  providers: [],
+  providers: [AlunoService],
 })
 export class UsuarioModule { }

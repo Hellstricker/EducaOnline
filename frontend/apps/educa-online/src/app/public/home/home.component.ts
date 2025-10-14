@@ -31,11 +31,13 @@ export class HomeComponent implements OnInit {
     redirectToLogin(matricular: boolean = false, cursoId: string = ''): void {
         if (!this.usuario && matricular)
             this.router.navigate([`/login`], { queryParams: { cursoId } });
+        else if(!this.usuario && !matricular)
+            this.router.navigate([`/login`]);
         else
             this.router.navigate(['/matricula', cursoId]);
     }
 
     redirectToPanel(): void {
-        this.router.navigate(['/inicio']);
+        this.router.navigate(['/curso']);
     }
 }

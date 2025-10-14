@@ -1,8 +1,9 @@
+import { AuthenticatedComponent } from './../../authenticated.component';
 import { Component, inject, OnInit } from "@angular/core";
 import { MatDialog } from "@angular/material/dialog";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { filter, switchMap, take } from "rxjs";
-import { ConteudoService, HeaderService } from "@educa-online/services";
+import { AuthService, ConteudoService, HeaderService } from "@educa-online/services";
 import { AulaResponseModel } from "@educa-online/data";
 import { ActivatedRoute } from "@angular/router";
 import { CreateEditAulaComponent } from "../create-edit-aula/create-edit-aula.component";
@@ -22,16 +23,21 @@ export class ListaAulaComponent implements OnInit {
 
   aulas: AulaResponseModel[] = [];
 
+  usuarioAdmin = false;
+
   cursoId!: string;
 
   constructor(
     private headerService: HeaderService,
     private conteudoService: ConteudoService,
     private route: ActivatedRoute,
+    private authService: AuthService
   ) {
     this.route.params.subscribe(params => {
-		this.cursoId = params['id'];
-	});
+		  this.cursoId = params['id'];
+	  });
+
+    this.usuarioAdmin = this.authService.getPerfil() == "ADM";
   }
 
   ngOnInit() {

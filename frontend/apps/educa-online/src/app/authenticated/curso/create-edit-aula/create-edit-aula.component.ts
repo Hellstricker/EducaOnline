@@ -28,11 +28,11 @@ export class CreateEditAulaComponent implements OnInit {
     if(this.data.id) {
       this.form.patchValue(this.data);
     }
+    this.form.cursoId.setValue(this.data.cursoId);
   }
 
   salvar(): void {
     const { valid, value } = this.form;
-
     if(valid && this.data.id) {
       this.editar();
     } else if(valid) {

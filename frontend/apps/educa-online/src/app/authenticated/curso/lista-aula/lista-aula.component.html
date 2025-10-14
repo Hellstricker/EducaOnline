@@ -6,9 +6,11 @@
     </mat-form-field>
   </div>
 
-  <div class="d-flex justify-content-end">
-    <button class="width-10" mat-flat-button (click)="novaAula()">Nova aula</button>
-  </div>
+  @if(usuarioAdmin){
+    <div class="d-flex justify-content-end">
+      <button class="width-10" mat-flat-button (click)="novaAula()">Nova aula</button>
+    </div>
+  }
 </div>
 
 <div class="table-content">
@@ -31,13 +33,15 @@
     <ng-container matColumnDef="acoes">
       <mat-header-cell *matHeaderCellDef> Ações </mat-header-cell>
       <mat-cell *matCellDef="let element" data-label="Ações">
-        <span class="material-symbols-outlined cursor-pointer" (click)="editarAula(element)">
-          edit
-        </span>
-
-        <span class="material-symbols-outlined cor-vermelho ms-2 cursor-pointer" (click)="removerAula(element.id)">
-          delete
-        </span>
+        @if(usuarioAdmin){
+          <span class="material-symbols-outlined cursor-pointer" (click)="editarAula(element)">
+            edit
+          </span>
+  
+          <span class="material-symbols-outlined cor-vermelho ms-2 cursor-pointer" (click)="removerAula(element.id)">
+            delete
+          </span>
+        }
       </mat-cell>
     </ng-container>
 

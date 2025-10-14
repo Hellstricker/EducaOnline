@@ -88,12 +88,7 @@ export class AuthService {
   }
 
   public getId(): string {
-    // const user = this.getUsuarioToken();
-
-    // if (user)
-    //   return this.getUsuarioToken().id;
-
-    return '';
+    return this.decodeToken()?.id!;
   }
 
   public setPerfil(perfil: string): void {

@@ -26,7 +26,7 @@ export class AuthenticatedGuard implements CanActivate {
       return true;
     }
 
-    this.router.navigate(['/inicio']);
+    this.router.navigate(['/curso']);
     return false;
   }
 }

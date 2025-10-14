@@ -12,7 +12,7 @@ import { CursoComponent } from "./curso.component";
 import { ListaCursoComponent } from "./lista-curso/lista-curso.component";
 import { CreateEditCursoComponent } from "./create-edit-curso/create-edit-curso.component";
 import { MatSelectModule } from "@angular/material/select";
-import { ConteudoService } from "@educa-online/services";
+import { AlunoService, ConteudoService } from "@educa-online/services";
 import { ListaAulaComponent } from "./lista-aula/lista-aula.component";
 import { CreateEditAulaComponent } from "./create-edit-aula/create-edit-aula.component";
 
@@ -29,6 +29,6 @@ import { CreateEditAulaComponent } from "./create-edit-aula/create-edit-aula.com
   ],
   exports: [],
   declarations: [CursoComponent, ListaCursoComponent, CreateEditCursoComponent, ListaAulaComponent, CreateEditAulaComponent],
-  providers: [ConteudoService],
+  providers: [ConteudoService, AlunoService],
 })
 export class CursoModule { }

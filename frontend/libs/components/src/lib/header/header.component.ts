@@ -14,6 +14,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
   titulo?: string = "Dashboard";
   destroy$ = new Subject<void>;
 
+  email = "";
+
   constructor(
     private router: Router,
     private headerService: HeaderService,
@@ -27,7 +29,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-
+    this.email = this.authService.getEmail()!;
   }
 
   ngOnDestroy(): void {

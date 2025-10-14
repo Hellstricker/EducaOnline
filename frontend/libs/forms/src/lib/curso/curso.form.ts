@@ -13,9 +13,30 @@ export class CursoFormGroup extends FormGroupBase {
     return this.get('nome') as FormControl;
   }
 
+  get valor(): FormControl {
+    return this.get('valor') as FormControl;
+  }
+
   get ativo(): FormControl {
     return this.get('ativo') as FormControl;
   }
+
+  get conteudoProgramatico(): ConteudoProgramaticoFormGroup {
+    return this.get('conteudoProgramatico') as ConteudoProgramaticoFormGroup;
+  }
+
+  constructor() {
+    super({
+      id: fb.control(null),
+      nome: fb.control('', Validators.required),
+      ativo: fb.control(true, Validators.required),
+      valor: fb.control(null, Validators.required),
+      conteudoProgramatico: new ConteudoProgramaticoFormGroup,
+    });
+  }
+}
+
+export class ConteudoProgramaticoFormGroup extends FormGroupBase {
 
   get titulo(): FormControl {
     return this.get('titulo') as FormControl;
@@ -35,12 +56,9 @@ export class CursoFormGroup extends FormGroupBase {
 
   constructor() {
     super({
-      id: fb.control(null),
-      nome: fb.control('', Validators.required),
-      ativo: fb.control(true, Validators.required),
       titulo: fb.control('', Validators.required),
       descricao: fb.control('', Validators.required),
-      cargaHoraria: fb.control(0, Validators.required),
+      cargaHoraria: fb.control(null, Validators.required),
       objetivos: fb.control('', Validators.required),
     });
   }
