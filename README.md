@@ -101,7 +101,7 @@ cd EducaOnline
 
 ### **Passo 2: Iniciar o RabbitMQ (OBRIGATÓRIO)**
 
-⚠️ **CRÍTICO**: O RabbitMQ deve estar rodando **ANTES** de qualquer API!
+**CRÍTICO**: O RabbitMQ deve estar rodando **ANTES** de qualquer API!
 
 ```bash
 docker run -d --hostname educa-rabbit --name educa-rabbit -p 5672:5672 -p 15672:15672 rabbitmq:3-management
@@ -123,7 +123,7 @@ abc123def456   rabbitmq:3-management    Up 30 seconds   0.0.0.0:5672->5672/tcp, 
 - Usuário: `guest`
 - Senha: `guest`
 
-**⏳ IMPORTANTE**: Aguarde **30-60 segundos** após iniciar o RabbitMQ antes de executar as APIs!
+**IMPORTANTE**: Aguarde **30-60 segundos** após iniciar o RabbitMQ antes de executar as APIs!
 
 **Se o container já existir mas estiver parado:**
 ```bash
@@ -139,20 +139,20 @@ cd frontend
 npm install
 ```
 
-⏳ Este processo pode demorar 2-5 minutos na primeira execução.
+Este processo pode demorar 2-5 minutos na primeira execução.
 
 ---
 
 ## **6. Executando a Solução**
 
-### **🎯 IMPORTANTE: Inicialização Automática**
+### **IMPORTANTE: Inicialização Automática**
 
-✅ **O projeto está configurado para criar automaticamente:**
+**O projeto está configurado para criar automaticamente:**
 - Bancos de dados SQLite
 - Todas as tabelas necessárias
 - Dados iniciais (seed) em ambiente Development
 
-❌ **NÃO é necessário rodar migrations manualmente!**
+**NÃO é necessário rodar migrations manualmente!**
 
 Tudo acontece automaticamente ao executar `dotnet run` em cada serviço.
 
@@ -160,7 +160,7 @@ Tudo acontece automaticamente ao executar `dotnet run` em cada serviço.
 
 ### **Opção 1: Executar via Terminal (Recomendado para Depuração)**
 
-⚠️ **Execute nesta ordem obrigatória:**
+**Execute nesta ordem obrigatória:**
 
 #### **1. Identidade.API** (deve ser o primeiro)
 ```bash
@@ -168,12 +168,12 @@ cd backend/src/Services/EducaOnline.Identidade.API
 dotnet run
 ```
 
-✅ Aguarde a mensagem: `Now listening on: https://localhost:7070`
+Aguarde a mensagem: `Now listening on: https://localhost:7070`
 
 Logs esperados:
 ```
-🔄 Verificando banco de dados...
-✅ Banco de dados verificado/criado com sucesso!
+Verificando banco de dados...
+Banco de dados verificado/criado com sucesso!
 Now listening on: https://localhost:7070
 ```
 
@@ -186,7 +186,7 @@ cd backend/src/Services/EducaOnline.Conteudo.API
 dotnet run
 ```
 
-✅ Aguarde: `Now listening on: http://localhost:5105`
+Aguarde: `Now listening on: http://localhost:5105`
 
 ---
 
@@ -197,7 +197,7 @@ cd backend/src/Services/EducaOnline.Aluno.API
 dotnet run
 ```
 
-⚠️ Se falhar com erro de RabbitMQ, verifique se o Docker está rodando!
+Se falhar com erro de RabbitMQ, verifique se o Docker está rodando!
 
 ---
 
@@ -226,7 +226,7 @@ cd backend/src/api_gateways/EducaOnline.Bff
 dotnet run
 ```
 
-✅ Aguarde: `Now listening on: https://localhost:7093`
+Aguarde: `Now listening on: https://localhost:7093`
 
 ---
 
@@ -237,7 +237,7 @@ cd frontend
 npx nx serve educa-online
 ```
 
-✅ Acesse: http://localhost:4200
+Acesse: http://localhost:4200
 
 ---
 
@@ -247,15 +247,15 @@ npx nx serve educa-online
 2. Clique com botão direito na Solution → **Configure Startup Projects**
 3. Selecione **Multiple startup projects**
 4. Configure **nesta ordem** (importante!):
-   - ✅ EducaOnline.Identidade.API → **Start**
-   - ✅ EducaOnline.Conteudo.API → **Start**
-   - ✅ EducaOnline.Aluno.API → **Start**
-   - ✅ EducaOnline.Pedidos.API → **Start**
-   - ✅ EducaOnline.Financeiro.API → **Start**
-   - ✅ EducaOnline.Bff → **Start**
+   - EducaOnline.Identidade.API → **Start**
+   - EducaOnline.Conteudo.API → **Start**
+   - EducaOnline.Aluno.API → **Start**
+   - EducaOnline.Pedidos.API → **Start**
+   - EducaOnline.Financeiro.API → **Start**
+   - EducaOnline.Bff → **Start**
 5. Pressione **F5** ou clique em **Start**
 
-⚠️ O frontend Angular precisa ser iniciado separadamente no terminal.
+O frontend Angular precisa ser iniciado separadamente no terminal.
 
 ---
 
@@ -272,7 +272,7 @@ npx nx serve educa-online
 | **EducaOnline.Financeiro.API**    | 7059        |            | https://localhost:7059/swagger   |
 | **RabbitMQ Management**           | -           | 15672      | http://localhost:15672           |
 
-⚠️ **Nota**: Algumas portas podem variar conforme o `launchSettings.json` de cada projeto.
+**Nota**: Algumas portas podem variar conforme o `launchSettings.json` de cada projeto.
 
 ---
 
@@ -280,7 +280,7 @@ npx nx serve educa-online
 
 Em ambiente **Development**, cada serviço cria dados automaticamente na primeira execução:
 
-### **🔐 Identidade.API**
+### **Identidade.API**
 Cria 2 usuários padrão:
 
 **Administrador:**
@@ -296,7 +296,7 @@ Cria 2 usuários padrão:
 
 ---
 
-### **📚 Conteudo.API**
+### **Conteudo.API**
 Cria 3 cursos:
 1. **Introdução à Inteligência Artificial**
    - ID: `04effc8b-fa4a-415c-90eb-95cdfdaba1b2`
@@ -315,7 +315,7 @@ Cria 3 cursos:
 
 ---
 
-### **👨‍🎓 Aluno.API**
+### **Aluno.API**
 - Cria o aluno com mesmo ID do Identity
 - Cria matrícula automática nos 3 cursos
 - Registra progresso em 1 aula (50%)
@@ -373,10 +373,10 @@ Exemplos de endpoints para testar:
    - Email: `aluno@educaonline.com.br`
    - Senha: `Teste@123`
 3. Explore as funcionalidades:
-   - 📚 Visualizar cursos disponíveis
-   - ✏️ Realizar matrícula
-   - 📊 Acompanhar progresso
-   - 🎓 Visualizar certificados
+   - Visualizar cursos disponíveis
+   - Realizar matrícula
+   - Acompanhar progresso
+   - Visualizar certificados
 
 ---
 
@@ -430,7 +430,7 @@ backend/src/Services/
 
 ## **12. Troubleshooting (Resolução de Problemas)**
 
-### **❌ Erro: "TaskCanceledException" ou Timeout RabbitMQ**
+### **Erro: "TaskCanceledException" ou Timeout RabbitMQ**
 
 **Sintomas:**
 ```
@@ -461,7 +461,7 @@ at EasyNetQ.Persistent.PersistentChannel...
 
 ---
 
-### **❌ Erro: "Port already in use"**
+### **Erro: "Port already in use"**
 
 **Sintomas:**
 ```
@@ -483,19 +483,19 @@ Failed to bind to address https://localhost:7070: address already in use
 
 ---
 
-### **❌ Erro: APIs não iniciam ou fecham imediatamente**
+### **Erro: APIs não iniciam ou fecham imediatamente**
 
 **Verificações:**
 
-1. ✅ Docker Desktop está rodando?
-2. ✅ RabbitMQ está ativo? (`docker ps`)
-3. ✅ RabbitMQ teve tempo de inicializar? (aguardar 30s)
-4. ✅ Está executando em ambiente Development?
-5. ✅ O arquivo `appsettings.Development.json` existe?
+1. Docker Desktop está rodando?
+2. RabbitMQ está ativo? (`docker ps`)
+3. RabbitMQ teve tempo de inicializar? (aguardar 30s)
+4. Está executando em ambiente Development?
+5. O arquivo `appsettings.Development.json` existe?
 
 ---
 
-### **❌ Erro: "npm is not recognized"**
+### **Erro: "npm is not recognized"**
 
 **Causa**: Node.js não está instalado.
 
@@ -506,7 +506,7 @@ Failed to bind to address https://localhost:7070: address already in use
 
 ---
 
-### **⚠️ Warnings CS8618 (nullable references)**
+### **Warnings CS8618 (nullable references)**
 
 **Exemplo:**
 ```
@@ -515,13 +515,13 @@ warning CS8618: Non-nullable property 'Title' must contain a non-null value
 
 **Causa**: Avisos de compilação do C# 9+ sobre nullability.
 
-**Impacto**: ✅ Não impedem a execução do projeto.
+**Impacto**: Não impedem a execução do projeto.
 
 **Solução** (opcional):
 ```csharp
-public required string Title { get; set; }  // Opção 1
-public string? Title { get; set; }          // Opção 2
-public string Title { get; set; } = "";     // Opção 3
+public required string Title { get; set; }  
+public string? Title { get; set; }          
+public string Title { get; set; } = "";    
 ```
 
 ---
@@ -559,32 +559,32 @@ npm install
 ## **13. Documentação Técnica**
 
 ### **Padrões Arquiteturais**
-- ✅ **DDD** (Domain-Driven Design)
-- ✅ **CQRS** com MediatR
-- ✅ **Event-Driven Architecture**
-- ✅ **Clean Architecture**
-- ✅ **Repository + Unit of Work Pattern**
-- ✅ **Value Objects** e **Entidades Ricas**
+- **DDD** (Domain-Driven Design)
+- **CQRS** com MediatR
+- **Event-Driven Architecture**
+- **Clean Architecture**
+- **Repository + Unit of Work Pattern**
+- **Value Objects** e **Entidades Ricas**
 
 ### **Tecnologias Backend**
-- ✅ **.NET 9.0**
-- ✅ **ASP.NET Core Identity** + **JWT Bearer**
-- ✅ **Entity Framework Core** + **SQLite**
-- ✅ **RabbitMQ** + **EasyNetQ**
-- ✅ **AutoMapper**
-- ✅ **FluentValidation**
-- ✅ **Dapper** (queries otimizadas)
-- ✅ **MediatR** (CQRS)
+- **.NET 9.0**
+- **ASP.NET Core Identity** + **JWT Bearer**
+- **Entity Framework Core** + **SQLite**
+- **RabbitMQ** + **EasyNetQ**
+- **AutoMapper**
+- **FluentValidation**
+- **Dapper** (queries otimizadas)
+- **MediatR** (CQRS)
 
 ### **Tecnologias Frontend**
-- ✅ **Angular 17+**
-- ✅ **Nx Monorepo**
-- ✅ **TypeScript**
-- ✅ **RxJS**
+- **Angular 17+**
+- **Nx Monorepo**
+- **TypeScript**
+- **RxJS**
 
 ### **Infraestrutura**
-- ✅ **Docker** (RabbitMQ)
-- ✅ **SQLite** (Development)
+- **Docker** (RabbitMQ)
+- **SQLite** (Development)
 
 ---
 
@@ -640,16 +640,16 @@ Antes de reportar problemas, verifique:
 
 Após iniciar todos os serviços com sucesso:
 
-1. ✅ Explore o Swagger de cada API
-2. ✅ Teste o fluxo completo:
+1. Explore o Swagger de cada API
+2. Teste o fluxo completo:
    - Login como aluno
    - Visualizar cursos disponíveis
    - Realizar matrícula
    - Processar pagamento
    - Acompanhar progresso
    - Emitir certificado
-3. ✅ Analise os eventos no RabbitMQ Management
-4. ✅ Explore o código-fonte para entender a arquitetura
+3. Analise os eventos no RabbitMQ Management
+4. Explore o código-fonte para entender a arquitetura
 
 ---
 
@@ -674,8 +674,8 @@ Após iniciar todos os serviços com sucesso:
 Este projeto é parte do **MBA DevXpert Full Stack .NET** e é mantido pelos autores para fins acadêmicos.
 
 Para dúvidas ou sugestões:
-- 📧 Entre em contato com os autores
-- 🐛 Abra uma Issue no repositório (se disponível)
+- Entre em contato com os autores
+- Abra uma Issue no repositório (se disponível)
 
 ---
 
@@ -685,11 +685,11 @@ Projeto acadêmico - Todos os direitos reservados aos autores.
 
 ---
 
-## **✅ Conclusão**
+## **Conclusão**
 
 O **EducaOnline** demonstra a aplicação prática de conceitos modernos de arquitetura de software, incluindo microsserviços, DDD, CQRS e event-driven architecture, em um contexto educacional realista.
 
-**Boa exploração do projeto! 🚀📚**
+**Boa exploração do projeto!**
 
 ---
 
