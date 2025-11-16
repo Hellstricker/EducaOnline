@@ -60,19 +60,22 @@ Antes de executar o projeto, certifique-se de ter instalado:
 
 ### **Obrigatórios:**
 
-#### **.NET SDK 9.0** ou superior
+#### **.NET SDK 9.0** ou superiora
+
 - Download: https://dotnet.microsoft.com/download
 - Verificação: `dotnet --version`
 
 #### **Node.js 20+** (LTS) e npm
+
 - Download: https://nodejs.org/
-- Verificação: 
+- Verificação:
   ```bash
   node --version
   npm --version
   ```
 
 #### **Docker Desktop**
+
 - Download: https://www.docker.com/products/docker-desktop
 - Verificação: `docker --version`
 - **Importante**: O Docker deve estar **rodando** antes de iniciar o projeto!
@@ -108,17 +111,20 @@ docker run -d --hostname educa-rabbit --name educa-rabbit -p 5672:5672 -p 15672:
 ```
 
 **Verificar se está rodando:**
+
 ```bash
 docker ps | grep educa-rabbit
 ```
 
 Você deve ver algo como:
+
 ```
 CONTAINER ID   IMAGE                    STATUS          PORTS
 abc123def456   rabbitmq:3-management    Up 30 seconds   0.0.0.0:5672->5672/tcp, 0.0.0.0:15672->15672/tcp
 ```
 
 **Acessar painel de gerenciamento:**
+
 - URL: http://localhost:15672
 - Usuário: `guest`
 - Senha: `guest`
@@ -126,6 +132,7 @@ abc123def456   rabbitmq:3-management    Up 30 seconds   0.0.0.0:5672->5672/tcp, 
 **IMPORTANTE**: Aguarde **30-60 segundos** após iniciar o RabbitMQ antes de executar as APIs!
 
 **Se o container já existir mas estiver parado:**
+
 ```bash
 docker start educa-rabbit
 ```
@@ -148,6 +155,7 @@ Este processo pode demorar 2-5 minutos na primeira execução.
 ### **IMPORTANTE: Inicialização Automática**
 
 **O projeto está configurado para criar automaticamente:**
+
 - Bancos de dados SQLite
 - Todas as tabelas necessárias
 - Dados iniciais (seed) em ambiente Development
@@ -163,6 +171,7 @@ Tudo acontece automaticamente ao executar `dotnet run` em cada serviço.
 **Execute nesta ordem obrigatória:**
 
 #### **1. Identidade.API** (deve ser o primeiro)
+
 ```bash
 cd backend/src/Services/EducaOnline.Identidade.API
 dotnet run
@@ -171,6 +180,7 @@ dotnet run
 Aguarde a mensagem: `Now listening on: https://localhost:7070`
 
 Logs esperados:
+
 ```
 Verificando banco de dados...
 Banco de dados verificado/criado com sucesso!
@@ -180,17 +190,19 @@ Now listening on: https://localhost:7070
 ---
 
 #### **2. Conteudo.API**
+
 ```bash
 # Em um NOVO terminal
 cd backend/src/Services/EducaOnline.Conteudo.API
 dotnet run
 ```
 
-Aguarde: `Now listening on: http://localhost:5105`
+Aguarde: `Now listening on: https://localhost:7183`
 
 ---
 
 #### **3. Aluno.API**
+
 ```bash
 # Em um NOVO terminal
 cd backend/src/Services/EducaOnline.Aluno.API
@@ -202,6 +214,7 @@ Se falhar com erro de RabbitMQ, verifique se o Docker está rodando!
 ---
 
 #### **4. Pedidos.API**
+
 ```bash
 # Em um NOVO terminal
 cd backend/src/Services/EducaOnline.Pedidos.API
@@ -211,6 +224,7 @@ dotnet run
 ---
 
 #### **5. Financeiro.API**
+
 ```bash
 # Em um NOVO terminal
 cd backend/src/Services/EducaOnline.Financeiro.API
@@ -220,6 +234,7 @@ dotnet run
 ---
 
 #### **6. BFF (Gateway)**
+
 ```bash
 # Em um NOVO terminal
 cd backend/src/api_gateways/EducaOnline.Bff
@@ -231,6 +246,7 @@ Aguarde: `Now listening on: https://localhost:7093`
 ---
 
 #### **7. Frontend Angular**
+
 ```bash
 # Em um NOVO terminal
 cd frontend
@@ -261,16 +277,16 @@ O frontend Angular precisa ser iniciado separadamente no terminal.
 
 ## **7. Serviços e Portas**
 
-| Projeto                           | Porta HTTPS | Porta HTTP | Swagger                          |
-|-----------------------------------|-------------|------------|----------------------------------|
-| **Frontend Angular**              | -           | 4200       | http://localhost:4200            |
-| **EducaOnline.Bff**               | 7093        | 5051       | https://localhost:7093/swagger   |
-| **EducaOnline.Identidade.API**    | 7070        | 5244       | https://localhost:7070/swagger   |
-| **EducaOnline.Conteudo.API**      | -           | 5105       | http://localhost:5105/swagger    |
-| **EducaOnline.Aluno.API**         | -           | 5152       | http://localhost:5152/swagger    |
-| **EducaOnline.Pedidos.API**       | 7244        |            | https://localhost:7244/swagger   |
-| **EducaOnline.Financeiro.API**    | 7059        |            | https://localhost:7059/swagger   |
-| **RabbitMQ Management**           | -           | 15672      | http://localhost:15672           |
+| Projeto                              | Porta HTTPS | Porta HTTP | Swagger                        |
+| ------------------------------------ | ----------- | ---------- | ------------------------------ |
+| **Frontend Angular**           | -           | 4200       | http://localhost:4200          |
+| **EducaOnline.Bff**            | 7093        | 5051       | https://localhost:7093/swagger |
+| **EducaOnline.Identidade.API** | 7070        | 5244       | https://localhost:7070/swagger |
+| **EducaOnline.Conteudo.API**   | 7183        | 5105       | https://localhost:7183/swagger |
+| **EducaOnline.Aluno.API**      | 7094        | 5152       | https://localhost:7094/swagger |
+| **EducaOnline.Pedidos.API**    | 7244        |            | https://localhost:7244/swagger |
+| **EducaOnline.Financeiro.API** | 7059        |            | https://localhost:7059/swagger |
+| **RabbitMQ Management**        | -           | 15672      | http://localhost:15672         |
 
 **Nota**: Algumas portas podem variar conforme o `launchSettings.json` de cada projeto.
 
@@ -281,14 +297,17 @@ O frontend Angular precisa ser iniciado separadamente no terminal.
 Em ambiente **Development**, cada serviço cria dados automaticamente na primeira execução:
 
 ### **Identidade.API**
+
 Cria 2 usuários padrão:
 
 **Administrador:**
+
 - Email: `admin@educaonline.com.br`
 - Senha: `Teste@123`
 - Perfil: Administrador
 
 **Aluno:**
+
 - Email: `aluno@educaonline.com.br`
 - Senha: `Teste@123`
 - ID fixo: `40640fec-5daf-4956-b1c0-2fde87717b66`
@@ -297,18 +316,21 @@ Cria 2 usuários padrão:
 ---
 
 ### **Conteudo.API**
+
 Cria 3 cursos:
+
 1. **Introdução à Inteligência Artificial**
+
    - ID: `04effc8b-fa4a-415c-90eb-95cdfdaba1b2`
    - Carga horária: 20h
    - Total de aulas: 2
-
 2. **Desenvolvimento Web com Angular**
+
    - ID: `04effc8b-fa4a-415c-90eb-95cdfdaba1b7`
    - Carga horária: 20h
    - Total de aulas: 2
-
 3. **Arquitetura de Software com .NET**
+
    - ID: `04effc8b-fa4a-415c-90eb-95cdfdaba1b8`
    - Carga horária: 20h
    - Total de aulas: 2
@@ -316,6 +338,7 @@ Cria 3 cursos:
 ---
 
 ### **Aluno.API**
+
 - Cria o aluno com mesmo ID do Identity
 - Cria matrícula automática nos 3 cursos
 - Registra progresso em 1 aula (50%)
@@ -352,15 +375,18 @@ Agora você pode testar os endpoints protegidos! 🎉
 Exemplos de endpoints para testar:
 
 **Conteudo.API** (http://localhost:5105/swagger):
+
 - `GET /api/cursos` - Listar todos os cursos
 - `GET /api/cursos/{id}` - Detalhes de um curso
 
 **Aluno.API**:
+
 - `GET /api/alunos/{id}` - Dados do aluno
 - `GET /api/alunos/{id}/matriculas` - Matrículas do aluno
 - `GET /api/alunos/{id}/certificados` - Certificados emitidos
 
 **BFF** (https://localhost:7093/swagger):
+
 - `POST /api/matricula` - Realizar nova matrícula
 - `POST /api/checkout` - Processar pagamento
 
@@ -398,6 +424,7 @@ O **RabbitMQ** gerencia a troca de eventos assíncronos entre os serviços:
 ```
 
 **Configuração no `appsettings.json`:**
+
 ```json
 {
   "MessageQueueConnection": {
@@ -433,6 +460,7 @@ backend/src/Services/
 ### **Erro: "TaskCanceledException" ou Timeout RabbitMQ**
 
 **Sintomas:**
+
 ```
 System.Threading.Tasks.TaskCanceledException: A task was canceled.
 at EasyNetQ.Persistent.PersistentChannel...
@@ -441,22 +469,21 @@ at EasyNetQ.Persistent.PersistentChannel...
 **Soluções:**
 
 1. Verificar se o RabbitMQ está rodando:
+
    ```bash
    docker ps | grep educa-rabbit
    ```
-
 2. Se não estiver, iniciar:
+
    ```bash
    docker start educa-rabbit
    ```
-
 3. Se não existir, criar:
+
    ```bash
    docker run -d --hostname educa-rabbit --name educa-rabbit -p 5672:5672 -p 15672:15672 rabbitmq:3-management
    ```
-
 4. **Aguardar 30-60 segundos** antes de iniciar as APIs
-
 5. Verificar acesso: http://localhost:15672 (guest/guest)
 
 ---
@@ -464,6 +491,7 @@ at EasyNetQ.Persistent.PersistentChannel...
 ### **Erro: "Port already in use"**
 
 **Sintomas:**
+
 ```
 Failed to bind to address https://localhost:7070: address already in use
 ```
@@ -471,12 +499,13 @@ Failed to bind to address https://localhost:7070: address already in use
 **Soluções:**
 
 1. **Windows - Encontrar e finalizar o processo:**
+
    ```powershell
    netstat -ano | findstr :7070
    taskkill /PID [número-do-pid] /F
    ```
-
 2. **Ou alterar a porta no `launchSettings.json`:**
+
    ```json
    "applicationUrl": "https://localhost:NOVA_PORTA"
    ```
@@ -500,6 +529,7 @@ Failed to bind to address https://localhost:7070: address already in use
 **Causa**: Node.js não está instalado.
 
 **Solução**:
+
 1. Baixe e instale: https://nodejs.org/ (versão LTS)
 2. Feche e reabra todos os terminais
 3. Verifique: `node --version` e `npm --version`
@@ -509,6 +539,7 @@ Failed to bind to address https://localhost:7070: address already in use
 ### **Warnings CS8618 (nullable references)**
 
 **Exemplo:**
+
 ```
 warning CS8618: Non-nullable property 'Title' must contain a non-null value
 ```
@@ -518,10 +549,11 @@ warning CS8618: Non-nullable property 'Title' must contain a non-null value
 **Impacto**: Não impedem a execução do projeto.
 
 **Solução** (opcional):
+
 ```csharp
 public required string Title { get; set; }  
-public string? Title { get; set; }          
-public string Title { get; set; } = "";    
+public string? Title { get; set; }        
+public string Title { get; set; } = "";  
 ```
 
 ---
@@ -559,6 +591,7 @@ npm install
 ## **13. Documentação Técnica**
 
 ### **Padrões Arquiteturais**
+
 - **DDD** (Domain-Driven Design)
 - **CQRS** com MediatR
 - **Event-Driven Architecture**
@@ -567,6 +600,7 @@ npm install
 - **Value Objects** e **Entidades Ricas**
 
 ### **Tecnologias Backend**
+
 - **.NET 9.0**
 - **ASP.NET Core Identity** + **JWT Bearer**
 - **Entity Framework Core** + **SQLite**
@@ -577,12 +611,14 @@ npm install
 - **MediatR** (CQRS)
 
 ### **Tecnologias Frontend**
+
 - **Angular 17+**
 - **Nx Monorepo**
 - **TypeScript**
 - **RxJS**
 
 ### **Infraestrutura**
+
 - **Docker** (RabbitMQ)
 - **SQLite** (Development)
 
@@ -656,11 +692,13 @@ Após iniciar todos os serviços com sucesso:
 ## **17. Melhorias Futuras (Sugestões)**
 
 ### **Curto Prazo:**
+
 - [ ] Docker Compose para orquestração de serviços
 - [ ] Health checks em cada API
 - [ ] Script de setup automático
 
 ### **Médio Prazo:**
+
 - [ ] Migração para PostgreSQL/SQL Server
 - [ ] Implementação de Circuit Breaker (Polly)
 - [ ] Logs estruturados (Serilog)
@@ -674,6 +712,7 @@ Após iniciar todos os serviços com sucesso:
 Este projeto é parte do **MBA DevXpert Full Stack .NET** e é mantido pelos autores para fins acadêmicos.
 
 Para dúvidas ou sugestões:
+
 - Entre em contato com os autores
 - Abra uma Issue no repositório (se disponível)
 
