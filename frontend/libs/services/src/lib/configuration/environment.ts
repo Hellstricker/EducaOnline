@@ -3,8 +3,8 @@ export const environment = {
   
   // APIs
   apiIdentidade: "https://localhost:7070/api",
-  apiConteudo: "http://localhost:5105/api",
-  apiAluno: "http://localhost:5152/api",
+  apiConteudo: "https://localhost:7183/api",
+  apiAluno: "https://localhost:7094/api",
   apiPedidos: "https://localhost:7244/api",
   apiFinanceiro: "https://localhost:7059/api",
   

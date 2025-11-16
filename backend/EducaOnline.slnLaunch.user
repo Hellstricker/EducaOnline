@@ -5,27 +5,32 @@
       {
         "Path": "src\\services\\EducaOnline.Conteudo.API\\EducaOnline.Conteudo.API.csproj",
         "Action": "Start",
-        "DebugTarget": "IIS Express"
+        "DebugTarget": "https"
       },
       {
         "Path": "src\\services\\EducaOnline.Identidade.API\\EducaOnline.Identidade.API.csproj",
         "Action": "Start",
-        "DebugTarget": "IIS Express - Development"
+        "DebugTarget": "Self Hosting - Development"
       },
       {
         "Path": "src\\services\\EducaOnline.Financeiro.API\\EducaOnline.Financeiro.API.csproj",
         "Action": "Start",
-        "DebugTarget": "IIS Express - Development"
+        "DebugTarget": "Self Hosting - Development"
       },
       {
         "Path": "src\\services\\EducaOnline.Aluno.API\\EducaOnline.Aluno.API.csproj",
         "Action": "Start",
-        "DebugTarget": "IIS Express"
+        "DebugTarget": "https"
       },
       {
         "Path": "src\\api_gateways\\EducaOnline.Bff\\EducaOnline.Bff.csproj",
         "Action": "Start",
-        "DebugTarget": "IIS Express - Development"
+        "DebugTarget": "Self Hosting - Development"
+      },
+      {
+        "Path": "src\\services\\Educaonline.Pedidos.API\\EducaOnline.Pedidos.API.csproj",
+        "Action": "Start",
+        "DebugTarget": "Self Hosting - Development"
       }
     ]
   }
